@@ -18,8 +18,8 @@ class TFRSUserEvent : public TGo4EventElement
        * be the source of the analysis step (if this is a raw event) 
        * or the event processor (if this is a reduced event).
        */
-      virtual Int_t Fill();
-
+  //virtual Int_t Fill();
+  
       /**
        * Method called by the event owner (analysis step) to clear the
        * event element.
@@ -31,8 +31,8 @@ class TFRSUserEvent : public TGo4EventElement
 		//Variables to be converted to Analysis ROOT Files for s323
 
    private:
-      TFRSUserProc   *fxProc;     //! This is processor
-      TGo4FileSource *fxFileSrc;  //! This is file source
+  //  TFRSUserProc   *fxProc;     //! This is processor
+  //  TGo4FileSource *fxFileSrc;  //! This is file source
    ClassDef(TFRSUserEvent,1)         
 
 };
