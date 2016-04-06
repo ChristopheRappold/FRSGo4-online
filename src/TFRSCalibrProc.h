@@ -46,20 +46,6 @@ private:
   void Process_CT_Analysis(const TFRSSortEvent& src, TFRSCalibrEvent& tgt);
   void Process_ElCurrent_Analysis(const TFRSSortEvent& src, TFRSCalibrEvent& tgt);
 
-  TH1I* MakeH1I_MW(const char* foldername, const char* name, int nameindex,
-		   Int_t nbins, Float_t xmin, Float_t xmax, 
-		   const char* xtitle = "channels", Color_t linecolor = 2, Color_t fillcolor = 6);
-
-  TH1I* MakeH1I_TPC(const char* foldername, const char* name, int nameindex,
-		    Int_t nbins, Float_t xmin, Float_t xmax, 
-		    const char* xtitle = "channels", Color_t linecolor = 2, Color_t fillcolor = 6);
-
-                       
-  TH1I* MakeH1I_ITAG(const char* foldername, const char* name, int nameindex,
-		     Int_t nbins, Float_t xmin, Float_t xmax, 
-		     const char* xtitle = "channels", Color_t linecolor = 2, Color_t fillcolor = 6);
-
-
   TFRSParameter* frs ;
   TMWParameter* mw ;
   TTPCParameter* tpc;

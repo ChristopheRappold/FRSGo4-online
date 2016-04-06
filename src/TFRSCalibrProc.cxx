@@ -12,16 +12,6 @@
 #include "TFRSAnalysis.h"
 
 
-const char* mw_folder_ext1[13]={"1", "2", "2", "3","4", "4", "5", "6","7", "8","8", "B", "B"};
-const char* mw_folder_ext2[13]={"11", "21", "22", "31","41", "42", "51", "61","71", "81", "82", "B21", "B22"};
-
-const char* mw_name_ext[13]={"(1:1)", "(2:1)", "(2:2)", "(3:1)",
-			     "(4:1)", "(4:2)", "(5:1)", "(6:1)",
-			     "(7:1)", "(8:1)", "(8:2)", "(9:1)", "(10:1)"};
-
-const char* tpc_name_ext1[6]={"TPC1_","TPC2_","TPC3_","TPC4_","TPC5_","TPC6_"};
-const char* tpc_folder_ext1[6]={"TPC1","TPC2","TPC3","TPC4","TPC5","TPC6"};
-
 TFRSCalibrProc::TFRSCalibrProc() : TFRSBasicProc("FRSCalibrProc")
 {
   frs = dynamic_cast<TFRSParameter*>(GetParameter("FRSPar"));
@@ -84,33 +74,6 @@ Bool_t TFRSCalibrProc::BuildEvent(TGo4EventElement* output)
   Process_ElCurrent_Analysis(*src, *tgt);
 
   return kTRUE;
-}
-
-TH1I* TFRSCalibrProc::MakeH1I_MW(const char* foldername, const char* name, int nameindex,
-                                 Int_t nbinsx, Float_t xmin, Float_t xmax, 
-                                 const char* xtitle, Color_t linecolor, Color_t fillcolor)
-{
-  char fullname[100];
-  if(nameindex>=0)
-    sprintf(fullname,"%s%s",name, mw_name_ext[nameindex]);
-  else
-    strcpy(fullname, name);  
-   
-  return MakeH1I(foldername, fullname, nbinsx, xmin, xmax, xtitle, linecolor, fillcolor);
-}
-
-//Make Histograms for TPCs
-TH1I* TFRSCalibrProc::MakeH1I_TPC(const char* foldername, const char* name, int nameindex,
-				  Int_t nbinsx, Float_t xmin, Float_t xmax, 
-				  const char* xtitle, Color_t linecolor, Color_t fillcolor)
-{
-  char fullname[100];
-  if(nameindex>=0)
-    sprintf(fullname,"%s%s",tpc_name_ext1[nameindex],name);
-  else
-    strcpy(fullname, name);  
-  return MakeH1I(foldername, fullname, nbinsx, xmin, xmax, xtitle, 
-		 linecolor, fillcolor);
 }
 
 

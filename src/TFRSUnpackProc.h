@@ -24,10 +24,6 @@ private:
   Bool_t Event_Extract(TFRSUnpackEvent* event_out, TGo4MbsSubEvent* rawsub, int type_event=1);
   void UnpackUserSubevent(TGo4MbsSubEvent* psubevt, TFRSUnpackEvent* tgt);
 
-  TH1I* MakeH1ISeries(const char* foldername, Int_t seriesnumber, Int_t crate, Int_t number, Bool_t remove);			     
-  TH1I* MakeH1ISeries3(const char* foldername, Int_t seriesnumber, Int_t crate, Int_t number, Bool_t remove);	 
-  TGo4Picture* MakeSeriesPicture(const char* foldername, Int_t seriesnumber, Bool_t remove);              
-
   TFRSParameter* frs ;
   
   TH1I            *hTrigger;         //!

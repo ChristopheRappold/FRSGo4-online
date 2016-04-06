@@ -104,6 +104,99 @@ TH1F* TFRSBasicProc::MakeH1F(const char* fname,
    return histo;
 }
 
+
+TH1I* TFRSBasicProc::MakeH1I_MW(const char* foldername, const char* name, int nameindex,
+                                 Int_t nbinsx, Float_t xmin, Float_t xmax, 
+                                 const char* xtitle, Color_t linecolor, Color_t fillcolor)
+{
+  char fullname[100];
+  if(nameindex>=0)
+    sprintf(fullname,"%s%s",name, mw_name_ext[nameindex]);
+  else
+    strcpy(fullname, name);  
+   
+  return MakeH1I(foldername, fullname, nbinsx, xmin, xmax, xtitle, linecolor, fillcolor);
+}
+
+//Make Histograms for TPCs
+TH1I* TFRSBasicProc::MakeH1I_TPC(const char* foldername, const char* name, int nameindex,
+				  Int_t nbinsx, Float_t xmin, Float_t xmax, 
+				  const char* xtitle, Color_t linecolor, Color_t fillcolor)
+{
+  char fullname[100];
+  if(nameindex>=0)
+    sprintf(fullname,"%s%s",tpc_name_ext1[nameindex],name);
+  else
+    strcpy(fullname, name);  
+  return MakeH1I(foldername, fullname, nbinsx, xmin, xmax, xtitle, 
+		 linecolor, fillcolor);
+}
+
+
+TH1I* TFRSBasicProc::MakeH1ISeries(const char* foldername, Int_t seriesnumber, Int_t crate, Int_t number, Bool_t remove)
+{
+  char fullfoldername[100];                                    
+  sprintf(fullfoldername,"%s/%02d", foldername, seriesnumber);
+  char histoname[50];
+  sprintf(histoname,"newVME%02d_%02d_%02d", crate, seriesnumber, number); 
+  if (remove)
+    {
+      char fullname[200]; 
+      sprintf(fullname,"%s/%s",fullfoldername,histoname);
+      RemoveHistogram(fullname); 
+      return 0;   
+    }
+  return MakeH1I(fullfoldername, histoname, 4096, 0, 4096);
+}
+
+TH1I* TFRSBasicProc::MakeH1ISeries3(const char* foldername, Int_t seriesnumber, Int_t crate, Int_t number, Bool_t remove) 
+{
+  char fullfoldername[100];                                    
+  sprintf(fullfoldername,"%s/%02d", foldername, seriesnumber);
+  char histoname[100];
+  sprintf(histoname,"VME%02d_%02d", crate, number); 
+  if (remove)
+    {
+      char fullname[200]; 
+      sprintf(fullname,"%s/%s",fullfoldername,histoname);
+      RemoveHistogram(fullname); 
+      return 0;   
+    }
+  return MakeH1I(fullfoldername, histoname, 8192, 0, 500000);
+}
+
+
+
+
+TGo4Picture* TFRSBasicProc::MakeSeriesPicture(const char* foldername, Int_t seriesnumber, Bool_t remove) 
+{
+  char picname[100];
+  sprintf(picname,"Pic_VME0_%02d", seriesnumber);
+  
+  if (remove)
+    {
+      char fullname[200]; 
+      sprintf(fullname,"%s/%s",foldername,picname);
+      RemovePicture(fullname); 
+      return 0;   
+    }
+  
+  TGo4Picture* pic = MakePic(foldername, picname, 4, 8);
+   
+  if (ObjWasCreated())
+    for(int i=0;i<4;i++)
+      for(int j=0;j<8;j++)
+	{
+	  char histoname[100];
+	  sprintf(histoname,"newVME0_%02d_%02d", seriesnumber, i*8+j);    
+	  pic->AddObjName(i, j, histoname);
+	}
+      
+  return pic;
+}
+
+
+
 TGo4WinCond* TFRSBasicProc::MakeWindowCond(const char* fname,
                                            const char* cname,
                                            float left,

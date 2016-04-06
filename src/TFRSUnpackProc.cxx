@@ -51,67 +51,6 @@ TFRSUnpackProc::~TFRSUnpackProc()
 { }
 
 
-TH1I* TFRSUnpackProc::MakeH1ISeries(const char* foldername, Int_t seriesnumber, Int_t crate, Int_t number, Bool_t remove)
-{
-  char fullfoldername[100];                                    
-  sprintf(fullfoldername,"%s/%02d", foldername, seriesnumber);
-  char histoname[50];
-  sprintf(histoname,"newVME%02d_%02d_%02d", crate, seriesnumber, number); 
-  if (remove)
-    {
-      char fullname[200]; 
-      sprintf(fullname,"%s/%s",fullfoldername,histoname);
-      RemoveHistogram(fullname); 
-      return 0;   
-    }
-  return MakeH1I(fullfoldername, histoname, 4096, 0, 4096);
-}
-
-TH1I* TFRSUnpackProc::MakeH1ISeries3(const char* foldername, Int_t seriesnumber, Int_t crate, Int_t number, Bool_t remove) 
-{
-  char fullfoldername[100];                                    
-  sprintf(fullfoldername,"%s/%02d", foldername, seriesnumber);
-  char histoname[100];
-  sprintf(histoname,"VME%02d_%02d", crate, number); 
-  if (remove)
-    {
-      char fullname[200]; 
-      sprintf(fullname,"%s/%s",fullfoldername,histoname);
-      RemoveHistogram(fullname); 
-      return 0;   
-    }
-  return MakeH1I(fullfoldername, histoname, 8192, 0, 500000);
-}
-
-
-
-
-TGo4Picture* TFRSUnpackProc::MakeSeriesPicture(const char* foldername, Int_t seriesnumber, Bool_t remove) 
-{
-  char picname[100];
-  sprintf(picname,"Pic_VME0_%02d", seriesnumber);
-  
-  if (remove)
-    {
-      char fullname[200]; 
-      sprintf(fullname,"%s/%s",foldername,picname);
-      RemovePicture(fullname); 
-      return 0;   
-    }
-  
-  TGo4Picture* pic = MakePic(foldername, picname, 4, 8);
-   
-  if (ObjWasCreated())
-    for(int i=0;i<4;i++)
-      for(int j=0;j<8;j++)
-	{
-	  char histoname[100];
-	  sprintf(histoname,"newVME0_%02d_%02d", seriesnumber, i*8+j);    
-	  pic->AddObjName(i, j, histoname);
-	}
-      
-  return pic;
-}
 
 Int_t getbits(Int_t value, int nword, int start, int length)
 {
