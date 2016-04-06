@@ -14,7 +14,7 @@
 
 TFRSUnpackProc::TFRSUnpackProc() : TFRSBasicProc("FRSUnpackProc")
 {
-  frs = (TFRSParameter*) GetParameter("FRSPar");
+  frs = dynamic_cast<TFRSParameter*>(GetParameter("FRSPar"));
 
 }
 
@@ -128,73 +128,6 @@ Int_t get2bits(Int_t value, int nword, int start, int length)
   buf = buf & ((1 << length) - 1);
   return buf;
 }
-
-void TFRSUnpackProc::UnpackUserSubevent(TGo4MbsSubEvent* psubevt, TFRSUnpackEvent* tgt)
-{
-
-  Int_t *pdata = psubevt->GetDataField();	
-  Int_t len = 0;  
-
-  /* read the header longword and extract slot, type & length  */
-  Int_t vme_geo = getbits(*pdata,2,12,5);
-  //Int_t vme_type = getbits(*pdata,2,9,3);
-  Int_t vme_nlw =  getbits(*pdata,1,1,6);
-  pdata++; len++;
-
-  /* read the data from scaler */
-  if (vme_nlw > 0)
-    {
-      for(int i=0;i<vme_nlw;i++)
-	{
-	  tgt->vme1[vme_geo][i] = *pdata;
-	  pdata++; len++;
-	}
-      /* read and ignore the expected "end-of-block" longword   */
-      pdata++; len++;
-    }
-
-  /* for ProcID = 20 - rest of the unpacking */
-
-  while (len < (psubevt->GetDlen()-2)/2)
-    {
-      
-      /* read the header longword and extract slot, type & length  */
-      Int_t vme_chn = 0;
-      Int_t vme_geo = getbits(*pdata,2,12,5);
-      Int_t vme_type = getbits(*pdata,2,9,3);
-      Int_t vme_nlw =  getbits(*pdata,1,1,6);
-      pdata++; len++;
-      
-      //    std::cout<<"type = "<<vme_type<<"nlw = "<<vme_nlw<<std::endl;
-      /* read the data */
-      if ((vme_type == 2) && (vme_nlw > 0))
-	{
-	  for(int i=0;i<vme_nlw;i++)
-	    {  
-	      vme_geo = getbits(*pdata,2,12,5);
-	      vme_type = getbits(*pdata,2,9,3);
-	      vme_chn = getbits(*pdata,2,1,5);
-	      tgt->vme1[vme_geo][vme_chn] = getbits(*pdata,1,1,16);	                 
-	      //printf("DATA:%d %d %d\n",vme_geo,vme_chn,tgt->vme1[vme_geo][vme_chn] ); 
-	      pdata++; len++;
-	    }
-	  
-	  /* read and ignore the expected "end-of-block" longword */
-	  pdata++; len++;
-	}
-      
-    }  /* end of the while... loop  */
-		
-  // if ((frs!=0) && frs->fill_raw_histos)
-  //   for(int i=0;i<32;i++)
-  //     {
-  // 	if (hVME1_8[i]) hVME1_8[i]->Fill(tgt->vme1[8][i] & 0xfff);
-  // 	if (hVME1_9[i]) hVME1_9[i]->Fill(tgt->vme1[9][i] & 0xfff);
-  // 	if (hVME1_16[i]) hVME1_16[i]->Fill(tgt->vme1[15][i] & 0xfff);
-  // 	if (hVME1_17[i]) hVME1_17[i]->Fill(tgt->vme1[17][i] & 0xfff);
-  //     }
-}  
-
 
 Bool_t TFRSUnpackProc::BuildEvent(TGo4EventElement* output) 
 {
@@ -567,7 +500,7 @@ Bool_t TFRSUnpackProc::Event_Extract(TFRSUnpackEvent* event_out, TGo4MbsSubEvent
 		  vme_type = getbits(*pdata,2,12,5);
 		}
 	    }
-	  if(getbits(*pdata,2,12,5)==16&&len<lenMax)
+	  if(getbits(*pdata,2,12,5)==16 && len<lenMax)
 	    {//EOB
 	      pdata++; len++;
 	    }
@@ -586,6 +519,72 @@ Bool_t TFRSUnpackProc::Event_Extract(TFRSUnpackEvent* event_out, TGo4MbsSubEvent
 
 }
 
+
+void TFRSUnpackProc::UnpackUserSubevent(TGo4MbsSubEvent* psubevt, TFRSUnpackEvent* tgt)
+{
+
+  Int_t *pdata = psubevt->GetDataField();	
+  Int_t len = 0;  
+
+  /* read the header longword and extract slot, type & length  */
+  Int_t vme_geo = getbits(*pdata,2,12,5);
+  //Int_t vme_type = getbits(*pdata,2,9,3);
+  Int_t vme_nlw =  getbits(*pdata,1,1,6);
+  pdata++; len++;
+
+  /* read the data from scaler */
+  if (vme_nlw > 0)
+    {
+      for(int i=0;i<vme_nlw;i++)
+	{
+	  tgt->vme1[vme_geo][i] = *pdata;
+	  pdata++; len++;
+	}
+      /* read and ignore the expected "end-of-block" longword   */
+      pdata++; len++;
+    }
+
+  /* for ProcID = 20 - rest of the unpacking */
+
+  while (len < (psubevt->GetDlen()-2)/2)
+    {
+      
+      /* read the header longword and extract slot, type & length  */
+      Int_t vme_chn = 0;
+      Int_t vme_geo = getbits(*pdata,2,12,5);
+      Int_t vme_type = getbits(*pdata,2,9,3);
+      Int_t vme_nlw =  getbits(*pdata,1,1,6);
+      pdata++; len++;
+      
+      //    std::cout<<"type = "<<vme_type<<"nlw = "<<vme_nlw<<std::endl;
+      /* read the data */
+      if ((vme_type == 2) && (vme_nlw > 0))
+	{
+	  for(int i=0;i<vme_nlw;i++)
+	    {  
+	      vme_geo = getbits(*pdata,2,12,5);
+	      vme_type = getbits(*pdata,2,9,3);
+	      vme_chn = getbits(*pdata,2,1,5);
+	      tgt->vme1[vme_geo][vme_chn] = getbits(*pdata,1,1,16);	                 
+	      //printf("DATA:%d %d %d\n",vme_geo,vme_chn,tgt->vme1[vme_geo][vme_chn] ); 
+	      pdata++; len++;
+	    }
+	  
+	  /* read and ignore the expected "end-of-block" longword */
+	  pdata++; len++;
+	}
+      
+    }  /* end of the while... loop  */
+		
+  // if ((frs!=0) && frs->fill_raw_histos)
+  //   for(int i=0;i<32;i++)
+  //     {
+  // 	if (hVME1_8[i]) hVME1_8[i]->Fill(tgt->vme1[8][i] & 0xfff);
+  // 	if (hVME1_9[i]) hVME1_9[i]->Fill(tgt->vme1[9][i] & 0xfff);
+  // 	if (hVME1_16[i]) hVME1_16[i]->Fill(tgt->vme1[15][i] & 0xfff);
+  // 	if (hVME1_17[i]) hVME1_17[i]->Fill(tgt->vme1[17][i] & 0xfff);
+  //     }
+}  
 
 
 
@@ -614,19 +613,15 @@ Bool_t TFRSUnpackProc::FillHistograms(TFRSUnpackEvent* event)
 	      hVME2_TDC[vme_chn]->Fill(multihit_value);
 	    }
 
-      // if(event->qtrigger==20)
-      // 	{
       // 	  // from UnpackUserSubevent 
       // 	  // if ((frs!=0) && frs->fill_raw_histos)
-      // 	  for(int i=0;i<32;i++)
-      // 	    {
-      // 	      if (hVME1_8[i]) hVME1_8[i]->Fill(event->vme1[8][i] & 0xfff);
-      // 	      if (hVME1_9[i]) hVME1_9[i]->Fill(event->vme1[9][i] & 0xfff);
-      // 	      if (hVME1_16[i]) hVME1_16[i]->Fill(event->vme1[15][i] & 0xfff);
-      // 	      if (hVME1_17[i]) hVME1_17[i]->Fill(event->vme1[17][i] & 0xfff);
-      // 	    }
-      // 	}
-
+      for(int i=0;i<32;i++)
+	{
+	  if (hVME1_8[i]) hVME1_8[i]->Fill(event->vme1[8][i] & 0xfff);
+	  if (hVME1_9[i]) hVME1_9[i]->Fill(event->vme1[9][i] & 0xfff);
+	  if (hVME1_16[i]) hVME1_16[i]->Fill(event->vme1[15][i] & 0xfff);
+	  if (hVME1_17[i]) hVME1_17[i]->Fill(event->vme1[17][i] & 0xfff);
+	}
     }
 
   return kTRUE;
