@@ -637,7 +637,7 @@ void TFRSAnlProc::Procceed_MUSIC_Analysis(TFRSSortEvent& srt, TFRSCalibrEvent& c
 
 Float_t rand0_5() 
 {
-  return rand()*1./RAND_MAX - 0.5;   
+  return rand()*1./RAND_MAX;// - 0.5;   
 }
 
 void TFRSAnlProc::Procceed_SCI_Analysis(TFRSSortEvent& srt, TFRSCalibrEvent& clb, TFRSAnlEvent& tgt) 
@@ -727,7 +727,7 @@ void TFRSAnlProc::Procceed_SCI_Analysis(TFRSSortEvent& srt, TFRSCalibrEvent& clb
 	     hSCI_Tx[idx]->Fill(tgt.sci_tx[idx]);    
 
 	   /* mm-calibrated     */
-	   Float_t R = tgt.sci_tx[idx] + rand0_5(); 
+	   Float_t R = tgt.sci_tx[idx] ;//+ rand0_5(); 
 	   
 	   Float_t power = 1., sum = 0.;
 	   for(int i=0;i<7;i++)
