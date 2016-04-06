@@ -7,42 +7,45 @@
 //#include  <iostream.h>
 #include  <stdio.h>
 
-TFRSSortProc::TFRSSortProc() : 
-   TFRSBasicProc("FRSSortProc") 
+TFRSSortProc::TFRSSortProc() : TFRSBasicProc("FRSSortProc") 
 {
-   StartOfSpilTime = -1;
+  StartOfSpilTime = -1;
 }
 
-TFRSSortProc::TFRSSortProc(const char* name) : 
-   TFRSBasicProc(name) 
+TFRSSortProc::TFRSSortProc(const char* name) : TFRSBasicProc(name) 
 { 
-   StartOfSpilTime = -1;
-	counter =0;
+  StartOfSpilTime = -1;
+  counter = 0;
 }
 
 TFRSSortProc::~TFRSSortProc() {
 }
 
-void TFRSSortProc::FRSSort(TFRSSortEvent* tgt) {
+Bool_t TFRSSortProc::BuildEvent(TGo4EventElement* output)
+{
 
+  TFRSSortEvent* tgt = dynamic_cast<TFRSSortEvent*> (output);
+  if (tgt==nullptr)
+    return kFALSE;
 
   tgt->SetValid(kTRUE);  // all events after unpack always accepted
 
   TFRSUnpackEvent *src = dynamic_cast<TFRSUnpackEvent*> (GetInputEvent());
-  if (src==0) return;
+  if (src==nullptr)
+    return kFALSE;
   
   /* now we can assign the parameters according to cabling:  */
 
   /* ### timestamp: */
   
-//  tgt->ts_id = src->vme0[20][0];
+  //  tgt->ts_id = src->vme0[20][0];
   tgt->ts_word[0] = src->vme0[20][0];
   tgt->ts_word[1] = src->vme0[20][2];
   tgt->ts_word[2] = src->vme0[20][4];
-  tgt->timestamp = Long64_t(1)*tgt->ts_word[0] + 
-                   Long64_t(0x10000)*tgt->ts_word[1] + 
-                   Long64_t(0x10000)*Long64_t(0x10000)*tgt->ts_word[2];
+
+  tgt->timestamp = Long64_t(1)*tgt->ts_word[0] + Long64_t(0x10000)*tgt->ts_word[1] + Long64_t(0x10000)*Long64_t(0x10000)*tgt->ts_word[2];
   // printf("qtrigger=%d timestamp=%ld \n",src->qtrigger,tgt->timestamp);
+
   tgt->tsys_word[0] = src->vme0[20][6] ; //s time low word
   tgt->tsys_word[1] = src->vme0[20][7] ; //s time high worid... we do not use it
   tgt->tsys_word[2] = src->vme0[20][8] ; //ms time since the previous s time (ftime routine)
@@ -51,28 +54,30 @@ void TFRSSortProc::FRSSort(TFRSSortEvent* tgt) {
   tgt->systemtime_ms = 1000*(tgt->systemtime_s)+tgt->tsys_word[2] ; 
 
 
-  if (src->qtrigger==12) {
-    StartOfSpilTime = tgt->timestamp; 
-    //StartOfSpilTime = 0; 
-    StartOfSpilTime2 = tgt->timestamp;
-    //StartOfSpilTime2 = 0;  
+  if (src->qtrigger==12)
+    {
+      StartOfSpilTime = tgt->timestamp; 
+      //StartOfSpilTime = 0; 
+      StartOfSpilTime2 = tgt->timestamp;
+      //StartOfSpilTime2 = 0;  
       // printf("12 spill start at %ld ",StartOfSpilTime);
-  }   
-  else 
-  if (src->qtrigger==13) {
-       StartOfSpilTime = -1;
-  }
+    }   
+  else if (src->qtrigger==13)
+    {
+      StartOfSpilTime = -1;
+    }
   //else                         //changed 170309
   // rest are interesting only if trigger == 1
   //if (src->qtrigger!=1 ) return;             
   
   // calculate time from spill start in sec
   if (StartOfSpilTime>=0) 
-  { 
-  tgt->timespill = (tgt->timestamp - StartOfSpilTime) / 50000000.;
-    //tgt->timespill = 1;
-   //printf("timespill= %f \n",tgt->timespill);    
-  }
+    { 
+      tgt->timespill = (tgt->timestamp - StartOfSpilTime) / 50000000.;
+      //tgt->timespill = 1;
+      //printf("timespill= %f \n",tgt->timespill);    
+    }
+  
   tgt->timespill2 = (tgt->timestamp - StartOfSpilTime2) / 50000000.;
   //tgt->timespill2 = 1; 
 
@@ -83,10 +88,11 @@ void TFRSSortProc::FRSSort(TFRSSortEvent* tgt) {
 
   /* ### scalers:  */
   /* these are treated as 32-bit integers directly  */
-  for(int i=0;i<32;i++){
-    tgt->sc_long[i] = src->vme2scaler[i];    
-    tgt->sc_long2[i] = src->vme1[5][i];
-  }
+  for(int i=0;i<32;i++)
+    {
+      tgt->sc_long[i] = src->vme2scaler[i];    
+      tgt->sc_long2[i] = src->vme1[5][i];
+    }
 
   //std::cout<<"1Hz sort,"<<src->vme0[6][3]<<std::endl;       
  
@@ -98,7 +104,7 @@ void TFRSSortProc::FRSSort(TFRSSortEvent* tgt) {
   for(int i=0;i<4;i++)
     tgt->mw_an[i] = src->vme0[8][i] & 0xfff;
     
- /* ### MW cathodes:  */
+  /* ### MW cathodes:  */
 
   /* ----- MW 11 (No. 1) ----- */
   tgt->mw_xr[0] = src->vme0[8][16] & 0xfff;
@@ -153,7 +159,7 @@ void TFRSSortProc::FRSSort(TFRSSortEvent* tgt) {
   tgt->tpc_l[3][1]=src->vme1[15][30] & 0xfff;
   tgt->tpc_r[3][1]=src->vme1[15][31] & 0xfff;
   
- // TPC 5 + TPC 6 (TPC 41 + TPC 42 @ S4)
+  // TPC 5 + TPC 6 (TPC 41 + TPC 42 @ S4)
   // TPC 5
   tgt->tpc_a[4][0]=src->vme1[17][0] & 0xfff;
   tgt->tpc_a[4][1]=src->vme1[17][1] & 0xfff;
@@ -268,8 +274,8 @@ void TFRSSortProc::FRSSort(TFRSSortEvent* tgt) {
   tgt->de_v2l = 0;
   tgt->de_v2r = 0;
   tgt->de_v3  = 0;
-//  tgt->de_42l = src->vme0[11][26] & 0xfff;
-//  tgt->de_42r = rc->vme0[11][27] & 0xfff;
+  //  tgt->de_42l = src->vme0[11][26] & 0xfff;
+  //  tgt->de_42r = rc->vme0[11][27] & 0xfff;
   
   //tgt->de_21ld = 0;    // 
   //tgt->de_21rd = 0;    //
@@ -285,18 +291,20 @@ void TFRSSortProc::FRSSort(TFRSSortEvent* tgt) {
   
 
   /* ### MUSIC OLD:  */
-  for(int i=0;i<4;i++){
-    tgt->music_t3[i] = src->vme1[9][16+i] & 0xfff;    //TIME
-    //tgt->music_t3[i] = 0;
-    tgt->music_e3[i] = src->vme0[12][16+i] & 0xfff;    //ENERGY
-    //tgt->music_e3[i] = 0;
-  }
+  for(int i=0;i<4;i++)
+    {
+      tgt->music_t3[i] = src->vme1[9][16+i] & 0xfff;    //TIME
+      //tgt->music_t3[i] = 0;
+      tgt->music_e3[i] = src->vme0[12][16+i] & 0xfff;    //ENERGY
+      //tgt->music_e3[i] = 0;
+    }
                
   /* ### TUM MUSIC dE:  */
-  for(int i=0;i<8;i++){
-    tgt->music_e1[i] = src->vme0[12][8+i] & 0xfff;
-    tgt->music_e2[i] = src->vme0[12][24+i] & 0xfff;    
-  }
+  for(int i=0;i<8;i++)
+    {
+      tgt->music_e1[i] = src->vme0[12][8+i] & 0xfff;
+      tgt->music_e2[i] = src->vme0[12][24+i] & 0xfff;    
+    }
     
   /* ### MUSIC temp & pressure:  */
   tgt->music_pres[0] = src->vme0[12][23] & 0xfff;
@@ -324,6 +332,8 @@ void TFRSSortProc::FRSSort(TFRSSortEvent* tgt) {
 
   //Electron current measurement (vme must be adjused)
   tgt->ec_signal = src->vme0[12][1]& 0xfff;
+
+  return kTRUE;
 }
 
 ClassImp(TFRSSortProc)

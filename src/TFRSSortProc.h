@@ -6,21 +6,24 @@
 class TFRSSortEvent;
 
 class TFRSSortProc : public TFRSBasicProc {
-   public:
-      TFRSSortProc() ;
-      TFRSSortProc(const char* name);
-      virtual ~TFRSSortProc() ;
+public:
+  TFRSSortProc() ;
+  TFRSSortProc(const char* name);
+  virtual ~TFRSSortProc() ;
+
+  Bool_t BuildEvent(TGo4EventElement* output);
+  //Bool_t FillHistograms(TFRSSortEvent* event);
    
-      void FRSSort(TFRSSortEvent* tgt);
+  //void FRSSort(TFRSSortEvent* tgt);
       
-   protected:
-      Long64_t StartOfSpilTime;
-      Long64_t StartOfSpilTime2; //does not reset at end of extraction
+protected:
+  Long64_t StartOfSpilTime;
+  Long64_t StartOfSpilTime2; //does not reset at end of extraction
 
-      Int_t counter;
+  Int_t counter;
 
 
-   ClassDef(TFRSSortProc,1)
+  ClassDef(TFRSSortProc,1)
 };
 
 #endif //TFRSSORTPROCESSOR_H
