@@ -4,51 +4,55 @@
 #include "Go4EventServer/TGo4FileSource.h"
 #include "TFRSAnlProc.h"
 
-TFRSAnlEvent::TFRSAnlEvent() :TGo4EventElement("FRSAnlEvent"), fxProc(0), fxFileSrc(0) { 
-}
+TFRSAnlEvent::TFRSAnlEvent() :TGo4EventElement("FRSAnlEvent")//, fxProc(0), fxFileSrc(0) { 
+{ }
 
-TFRSAnlEvent::TFRSAnlEvent(const char* name) :TGo4EventElement(name), fxProc(0), fxFileSrc(0) { 
-}
+TFRSAnlEvent::TFRSAnlEvent(const char* name) :TGo4EventElement(name)//, fxProc(0), fxFileSrc(0) {
+{ }
 
-TFRSAnlEvent::~TFRSAnlEvent() { 
-}
+TFRSAnlEvent::~TFRSAnlEvent()
+{ }
 
-Int_t TFRSAnlEvent::Init() { 
-//--- check for different source types
+Int_t TFRSAnlEvent::Init()
+{ 
+  //--- check for different source types
   Int_t rev = 0;
-  if(CheckEventSource("TFRSAnlProc")) {
-    fxProc = (TFRSAnlProc*)GetEventSource();
-    std::cout << "**** " << GetName() << " will be filled by " << fxProc->GetName() << " ****" << std::endl;
-  } else 
-  if(CheckEventSource("TGo4FileSource")) {
-    fxFileSrc = (TGo4FileSource*)GetEventSource();
-    std::cout << "**** " << GetName() << " will be filled by File Source ****"<< std::endl;
-  }
-  else rev=1;
+  // if(CheckEventSource("TFRSAnlProc")) {
+  //   fxProc = (TFRSAnlProc*)GetEventSource();
+  //   std::cout << "**** " << GetName() << " will be filled by " << fxProc->GetName() << " ****" << std::endl;
+  // } else 
+  // if(CheckEventSource("TGo4FileSource")) {
+  //   fxFileSrc = (TGo4FileSource*)GetEventSource();
+  //   std::cout << "**** " << GetName() << " will be filled by File Source ****"<< std::endl;
+  // }
+  // else rev=1;
   return rev;
 }
 
 
-Int_t TFRSAnlEvent::Fill() 
+// Int_t TFRSAnlEvent::Fill() 
+// {
+//    Clear();
+//    if(fxProc) fxProc->FRSEventAnalysis(this); else
+//    if(fxFileSrc)fxFileSrc->BuildEvent(this); // method from framework to restore event from file
+
+//    return 0;
+// }
+
+void TFRSAnlEvent::Clear(Option_t *t)
 {
-   Clear();
-   if(fxProc) fxProc->FRSEventAnalysis(this); else
-   if(fxFileSrc)fxFileSrc->BuildEvent(this); // method from framework to restore event from file
-
-   return 0;
-}
-
-void TFRSAnlEvent::Clear(Option_t *t) {
   // MUSIC part  
     
-  for(int i=0;i<8;i++) {
-    music_b_e1[i] = kFALSE;
-    music_b_e2[i] = kFALSE;
-  }
-  for(int i=0;i<4;i++) {
-    music_b_t3[i] = kFALSE;
-    music_b_e3[i] = kFALSE;
-  }
+  for(int i=0;i<8;i++)
+    {
+      music_b_e1[i] = kFALSE;
+      music_b_e2[i] = kFALSE;
+    }
+  for(int i=0;i<4;i++)
+    {
+      music_b_t3[i] = kFALSE;
+      music_b_e3[i] = kFALSE;
+    }
   music1_anodes_cnt = 0;
   music2_anodes_cnt = 0;
   music3_anodes_cnt = 0;
@@ -62,27 +66,29 @@ void TFRSAnlEvent::Clear(Option_t *t) {
   b_decor = kFALSE;
   
   // SCI part
-  for(int i=0;i<12;i++) {
-     sci_l[i] = 1.;
-     sci_r[i] = 0.;
-     sci_e[i] = 0.;
-     sci_tx[i] = 0.;
-     sci_x[i] = 0.;
-     sci_b_l[i] = kFALSE;
-     sci_b_r[i] = kFALSE;
-     sci_b_e[i] = kFALSE;
-     sci_b_tx[i] = kFALSE;
-     sci_b_x[i] = kFALSE;
-  }
+  for(int i=0;i<12;i++)
+    {
+      sci_l[i] = 1.;
+      sci_r[i] = 0.;
+      sci_e[i] = 0.;
+      sci_tx[i] = 0.;
+      sci_x[i] = 0.;
+      sci_b_l[i] = kFALSE;
+      sci_b_r[i] = kFALSE;
+      sci_b_e[i] = kFALSE;
+      sci_b_tx[i] = kFALSE;
+      sci_b_x[i] = kFALSE;
+    }
   
   // veto SCI 
-  for(int i=0;i<3;i++) {
-     sci_veto_l[i] = 1.;
-     sci_veto_r[i] = 1.;
-     sci_b_veto_l[i] = kFALSE;
-     sci_b_veto_r[i] = kFALSE;
-     sci_b_veto_e[i] = kFALSE;
-  }
+  for(int i=0;i<3;i++)
+    {
+      sci_veto_l[i] = 1.;
+      sci_veto_r[i] = 1.;
+      sci_b_veto_l[i] = kFALSE;
+      sci_b_veto_r[i] = kFALSE;
+      sci_b_veto_e[i] = kFALSE;
+    }
   
   sci_b_veto_r[3] = kTRUE; // veto3 missing channel
 
@@ -121,10 +127,11 @@ void TFRSAnlEvent::Clear(Option_t *t) {
   id_b_x4 = kFALSE;
   id_b_detof2 = kFALSE;
   
-  for (int i=0;i<2;i++) {
-    id_brho[i] = 0.;  
-    id_rho[i] = 0.;
-  }
+  for (int i=0;i<2;i++)
+    {
+      id_brho[i] = 0.;  
+      id_rho[i] = 0.;
+    }
   id_beta     = 0.; 
   id_beta3     = 0.; 
   id_gamma    = 1.;
@@ -153,14 +160,15 @@ void TFRSAnlEvent::Clear(Option_t *t) {
   id_b_AoQ    = kFALSE;
   id_b_z      = kFALSE;
   id_b_x2AoQ  = kFALSE;
-  for(int i=0;i<5;i++) {
-    id_b_x4AoQ_Z[i] = kFALSE;  
-    id_b_z_AoQ[i] = kFALSE;
-    id_b_music_z[i] = kFALSE;
-  }
+  for(int i=0;i<5;i++)
+    {
+      id_b_x4AoQ_Z[i] = kFALSE;  
+      id_b_z_AoQ[i] = kFALSE;
+      id_b_music_z[i] = kFALSE;
+    }
   timestamp=0;
- ts=0;  
- ts2=0;  
+  ts=0;  
+  ts2=0;  
 }
 
 ClassImp(TFRSAnlEvent)
