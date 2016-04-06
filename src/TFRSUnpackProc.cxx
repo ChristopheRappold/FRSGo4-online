@@ -544,12 +544,11 @@ Bool_t TFRSUnpackProc::FillHistograms(TFRSUnpackEvent* event)
 	  //if (hVME0_14[i]) hVME0_14[i]->Fill(event->vme0[14][i] & 0xfff);
 	}
 
-      for(auto& channels : event->vme2s)
-	for(auto& multihit_value : channels)
-	  if(multihit_value > 0)
+      for(int i=0; i<32; ++i)
+	for(int j=0; j<10; ++j)
+	  if(event->vme2s[i][j] > 0)
 	    {
-	      int vme_chn = &channels-event->vme2s;
-	      hVME2_TDC[vme_chn]->Fill(multihit_value);
+	      hVME2_TDC[i]->Fill(event->vme2s[i][j]);
 	    }
 
       // 	  // from UnpackUserSubevent 

@@ -72,16 +72,23 @@ protected:
 		    Int_t nbins, Float_t xmin, Float_t xmax, 
 		    const char* xtitle = "channels", Color_t linecolor = 2, Color_t fillcolor = 6);
 
-  const char* mw_name_ext[13]={"(1:1)", "(2:1)", "(2:2)", "(3:1)",
-			       "(4:1)", "(4:2)", "(5:1)", "(6:1)",
-			       "(7:1)", "(8:1)", "(8:2)", "(9:1)", "(10:1)"};
+  // const char* mw_name_ext[13]={"(1:1)", "(2:1)", "(2:2)", "(3:1)",
+  // 			       "(4:1)", "(4:2)", "(5:1)", "(6:1)",
+  // 			       "(7:1)", "(8:1)", "(8:2)", "(9:1)", "(10:1)"};
 
-  const char* mw_folder_ext1[13]={"1", "2", "2", "3","4", "4", "5", "6","7", "8","8", "B", "B"};
-  const char* mw_folder_ext2[13]={"11", "21", "22", "31","41", "42", "51", "61","71", "81", "82", "B21", "B22"};
+  // const char* mw_folder_ext1[13]={"1", "2", "2", "3","4", "4", "5", "6","7", "8","8", "B", "B"};
+  // const char* mw_folder_ext2[13]={"11", "21", "22", "31","41", "42", "51", "61","71", "81", "82", "B21", "B22"};
   
-  const char* tpc_name_ext1[6]={"TPC1_","TPC2_","TPC3_","TPC4_","TPC5_","TPC6_"};
-  const char* tpc_folder_ext1[6]={"TPC1","TPC2","TPC3","TPC4","TPC5","TPC6"};
-                         
+  // const char* tpc_name_ext1[6]={"TPC1_","TPC2_","TPC3_","TPC4_","TPC5_","TPC6_"};
+  // const char* tpc_folder_ext1[6]={"TPC1","TPC2","TPC3","TPC4","TPC5","TPC6"};
+
+
+  const static char* mw_name_ext[13];
+  const static char* mw_folder_ext1[13];
+  const static char* mw_folder_ext2[13];
+  const static char* tpc_name_ext1[6];
+  const static char* tpc_folder_ext1[6];
+
   // TH1I* MakeH1I_ITAG(const char* foldername, const char* name, int nameindex,
   // 		     Int_t nbins, Float_t xmin, Float_t xmax, 
   // 		     const char* xtitle = "channels", Color_t linecolor = 2, Color_t fillcolor = 6);

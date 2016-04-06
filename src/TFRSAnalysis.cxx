@@ -187,7 +187,7 @@ Bool_t TFRSAnalysis::InitEventClasses()
 	{
 	  std::stringstream stream(temp_line);
 	  std::string testComment(stream.str());
-	  auto it_comment = testComment.find(CommentSymbol);
+	  std::size_t it_comment = testComment.find(CommentSymbol);
 	  if(it_comment!=std::string::npos)
 	    {
 	      //std::cout<<"!> Skip comment"<<temp_line<<std::endl;
