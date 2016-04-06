@@ -21,24 +21,12 @@ const  char* TFRSBasicProc::tpc_folder_ext1[6]={"TPC1","TPC2","TPC3","TPC4","TPC
 
 
 TFRSBasicProc::TFRSBasicProc() : TGo4EventProcessor("FRSBasicProc"),
-				 fbTestAutoSaveFile(kTRUE), fbUseAutoSaveFile(kFALSE)  {
-
-  // mw_name_ext({"(1:1)", "(2:1)", "(2:2)", "(3:1)","(4:1)", "(4:2)", "(5:1)", "(6:1)","(7:1)", "(8:1)", "(8:2)", "(9:1)", "(10:1)"});
-  // mw_folder_ext1({"1", "2", "2", "3","4", "4", "5", "6","7", "8","8", "B", "B"});
-  // mw_folder_ext2({"11", "21", "22", "31","41", "42", "51", "61","71", "81", "82", "B21", "B22"});
-  // tpc_name_ext1({"TPC1_","TPC2_","TPC3_","TPC4_","TPC5_","TPC6_"});
-  // tpc_folder_ext1({"TPC1","TPC2","TPC3","TPC4","TPC5","TPC6"});
-    
-}
+				 fbTestAutoSaveFile(kTRUE), fbUseAutoSaveFile(kFALSE)
+{ }
 
 TFRSBasicProc::TFRSBasicProc(const char* name) : TGo4EventProcessor(name),
-						 // mw_name_ext({"(1:1)", "(2:1)", "(2:2)", "(3:1)","(4:1)", "(4:2)", "(5:1)", "(6:1)","(7:1)", "(8:1)", "(8:2)", "(9:1)", "(10:1)"}),
-						 // mw_folder_ext1({"1", "2", "2", "3","4", "4", "5", "6","7", "8","8", "B", "B"}),
-						 // mw_folder_ext2({"11", "21", "22", "31","41", "42", "51", "61","71", "81", "82", "B21", "B22"}),
-						 // tpc_name_ext1("TPC1_","TPC2_","TPC3_","TPC4_","TPC5_","TPC6_"),
-						 // tpc_folder_ext1({"TPC1","TPC2","TPC3","TPC4","TPC5","TPC6"}),
-						 fbTestAutoSaveFile(kTRUE), fbUseAutoSaveFile(kFALSE) { 
-}
+						 fbTestAutoSaveFile(kTRUE), fbUseAutoSaveFile(kFALSE)
+{ }
 
 TFRSBasicProc::~TFRSBasicProc() {
 }

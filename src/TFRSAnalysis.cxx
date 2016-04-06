@@ -205,7 +205,7 @@ Bool_t TFRSAnalysis::InitEventClasses()
 
   std::cout << "TFRSAnalysis::Call "<< nameSetupFile<<" script" << std::endl;
   
-  std::ifstream testingFileExist(nameSetupFile);
+  std::ifstream testingFileExist(nameSetupFile.c_str());
   if(testingFileExist.good()==false)
     {
       std::cout<<" E> !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! "<<std::endl;
