@@ -212,7 +212,7 @@ Bool_t TFRSUnpackProc::BuildEvent(TGo4EventElement* output)
 	  */
 	  /* check for ProcID 10 = standard crate  */
 	  //    if((psubevt->GetProcid())!=10) {
-	  if( (psubevt->GetProcid()!=10) && (psubevt->GetProcid()!=15) && (psubevt->GetProcid()!=20) && (psubevt->GetProcid()==65) )
+	  if( (psubevt->GetProcid()!=10) && (psubevt->GetProcid()!=15) && (psubevt->GetProcid()!=20) && (psubevt->GetProcid()!=65) )
 	    {
 	      std::cout << "Wrong ProcID " << psubevt->GetProcid() << std::endl; 
 	      continue; // skip non standard event
