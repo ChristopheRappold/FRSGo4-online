@@ -4,23 +4,14 @@
 #include "Go4EventServer/TGo4FileSource.h"
 #include "TFRSUserProc.h"
 
-TFRSUserEvent::TFRSUserEvent() : 
-   TGo4EventElement("FRSUserEvent"), 
-   fxProc(0), 
-   fxFileSrc(0) 
-{ 
-}
+TFRSUserEvent::TFRSUserEvent() : TGo4EventElement("FRSUserEvent")//, fxProc(0), fxFileSrc(0) 
+{  }
 
-TFRSUserEvent::TFRSUserEvent(const char* name) :
-   TGo4EventElement(name), 
-   fxProc(0), 
-   fxFileSrc(0) 
-{ 
-}
+TFRSUserEvent::TFRSUserEvent(const char* name) : TGo4EventElement(name)//, fxProc(0), fxFileSrc(0) 
+{ }
 
 TFRSUserEvent::~TFRSUserEvent() 
-{ 
-}
+{ }
 
 Int_t TFRSUserEvent::Init() { 
   Int_t rev=0;
