@@ -3,6 +3,8 @@
 
 #include "Go4Analysis/TGo4Analysis.h"
 
+#include "TFRSParameter.h"
+
 class TH1;
 class TH2;
 
@@ -10,13 +12,13 @@ class TGo4MbsEvent;
 class TGo4WinCond;
 class TGo4PolyCond;
 
-class TFRSParameter;
-class TMWParameter;
-class TTPCParameter;
-class TMUSICParameter;
-class TSCIParameter;
-class TIDParameter;
-class TSIParameter;
+// class TFRSParameter;
+// class TMWParameter;
+// class TTPCParameter;
+// class TMUSICParameter;
+// class TSCIParameter;
+// class TIDParameter;
+// class TSIParameter;
 
 class TFRSAnalysis : public TGo4Analysis {
 public:   
