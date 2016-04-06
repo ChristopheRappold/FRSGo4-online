@@ -5,40 +5,40 @@
 #include "TFRSCalibrProc.h"
 #include "Go4EventServer/TGo4FileSource.h"
 
-TFRSCalibrEvent::TFRSCalibrEvent() : 
-   TGo4EventElement("FRSCalibrEvent"), fxProc(0), fxFileSrc(0) { 
-}
+TFRSCalibrEvent::TFRSCalibrEvent() : TGo4EventElement("FRSCalibrEvent")//, fxProc(0), fxFileSrc(0) { 
+{ }
 
-TFRSCalibrEvent::TFRSCalibrEvent(const char* name) 
-  :TGo4EventElement(name), fxProc(0), fxFileSrc(0) { 
-}
+TFRSCalibrEvent::TFRSCalibrEvent(const char* name) : TGo4EventElement(name)//, fxProc(0), fxFileSrc(0) { 
+{ }
 
-TFRSCalibrEvent::~TFRSCalibrEvent() { 
-}
+TFRSCalibrEvent::~TFRSCalibrEvent()
+{ }
 
-Int_t TFRSCalibrEvent::Init() { 
+Int_t TFRSCalibrEvent::Init()
+{ 
   Int_t rev=0;
   Clear();
-  if(CheckEventSource("TFRSCalibrProc")){
-    fxProc = (TFRSCalibrProc*)GetEventSource();
-    std::cout << "**** " << GetName() << " will be filled by " << fxProc->GetName() << " ****" << std::endl;
-  } else
-  if(CheckEventSource("TGo4FileSource")) {
-    fxFileSrc = (TGo4FileSource*)GetEventSource();
-    std::cout << "**** " << GetName() << " will be filled by File Source ****"<< std::endl;
-  } else rev=1;
+  // if(CheckEventSource("TFRSCalibrProc")){
+  //   fxProc = (TFRSCalibrProc*)GetEventSource();
+  //   std::cout << "**** " << GetName() << " will be filled by " << fxProc->GetName() << " ****" << std::endl;
+  // } else
+  // if(CheckEventSource("TGo4FileSource")) {
+  //   fxFileSrc = (TGo4FileSource*)GetEventSource();
+  //   std::cout << "**** " << GetName() << " will be filled by File Source ****"<< std::endl;
+  // } else rev=1;
   return rev;
 }
 
-Int_t TFRSCalibrEvent::Fill() 
-{
-   Clear();
-   if(fxProc) fxProc->FRSCalibr(this); else  // user event processing method
-   if(fxFileSrc)fxFileSrc->BuildEvent(this); // method from framework to restore event from file
-   return 0;
-}
+// Int_t TFRSCalibrEvent::Fill() 
+// {
+//    Clear();
+//    if(fxProc) fxProc->FRSCalibr(this); else  // user event processing method
+//    if(fxFileSrc)fxFileSrc->BuildEvent(this); // method from framework to restore event from file
+//    return 0;
+// }
 
-void TFRSCalibrEvent::Clear(Option_t *t) { 
+void TFRSCalibrEvent::Clear(Option_t *t)
+{ 
   seconds = 0;
   tenthsecs = 0;
   hundrethsecs = 0;	//mik
@@ -47,14 +47,15 @@ void TFRSCalibrEvent::Clear(Option_t *t) {
   freeTrig=0;
   acptTrig=0;
 
-  for (int i=0;i<13;i++) {
-    mw_xsum[i] = 0;
-    mw_ysum[i] = 0;
-    mw_x[i] = 0.;
-    mw_y[i] = 0.;
-    mw_wire[i] = 0.;
-    b_mw_xsum[i] = kFALSE; 
-    b_mw_ysum[i] = kFALSE; 
+  for (int i=0;i<13;i++)
+    {
+      mw_xsum[i] = 0;
+      mw_ysum[i] = 0;
+      mw_x[i] = 0.;
+      mw_y[i] = 0.;
+      mw_wire[i] = 0.;
+      b_mw_xsum[i] = kFALSE; 
+      b_mw_ysum[i] = kFALSE; 
   }
   
   z_x_s2 = 0.;
@@ -117,20 +118,22 @@ void TFRSCalibrEvent::Clear(Option_t *t) {
   music2_x = 0.;        /* MUSIC1,2 positions       */
 
   //TPC Part
-  for (int i = 0; i<6;i++){
-    tpc_x[i] = 9999.9;
-    tpc_y[i] = 9999.9;
-    b_tpc_xy[i] = kFALSE;
-    for (int j=0;j<4;j++){
-      tpc_csum[i][j] =0;
-      b_tpc_csum[i][j] = kFALSE;
-    }
-  }  
+  for (int i = 0; i<6;i++)
+    {
+      tpc_x[i] = 9999.9;
+      tpc_y[i] = 9999.9;
+      b_tpc_xy[i] = kFALSE;
+      for (int j=0;j<4;j++)
+	{
+	  tpc_csum[i][j] =0;
+	  b_tpc_csum[i][j] = kFALSE;
+	}
+    }  
 	
 // Si
   si_e1=0;
   si_e2=0;
-
+  
 }
 
 ClassImp(TFRSCalibrEvent)
