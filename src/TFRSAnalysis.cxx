@@ -16,6 +16,9 @@
 #include "TFRSCalibrProc.h"
 #include "TFRSAnlProc.h"
 
+#include <sstream>
+#include <fstream>
+
 //***********************************************************
 TFRSAnalysis::TFRSAnalysis() 
   : fMbsEvent(0), fSize(0), fEvents(0), fLastEvent(0) 
@@ -172,9 +175,50 @@ TFRSAnalysis::TFRSAnalysis(const char* lmd,
 Bool_t TFRSAnalysis::InitEventClasses() 
 {
   Bool_t res = TGo4Analysis::InitEventClasses();
-  std::cout << "TFRSAnalysis::Call setup.C script" << std::endl;
-   
-  gROOT->ProcessLine(".x setup.C");
+  std::string nameExperiment;
+  std::ifstream ifs ( "config.txt" );
+  if(ifs.is_open())
+    {
+      const std::string CommentSymbol("#");
+      const std::string ExpNameSymbol("NameExperiment");
+
+      std::string temp_line;
+      while(std::getline(ifs,temp_line))
+	{
+	  std::stringstream stream(temp_line);
+	  std::string testComment(stream.str());
+	  auto it_comment = testComment.find(CommentSymbol);
+	  if(it_comment!=std::string::npos)
+	    {
+	      //std::cout<<"!> Skip comment"<<temp_line<<std::endl;
+	      continue;
+	    }
+	  std::string key, value;
+	  stream >> key >> value ;
+	  if(key==ExpNameSymbol)
+	    nameExperiment=value;
+	}
+    }
+  std::string nameSetupFile ("setup/setup_");
+  nameSetupFile+=nameExperiment;
+  nameSetupFile+=".C";
+
+  std::cout << "TFRSAnalysis::Call "<< nameSetupFile<<" script" << std::endl;
+  
+  std::ifstream testingFileExist(nameSetupFile);
+  if(testingFileExist.good()==false)
+    {
+      std::cout<<" E> !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! "<<std::endl;
+      std::cout<<" E> Setup file "<<nameSetupFile<<" not found ! Please look to directory ./setup/ if it exits or set proper name of experiment in config.txt"<<std::endl;
+      std::cout<<" E> !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! "<<std::endl;
+
+      std::exit(-1);
+    }
+  
+  std::string processL(".x ");
+  processL += nameSetupFile;
+  gROOT->ProcessLine(processL.c_str());
+  
   printf("Analysis Name: %s\n",GetName()); 
   return res;
 }
