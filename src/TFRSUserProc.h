@@ -12,26 +12,26 @@ class TFRSCalibrEvent;
 class TFRSAnlEvent;
 
 class TFRSUserProc : public TFRSBasicProc {
-   public:
-      TFRSUserProc() ;
-      TFRSUserProc(const char* name);
-      virtual ~TFRSUserProc() ;
+public:
+  TFRSUserProc() ;
+  TFRSUserProc(const char* name);
+  virtual ~TFRSUserProc() ;
    
-      void FRSUserProc(TFRSUserEvent* tgt);
+  void FRSUserProc(TFRSUserEvent* tgt);
 
-   protected:   
-      void Create_ROOT_Tree_Data();
-		void Process_ROOT_Tree_Analysis(TFRSSortEvent &srt, TFRSCalibrEvent &cal, TFRSAnlEvent &anl, TFRSUserEvent &tgt);
+protected:   
+  void Create_ROOT_Tree_Data();
+  void Process_ROOT_Tree_Analysis(TFRSSortEvent &srt, TFRSCalibrEvent &cal, TFRSAnlEvent &anl, TFRSUserEvent &tgt);
 
 
-		TFile *evtFile;
+  TFile *evtFile;
 	
-		TTree* allEvtTree;
-		TTree* impTree;
-		TTree* decTree;
+  TTree* allEvtTree;
+  TTree* impTree;
+  TTree* decTree;
 
 
-   ClassDef(TFRSUserProc,1)
+  ClassDef(TFRSUserProc,1)
 };
 
 #endif //TFRSUSERPROCESSOR_H

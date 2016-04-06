@@ -9,24 +9,24 @@
 #include "TFRSParameter.h"
 
 
-TFRSUserProc::TFRSUserProc() : TFRSBasicProc("FRSUserProc") 
-{
-}
+TFRSUserProc::TFRSUserProc() : TFRSBasicProc("FRSUserProc"),evtFile(nullptr),allEvtTree(nullptr),impTree(nullptr),decTree(nullptr)
+{ }
 
-TFRSUserProc::TFRSUserProc(const char* name) : 
-   TFRSBasicProc(name) 
+TFRSUserProc::TFRSUserProc(const char* name) : TFRSBasicProc(name),evtFile(nullptr),allEvtTree(nullptr),impTree(nullptr),decTree(nullptr)
 { 
 
- // Create_ROOT_Tree_Data();
+  // Create_ROOT_Tree_Data();
 }
 
 TFRSUserProc::~TFRSUserProc() 
 {
-	//Write and close the new root file 
-	//evtFile=allEvtTree->GetCurrentFile();
-	evtFile->Write();
-	evtFile->Close();
-
+  //Write and close the new root file 
+  //evtFile=allEvtTree->GetCurrentFile();
+  if(evtFile!=nullptr)
+    {
+      evtFile->Write();
+      evtFile->Close();
+    }
 }
 
 void TFRSUserProc::FRSUserProc(TFRSUserEvent* tgt) {
@@ -37,9 +37,9 @@ void TFRSUserProc::FRSUserProc(TFRSUserEvent* tgt) {
   TFRSCalibrEvent *cal = dynamic_cast<TFRSCalibrEvent*> (GetInputEvent("Analysis"));
   TFRSAnlEvent *anl = dynamic_cast<TFRSAnlEvent*> (GetInputEvent());
 
-  	if ((tgt==0) || (cal==0) || (srt==0) || (anl==0)) return;
+  if ((tgt==0) || (cal==0) || (srt==0) || (anl==0)) return;
 
-	Process_ROOT_Tree_Analysis(*srt,*cal,*anl,*tgt);
+  Process_ROOT_Tree_Analysis(*srt,*cal,*anl,*tgt);
     
 }
 
