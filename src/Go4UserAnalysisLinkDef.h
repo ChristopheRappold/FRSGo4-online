@@ -5,6 +5,7 @@
 #pragma link off all functions;
 
 #pragma link C++ class TFRSParameter+;
+#pragma link C++ class TModParameter+;
 #pragma link C++ class TMWParameter+;
 #pragma link C++ class TTPCParameter+;
 #pragma link C++ class TMUSICParameter+;
