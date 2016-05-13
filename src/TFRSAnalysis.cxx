@@ -220,7 +220,7 @@ Bool_t TFRSAnalysis::InitEventClasses()
   std::string processL(".x ");
   processL += nameSetupFile;
   gROOT->ProcessLine(processL.c_str());
-  
+  ModPar->setMap();
   printf("Analysis Name: %s\n",GetName()); 
   return res;
 }

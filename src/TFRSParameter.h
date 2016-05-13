@@ -2,6 +2,7 @@
 #define TFRSPARAMETER_H
 
 #include "Go4StatusBase/TGo4Parameter.h"
+#include "TMap.h"
 #include <map>
 
 class TFRSParameter : public TGo4Parameter {
@@ -80,6 +81,15 @@ public:
   ClassDef(TFRSParameter,1)
 };
 
+class Map1 : public TObject
+{
+public :
+  std::map<int,int> map;
+  Map1():TObject() { }
+  Map1(const char* name):TObject() { }
+  ClassDef(Map1,1);
+};
+
 class TModParameter : public TGo4Parameter{
 public:
   TModParameter();  
@@ -87,7 +97,7 @@ public:
   virtual ~TModParameter();
   virtual void Print(Option_t* t="") const;
   virtual Bool_t UpdateFrom(TGo4Parameter*);
-
+  void setMap();
   int Nb_Modules;
   int Nb_QDC;
   int Nb_ADC;
@@ -104,10 +114,12 @@ public:
 
   std::map<int, int> Nb_Channels; 
   std::map<int, std::map<int,int> > MapCrates; // [ procID -> { VMEGeo, idMod}] 
-
+  TMap Maptemp;
+  
   std::vector<std::string> ModType;
   ClassDef(TModParameter,1)
 };
+
 
 // *************************************************************************
 

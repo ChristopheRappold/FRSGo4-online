@@ -712,14 +712,26 @@ void setup_s411_jun16()
   //std::unordered_map<int,int> CrateUser;
   std::map<int,int> CrateUser;
   CrateUser.insert(std::pair<int,int>(0,IdMod++));
-  
+
+  Map1* temp1 = new Map1("temp1");
+  Map1* temp2 = new Map1("temp2");
+  Map1* temp3 = new Map1("temp3");
+  temp1->map=CrateFRS;
+  temp2->map=CrateTPC;
+  temp3->map=CrateUser;
+  TObjString* key1 = new TObjString("10");
+  TObjString* key2 = new TObjString("20");
+  TObjString* key3 = new TObjString("30");
+  ElecMod->Maptemp.Add(key1,temp1);
+  ElecMod->Maptemp.Add(key2,temp2);
+  ElecMod->Maptemp.Add(key3,temp3);
   // ElecMod->MapCrates.insert(std::pair<int,std::unordered_map<int,int> >(10,CrateFRS));
   // ElecMod->MapCrates.insert(std::pair<int,std::unordered_map<int,int> >(20,CrateTPC));
   // ElecMod->MapCrates.insert(std::pair<int,std::unordered_map<int,int> >(30,CrateUser));
   
-  ElecMod->MapCrates.insert(std::pair<int,std::map<int,int> >(10,CrateFRS));
-  ElecMod->MapCrates.insert(std::pair<int,std::map<int,int> >(20,CrateTPC));
-  ElecMod->MapCrates.insert(std::pair<int,std::map<int,int> >(30,CrateUser));
+  //ElecMod->MapCrates.insert(std::pair<int,std::map<int,int> >(10,CrateFRS));
+  //ElecMod->MapCrates.insert(std::pair<int,std::map<int,int> >(20,CrateTPC));
+  //ElecMod->MapCrates.insert(std::pair<int,std::map<int,int> >(30,CrateUser));
 
   
   ElecMod->ModType.push_back("FRS_SC_1");

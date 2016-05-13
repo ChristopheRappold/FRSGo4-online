@@ -1,6 +1,6 @@
 #include "TFRSParameter.h"
 #include "Riostream.h"
-
+#include "TObjString.h"
 
 
 TFRSParameter::TFRSParameter() : TGo4Parameter("FRSParameter")
@@ -319,6 +319,25 @@ Bool_t TModParameter::UpdateFrom(TGo4Parameter* par)
   
   return kTRUE;
 }
+void TModParameter::setMap()
+{
+  std::cout<<" setMap :"<<Maptemp.GetEntries()<<std::endl;
+  TIterator* it = Maptemp.MakeIterator();
+  while(TObject* key = it->Next())
+    {
+      Map1* temp = dynamic_cast<Map1*>(Maptemp.GetValue(key));
+      TObjString* nametemp = dynamic_cast<TObjString*>(key);
+      //std::cout<<nametemp->GetString()<<"\n";
+      // for(const auto& it_map : temp->map)
+      // 	{
+      // 	  std::cout<<"{ "<<it_map.first<<", "<<it_map.second<<"} \n";
+      // 	}
+      int key_real = nametemp->GetString().Atoi();
+      MapCrates.insert(std::pair<int,std::map<int,int> >(key_real,temp->map));
+
+    }
+}
+
 
 ClassImp(TModParameter)
 
