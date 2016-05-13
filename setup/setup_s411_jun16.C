@@ -693,27 +693,35 @@ void setup_s411_jun16()
   
   // Crate FRS procID 10
   int IdMod = 0;
-  std::unordered_map<int,int> CrateFRS;
+  //std::unordered_map<int,int> CrateFRS;
+  std::map<int,int> CrateFRS;
   CrateFRS.insert(std::pair<int,int>(1,IdMod++));
   CrateFRS.insert(std::pair<int,int>(9,IdMod++));
   CrateFRS.insert(std::pair<int,int>(8,IdMod++));
   CrateFRS.insert(std::pair<int,int>(11,IdMod++));
   CrateFRS.insert(std::pair<int,int>(12,IdMod++));
 
-  std::unordered_map<int,int> CrateTPC;
+  //std::unordered_map<int,int> CrateTPC;
+  std::map<int,int> CrateTPC;
   CrateTPC.insert(std::pair<int,int>(5,IdMod++));
   CrateTPC.insert(std::pair<int,int>(8,IdMod++));
   CrateTPC.insert(std::pair<int,int>(9,IdMod++));
   CrateTPC.insert(std::pair<int,int>(15,IdMod++));
   CrateTPC.insert(std::pair<int,int>(4,IdMod++));
   
-  std::unordered_map<int,int> CrateUser;
+  //std::unordered_map<int,int> CrateUser;
+  std::map<int,int> CrateUser;
   CrateUser.insert(std::pair<int,int>(0,IdMod++));
   
-  ElecMod->MapCrates.insert(std::pair<int,std::unordered_map<int,int> >(10,CrateFRS));
-  ElecMod->MapCrates.insert(std::pair<int,std::unordered_map<int,int> >(20,CrateTPC));
-  ElecMod->MapCrates.insert(std::pair<int,std::unordered_map<int,int> >(30,CrateUser));
+  // ElecMod->MapCrates.insert(std::pair<int,std::unordered_map<int,int> >(10,CrateFRS));
+  // ElecMod->MapCrates.insert(std::pair<int,std::unordered_map<int,int> >(20,CrateTPC));
+  // ElecMod->MapCrates.insert(std::pair<int,std::unordered_map<int,int> >(30,CrateUser));
+  
+  ElecMod->MapCrates.insert(std::pair<int,std::map<int,int> >(10,CrateFRS));
+  ElecMod->MapCrates.insert(std::pair<int,std::map<int,int> >(20,CrateTPC));
+  ElecMod->MapCrates.insert(std::pair<int,std::map<int,int> >(30,CrateUser));
 
+  
   ElecMod->ModType.push_back("FRS_SC_1");
   ElecMod->ModType.push_back("FRS_TDC_1");
   ElecMod->ModType.push_back("FRS_TDC_2");

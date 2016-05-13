@@ -2,7 +2,7 @@
 #define TFRSPARAMETER_H
 
 #include "Go4StatusBase/TGo4Parameter.h"
-#include <unordered_map>
+#include <map>
 
 class TFRSParameter : public TGo4Parameter {
 public:
@@ -97,9 +97,14 @@ public:
 
   int Scaler32bit;
   std::vector<int> EventFlags;
-  
-  std::unordered_map<int, int> Nb_Channels; 
-  std::unordered_map<int, std::unordered_map<int,int> > MapCrates; // [ procID -> { VMEGeo, idMod}] 
+
+  // C++11 only
+  //std::unordered_map<int, int> Nb_Channels; 
+  //std::unordered_map<int, std::unordered_map<int,int> > MapCrates; // [ procID -> { VMEGeo, idMod}] 
+
+  std::map<int, int> Nb_Channels; 
+  std::map<int, std::map<int,int> > MapCrates; // [ procID -> { VMEGeo, idMod}] 
+
   std::vector<std::string> ModType;
 };
 

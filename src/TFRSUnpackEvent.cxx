@@ -60,10 +60,10 @@ void TFRSUnpackEvent::Clear(Option_t *t)
     {
       for (int j = 0; j < 10; ++j)
 	{
-	  event_out->vme2s[i][j] = 0;
-	  event_out->vme2s_trailing[i][j] = 0;
+	  vme2s[i][j] = 0;
+	  vme2s_trailing[i][j] = 0;
 	}    
-      event_out->nhit5[i] = 0;
+      nhit5[i] = 0;
     }  
 
    qlength = 0;
