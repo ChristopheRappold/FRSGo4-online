@@ -106,6 +106,7 @@ public:
   std::map<int, std::map<int,int> > MapCrates; // [ procID -> { VMEGeo, idMod}] 
 
   std::vector<std::string> ModType;
+  ClassDef(TModParameter,1)
 };
 
 // *************************************************************************

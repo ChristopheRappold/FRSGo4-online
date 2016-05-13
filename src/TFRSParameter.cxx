@@ -320,6 +320,7 @@ Bool_t TModParameter::UpdateFrom(TGo4Parameter* par)
   return kTRUE;
 }
 
+ClassImp(TModParameter)
 
 
 // ----------------------------------------------------------
