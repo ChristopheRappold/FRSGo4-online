@@ -14,6 +14,7 @@ endif
 all: build
 
 include Module.mk
+CXXFLAGS += -std=c++11
 
 build: all-$(MODULE_NAME)
 
