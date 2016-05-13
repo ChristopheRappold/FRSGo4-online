@@ -70,7 +70,8 @@ private:
   TSCIParameter         *fSCIPar;    //!
   TIDParameter          *fIDPar;     //!
   TSIParameter          *fSIPar;     //!
-
+  TModParameter * ModPar; //!
+  
   TH1I                  *fSize;      //!
   Int_t                 fEvents;     //!
   Int_t                 fLastEvent;  //!

@@ -1,11 +1,10 @@
-
 #include "TFRSParameter.h"
-
 #include "Riostream.h"
 
 
 
-TFRSParameter::TFRSParameter() : TGo4Parameter("FRSParameter") {
+TFRSParameter::TFRSParameter() : TGo4Parameter("FRSParameter")
+{
   fill_raw_histos = kTRUE;
   //  fill_raw_histos = kFALSE;
   after_run176 = kTRUE;    // flag it off to analyze data before run176
@@ -234,6 +233,93 @@ Bool_t TFRSParameter::UpdateFrom(TGo4Parameter *pp) {
 }
 
 ClassImp(TFRSParameter)
+
+
+// ----------------------------------------------------------
+
+TModParameter::TModParameter() : TGo4Parameter("TModParameter")
+{
+  Nb_Modules = 0;
+  Nb_QDC = 0;
+  Nb_ADC = 0;
+  Nb_TDC = 0;
+  Nb_Scaler = 0;
+  Nb_TimeStamp = 0;
+  Scaler32bit = 0;
+  
+  EventFlags.clear();
+  Nb_Channels.clear();
+  MapCrates.clear();
+  ModType.clear();
+}
+
+TModParameter::TModParameter(const char* name) : TGo4Parameter(name)
+{
+  Nb_Modules = 0;
+  Nb_QDC = 0;
+  Nb_ADC = 0;
+  Nb_TDC = 0;
+  Nb_Scaler = 0;
+  Nb_TimeStamp = 0;
+  Scaler32bit = 0;
+  
+  EventFlags.clear();
+  Nb_Channels.clear();
+  MapCrates.clear();
+  ModType.clear();
+} 
+
+TModParameter::~TModParameter()
+{ }
+
+void TModParameter::Print(Option_t*) const
+{
+  std::cout << "Parameter " << GetName() << std::endl;	    
+  std::cout<< " Number of Electronic modules :"<<Nb_Modules<<std::endl;
+
+  std::cout<<" N_Mod "<<Nb_Modules<<" qdc:"<<Nb_QDC<<" adc:"<<Nb_ADC<<" tdc:"<<Nb_TDC<<" Sc:"<<Nb_Scaler<<" TS:"<<Nb_TimeStamp<<std::endl;
+  std::cout<<" Channels mapping :"<<Nb_Channels.size()<<std::endl;
+  for(const auto& it_ch : Nb_Channels)
+    std::cout<<" IdMod:"<<it_ch.first<<" Ch:"<<it_ch.second<<std::endl;
+
+  std::cout<<" Crate mapping :"<<std::endl;
+  for(const auto& it_crate : MapCrates )
+    {
+      std::cout<<" ProcID :"<<it_crate.first<<" ";
+      for(const auto& it_mod : it_crate.second)
+	std::cout<<"{"<<it_mod.first<<", "<<it_mod.second<<"} ";
+    }
+  std::cout<<" module naming :"<<std::endl;
+  for(unsigned int i=0; i<ModType.size();++i)
+    std::cout<<"IdMod:"<<i<<" "<<ModType[i]<<std::endl;
+  
+}
+
+Bool_t TModParameter::UpdateFrom(TGo4Parameter* par)
+{
+  TModParameter *from = dynamic_cast<TModParameter*>(par);
+  if (from==nullptr)
+    {
+      std::cout << "Wrong parameter object: " << par->ClassName() << std::endl; 
+      return kFALSE;   
+    }
+  Nb_Modules = from->Nb_Modules;
+  Nb_QDC = from->Nb_QDC;
+  Nb_ADC = from->Nb_ADC;
+  Nb_TDC = from->Nb_TDC;
+  Nb_Scaler = from->Nb_Scaler;
+  Nb_TimeStamp = from->Nb_TimeStamp;
+  Scaler32bit = from->Scaler32bit;
+  
+  EventFlags = from->EventFlags;
+  
+  Nb_Channels = from->Nb_Channels;
+  MapCrates = from->MapCrates;
+  ModType = from->ModType;
+  
+  return kTRUE;
+}
+
 
 
 // ----------------------------------------------------------

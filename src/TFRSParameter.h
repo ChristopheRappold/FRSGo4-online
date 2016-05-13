@@ -2,13 +2,14 @@
 #define TFRSPARAMETER_H
 
 #include "Go4StatusBase/TGo4Parameter.h"
+#include <unordered_map>
 
 class TFRSParameter : public TGo4Parameter {
 public:
   TFRSParameter();  
   TFRSParameter(const char* name); 
   virtual ~TFRSParameter();
-  virtual void Print(Option_t*) const;
+  virtual void Print(Option_t* t="") const;
   virtual Bool_t UpdateFrom(TGo4Parameter *);
       
   Bool_t        fill_raw_histos; // fill raw histograms in unpack step
@@ -79,6 +80,29 @@ public:
   ClassDef(TFRSParameter,1)
 };
 
+class TModParameter : public TGo4Parameter{
+public:
+  TModParameter();  
+  TModParameter(const char* name); 
+  virtual ~TModParameter();
+  virtual void Print(Option_t* t="") const;
+  virtual Bool_t UpdateFrom(TGo4Parameter*);
+
+  int Nb_Modules;
+  int Nb_QDC;
+  int Nb_ADC;
+  int Nb_TDC;
+  int Nb_Scaler;
+  int Nb_TimeStamp;
+
+  int Scaler32bit;
+  std::vector<int> EventFlags;
+  
+  std::unordered_map<int, int> Nb_Channels; 
+  std::unordered_map<int, std::unordered_map<int,int> > MapCrates; // [ procID -> { VMEGeo, idMod}] 
+  std::vector<std::string> ModType;
+};
+
 // *************************************************************************
 
 class TMWParameter : public TGo4Parameter {
@@ -86,7 +110,7 @@ public:
   TMWParameter();  
   TMWParameter(const char* name); 
   virtual ~TMWParameter();
-  virtual void Print(Option_t*) const;
+  virtual void Print(Option_t* t="") const;
   virtual Bool_t UpdateFrom(TGo4Parameter*);
       
   Float_t       x_factor[13];    /*  MWPC calibration        */
@@ -105,7 +129,7 @@ public:
   TTPCParameter();  
   TTPCParameter(const Text_t* name); 
   virtual ~TTPCParameter();
-  virtual void Print(Option_t*) const;
+  virtual void Print(Option_t* t="") const;
   virtual Bool_t UpdateFrom(TGo4Parameter*);
       
   Float_t       x_factor[6][2];     /* [mm/ch]                  */
@@ -129,7 +153,7 @@ public:
   TMUSICParameter();  
   TMUSICParameter(const char* name); 
   virtual ~TMUSICParameter();
-  virtual void Print(Option_t*) const;
+  virtual void Print(Option_t* t="") const;
   virtual Bool_t UpdateFrom(TGo4Parameter*);
       
   Int_t         e1_off[8];       /* ADC offsets              */
@@ -153,7 +177,7 @@ public:
   TSCIParameter();  
   TSCIParameter(const char* name); 
   virtual ~TSCIParameter();
-  virtual void Print(Option_t*) const;
+  virtual void Print(Option_t* t="") const;
   virtual Bool_t UpdateFrom(TGo4Parameter*);
       
   Float_t       le_a[2][12];     /* dE-left   shift,gain     */
@@ -183,7 +207,7 @@ public:
   TIDParameter();  
   TIDParameter(const char* name); 
   virtual ~TIDParameter();
-  virtual void Print(Option_t*) const;
+  virtual void Print(Option_t* t="") const;
   virtual Bool_t UpdateFrom(TGo4Parameter*);
       
   Int_t         x2_select;       /* 1=> x2 position from MWs */
@@ -219,7 +243,7 @@ public:
   TSIParameter();  
   TSIParameter(const char* name); 
   virtual ~TSIParameter();
-  virtual void Print(Option_t*) const;
+  virtual void Print(Option_t* t="") const;
   virtual Bool_t UpdateFrom(TGo4Parameter*);
 
   Float_t si_factor1;

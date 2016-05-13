@@ -169,7 +169,9 @@ TFRSAnalysis::TFRSAnalysis(const char* lmd,
   fSIPar = new TSIParameter("SIPar");
   AddParameter(fSIPar);
 
-
+  ModPar = new TModParameter("ModPar");
+  AddParameter(ModPar);
+  
 }
 
 Bool_t TFRSAnalysis::InitEventClasses() 
