@@ -10,7 +10,10 @@
 #include "TH2.h"
 
 #include <iostream>
+#include <bitset>
 //#include  <stdio.h>
+
+//#DEBUG
 
 TFRSUnpackProc::TFRSUnpackProc() : TFRSBasicProc("FRSUnpackProc")
 {
@@ -21,8 +24,20 @@ TFRSUnpackProc::TFRSUnpackProc() : TFRSBasicProc("FRSUnpackProc")
 TFRSUnpackProc::TFRSUnpackProc(const char* name) :  TFRSBasicProc(name) 
 { 
   hTrigger = MakeH1I("Raw data", "newTrigger", 16, 0.5, 16.5); 
-  frs = dynamic_cast<TFRSParameter*>(GetParameter("FRSPar"));
 
+  frs = dynamic_cast<TFRSParameter*>(GetParameter("FRSPar"));
+  ModSetup = dynamic_cast<TModParameter*>(GetParameter("ModPar"));
+  if(frs == nullptr)
+    {
+      std::cout<<"E> FRS parameters not set properly, it is nullptr !"<<std::endl;
+      std::exit(-1);
+    }
+  if(ModSetup == nullptr)
+    {
+      std::cout<<"E> Electronic Module parameters not set properly, it is nullptr !"<<std::endl;
+      std::exit(-1);
+    }
+  
   bool remove_histos = (frs!=nullptr) && (!frs->fill_raw_histos);
   
   for(int n=0;n<32;n++)
@@ -45,6 +60,8 @@ TFRSUnpackProc::TFRSUnpackProc(const char* name) :  TFRSBasicProc(name)
       //hVME2_12[n] = MakeH1ISeries("Raw data/VME2", 12, 2, n, remove_histos);
     }
 
+  h_UnpackStatus = MakeH2I("Unpack","Status",2*21*32,0.,2*21*32,10,0.,10.,"#Ch","Status",1);
+  
 }
 
 TFRSUnpackProc::~TFRSUnpackProc()
@@ -131,7 +148,9 @@ Bool_t TFRSUnpackProc::BuildEvent(TGo4EventElement* output)
       while ((psubevt=fInput->NextSubEvent())!= nullptr)
 	{
 	  // start subevents loop
-
+#ifdef DEBUG
+	  psubevt->PrintEvent();
+#endif
 	  //printf("TRI:%d\n",fInput->GetTrigger());
 	  //printf("PROC:%d\n",psubevt->GetProcid());
 	  //std::cout << "subevent control " << int(psubevt->GetControl()) << std::endl;
@@ -151,7 +170,7 @@ Bool_t TFRSUnpackProc::BuildEvent(TGo4EventElement* output)
 	  */
 	  /* check for ProcID 10 = standard crate  */
 	  //    if((psubevt->GetProcid())!=10) {
-	  if( (psubevt->GetProcid()!=10) && (psubevt->GetProcid()!=15) && (psubevt->GetProcid()!=20) && (psubevt->GetProcid()!=65) )
+	  if( (psubevt->GetProcid()!=10) && (psubevt->GetProcid()!=15) && (psubevt->GetProcid()!=20) && (psubevt->GetProcid()!=30) && (psubevt->GetProcid()!=40) )
 	    {
 	      std::cout << "Wrong ProcID " << psubevt->GetProcid() << std::endl; 
 	      continue; // skip non standard event
@@ -159,15 +178,18 @@ Bool_t TFRSUnpackProc::BuildEvent(TGo4EventElement* output)
     
 	  /*  Check the SUBevent type and subtype!             */
 	
-	  if( (psubevt->GetType()!=10) || (psubevt->GetSubtype()!=1) )
+	  if( !( (psubevt->GetType() == 10) && (psubevt->GetSubtype() == 1) )    &&
+	      !( (psubevt->GetType() == 36) && (psubevt->GetSubtype() == 3600) ) &&
+	      !( (psubevt->GetType() == 88) && (psubevt->GetSubtype() == 8800) ) )
 	    {  // for all data 
-	      //std::cout << "getsubtype " << psubevt->GetSubtype() << std::endl;
-	      //std::cout << "gettype " << psubevt->GetType() << std::endl;
-	      //std::cout << "Wrong subevent type " << psubevt->GetType() << std::endl;
+	      std::cout << "getsubtype " << psubevt->GetSubtype() << std::endl;
+	      std::cout << "gettype " << psubevt->GetType() << std::endl;
+	      std::cout << "Wrong subevent type " << psubevt->GetType() << std::endl;
 	      continue; // skip subevent SL
 	    }
-
-     
+	  
+	  if( (psubevt->GetType() == 36) && (psubevt->GetSubtype() == 3600) )
+	    continue;
 	  /*    Now select subcrate number:  */
 	  //      if((psubevt->GetSubcrate())!=0) {
 	  //	std::cout << "Non supported subcrate " << psubevt->GetSubcrate() << std::endl;
@@ -246,66 +268,134 @@ Bool_t TFRSUnpackProc::Event_Extract(TFRSUnpackEvent* event_out, TGo4MbsSubEvent
   Int_t len = 0;	  
   Int_t vme_chn;
   Int_t lenMax = (psubevt->GetDlen()-2)/2;
+  const auto it_Crate = ModSetup->MapCrates.find(psubevt->GetProcid());
+  if(it_Crate == ModSetup->MapCrates.end())
+    std::cout<<"E> Crate Mapping does not have this ProcID :"<<psubevt->GetProcid()<<std::endl;
+  
+  if(ModSetup->EventFlags.size()!=0)
+    {
+      Int_t  event_flag = *pdata++;
+      len++; // 0x200
+#ifdef DEBUG
+      std::cout<<" Event FLAG :"<<std::endl;
+      std::cout<<std::bitset<32>(event_flag)<<"\n"<<std::bitset<32>(ModSetup->EventFlags[0])<<std::endl;
+#endif
+      event_out->EventFlag = event_flag;
+    }
 
+  
   switch(psubevt->GetProcid())
     {
     case 10:
       // proc ID=10 - FRS CRATE
-      
+#ifdef DEBUG
+      std::cout<<"ProcID :"<<10<<std::endl;
+#endif      
+      pdata++; len++; // remove 0xbaba.baba
+
       // get pointer on data   
 
       //Int_t *pdata = psubevt->GetDataField();
       //Int_t len = 0;
-      
-      /** \note FRS TIME STAMP module data (3 longwords)   
-       *   has no header or end-of-block info, we must hardwire GEO = 20.
-       */
-      //      pdata++; len++; // 0x200
-      
-      //Int_t vme_chn = 0;
-
-      /*
-	for (int i=0;i<3;i++) {
-	tgt->vme0[20][vme_chn++] = getbits(*pdata,1,1,16);
-	tgt->vme0[20][vme_chn++] = getbits(*pdata,2,1,16);
-	pdata++; len++;
+      if(ModSetup->Nb_TimeStamp > 0 && (psubevt->GetType() == 10) )
+	{
+	  /** \note FRS TIME STAMP module data (3 longwords)   
+	   *   has no header or end-of-block info, we must hardwire GEO = 20.
+	   */
+	  Int_t vme_chn = 0;
+	  
+	  for (int i=0;i<3;i++)
+	    {
+	      event_out->vme0[20][vme_chn++] = getbits(*pdata,1,1,16);
+	      event_out->vme0[20][vme_chn++] = getbits(*pdata,2,1,16);
+	      pdata++; len++;
+	    }
+	  
 	}
-      */
       
-      /** \note FRS SCALER module data (1 longword per channel)   
-       *  This module has sequential readout therefore no channel
-       *  number contained in the data longwords. 
-       */
-      /*
-      // read the header longword and extract slot, type & length  
-      Int_t vme_geo = getbits(*pdata,2,12,5);
-      Int_t vme_type = getbits(*pdata,2,9,3);
-      Int_t vme_nlw =  getbits(*pdata,1,1,6);
-      pdata++; len++;
-		      
-      // read the data 
-      if (vme_nlw > 0) {
-      for(int i=0;i<vme_nlw;i++) {
-      tgt->vme0[vme_geo][i] = *pdata;
-      pdata++; len++;
-      }
-      // std::cout<<"1Hz unpack, "<<tgt->vme0[6][3]<<std::endl;
-      // read and ignore the expected "end-of-block" longword   
-      pdata++; len++;
-      }
-      */
+      if( (psubevt->GetType() != 88) )
+	break;
+
+      if(ModSetup->Nb_Scaler > 0)
+	{
+	  /** \note FRS SCALER module data (1 longword per channel)   
+	   *  This module has sequential readout therefore no channel
+	   *  number contained in the data longwords. 
+	   */
+	  // read the header longword and extract slot, type & length  
+	  Int_t vme_geo = getbits(*pdata,2,12,5);
+	  Int_t vme_type = getbits(*pdata,2,9,3);
+	  Int_t vme_nlw =  getbits(*pdata,2,3,6);
+	  pdata++; len++;
+	  if(vme_type!=4)
+	    std::cout<<"E> Scaler type missed match ! GEO"<<vme_geo<<" "<<" type 4 =/="<<vme_type<<std::endl;
+
+#ifdef DEBUG
+	  std::cout<<"Scaler :"<<vme_geo<<" "<<vme_type<<" "<<vme_nlw<<std::endl;
+#endif
+	  // read the data 
+	  if (vme_nlw > 0)
+	    {
+	      for(int i=0;i<vme_nlw;i++)
+		{
+		  if(ModSetup->Scaler32bit)
+		    {
+		      event_out->vme0[vme_geo][i] = *pdata;
+#ifdef DEBUG
+		      std::cout<<" Ch "<<i<<"# "<<event_out->vme0[vme_geo][i] <<std::endl;
+#endif
+		    }
+		  else
+		    {
+		      Int_t sc_data = get2bits(*pdata,1,1,26);
+		      Int_t  sc_ch = get2bits(*pdata,1,27,5);
+		      if(sc_ch != i)
+			std::cout<<"E> Scaler missed match channel !"<<sc_ch<<" "<<i<<" "<<psubevt->GetProcid()<<std::endl;
+		      event_out->vme0[vme_geo][i] = sc_data;
+#ifdef DEBUG
+		      std::cout<<" Ch "<<sc_ch<<"# "<<sc_data<<std::endl;
+#endif
+		    }
+		  pdata++; len++;
+		}
+	      // std::cout<<"1Hz unpack, "<<tgt->vme0[6][3]<<std::endl;
+	      // read and ignore the expected "end-of-block" longword   
+	      //pdata++; len++;
+	    }
+	}
       //  now start with the REST of the unpacking...       
-		      
+
       while (len < (psubevt->GetDlen()-2)/2)
 	{
 			  
 	  // read the header longword and extract slot, type & length  
+#ifdef DEBUG
+	  std::cout<<"word :"<<std::bitset<32>(*pdata)<<" "<<std::endl;
+#endif
 	  Int_t vme_geo = getbits(*pdata,2,12,5);
 	  Int_t vme_type = getbits(*pdata,2,9,3);
-	  Int_t vme_nlw =  getbits(*pdata,1,1,6);
+	  Int_t vme_nlw =  getbits(*pdata,1,9,6);
 	  pdata++; len++;
-			  
-	  // read the data 
+	  const auto it_Module = it_Crate->second.find(vme_geo);
+	  int IdMod = it_Module->second;
+#ifdef DEBUG
+	  std::cout<<"data "<<vme_geo<<" "<<vme_type<<" "<<vme_nlw<<" idmod:"<<IdMod<<std::endl;
+#endif
+	  if(it_Module == it_Crate->second.end())
+	    std::cout<<"E> Crate Mapping does not have this module (vmeGEO) "<<vme_geo<<" in Crate :"<<psubevt->GetProcid()<<std::endl;
+
+	  // read the data
+	  if(vme_type == 6)
+	    {
+	      // not valid data !
+	      const auto MaxCh = ModSetup->Nb_Channels.find(vme_geo); 
+	      for(int i=0;i<MaxCh->second;++i)
+		{
+		  h_UnpackStatus->Fill(IdMod*32+i,"not valid/Header",1.);
+		  //h_UnpackStatus->Fill(IdMod*MaxCh->second+i,6.);
+		}
+		 
+	    }
 	  if ((vme_type == 2) && (vme_nlw > 0))
 	    {
 	      for(int i=0;i<vme_nlw;i++)
@@ -313,7 +403,26 @@ Bool_t TFRSUnpackProc::Event_Extract(TFRSUnpackEvent* event_out, TGo4MbsSubEvent
 		  vme_geo = getbits(*pdata,2,12,5);
 		  vme_type = getbits(*pdata,2,9,3);
 		  vme_chn = getbits(*pdata,2,1,5);
+		  
 		  event_out->vme0[vme_geo][vme_chn] = getbits(*pdata,1,1,16);
+		  Int_t vme_statusVD = getbits(*pdata,14,1,1);
+		  Int_t vme_statusUN = getbits(*pdata,13,1,1);
+		  Int_t vme_statusOV = getbits(*pdata,12,1,1);
+
+		  if(vme_statusVD == 1)
+		    h_UnpackStatus->Fill(IdMod*32.+vme_chn,"valid",1.);
+		  else
+		    h_UnpackStatus->Fill(IdMod*32.+vme_chn,"not valid/Data",1.);
+
+		  if(vme_statusUN == 1)
+		    h_UnpackStatus->Fill(IdMod*32.+vme_chn,"UnderThreshold",1.);
+
+		  if(vme_statusOV == 1)
+		    h_UnpackStatus->Fill(IdMod*32.+vme_chn,"Overflow",1.);
+
+#ifdef DEBUG
+		  std::cout<<" Ch "<<vme_chn<<" "<<event_out->vme0[vme_geo][vme_chn]<<" status ["<<vme_statusVD<<", "<<vme_statusUN<<", "<<vme_statusOV<<"]"<<std::endl;
+#endif
 		  pdata++; len++;
 		}
 			      
@@ -356,10 +465,12 @@ Bool_t TFRSUnpackProc::Event_Extract(TFRSUnpackEvent* event_out, TGo4MbsSubEvent
       break;
       // ID=15 loop
       
-    case 65:
+    case 30:
       //proc ID=65 - User CRATE
       // get pointer on data   
-	
+#ifdef DEBUG
+      std::cout<<"ProcID :"<<30<<std::endl;
+#endif
       // Int_t *pdata = psubevt->GetDataField();
       // Int_t len = 0;	  
       // //Int_t vme_chn;
@@ -372,84 +483,218 @@ Bool_t TFRSUnpackProc::Event_Extract(TFRSUnpackEvent* event_out, TGo4MbsSubEvent
 	  std::cout << "Bad User subevent data" << std::endl;
 	  return kFALSE;
 	}
-	  
-	  
       // std::cout<<"length = "<<lenMax<<std::endl;
-      while (len < lenMax) 
-	{
-	  Int_t vme_geo = getbits(*pdata,2,12,5);
-	  Int_t vme_type = getbits(*pdata,2,9,3);
-	  Int_t vme_nlw =  getbits(*pdata,1,9,6);
-	  //printf("%d %d %d\n",vme_geo,vme_type,vme_nlw);
-	  pdata++; len++;
-			  
-	  // read the data 
-	  if ( (vme_nlw > 0) && (vme_type==2) )
-	    {
-	      for(int i=0;i<vme_nlw;i++)
-		{
-		  event_out->vme2scaler[i] = *pdata;
-		  pdata++; len++;
-		}
-			      
-	      // read and ignore the expected "end-of-block" longword 
-	      pdata++; len++;
-	    }		      
-			  
-			  
-	  //v1290 TDC              
-	  vme_geo = getbits(*pdata,1,1,5);
-	  vme_type = getbits(*pdata,2,12,5);
-	  Int_t multihit = 0;//, counter = 0;
-			  
-	  //std::cout<<"mTDC geo = "<<vme_geo<<", type = "<<vme_type<<std::endl;
-			  
-	  for (int i = 0; i < 32; ++i)
-	    {
-	      for (int j = 0; j < 10; ++j)
-		event_out->vme2s[i][j] = 0;
 
-	      event_out->nhit5[i] = 0;
-	    }  
-	   
-	   
+      if(ModSetup->Nb_TDC>0)
+	{
+	  //v1290 TDC              
+	  Int_t vme_geo = getbits(*pdata,1,1,5);
+	  Int_t vme_type = getbits(*pdata,2,12,5);
+	  pdata++; len++;
+	  Int_t multihit = 0;//, counter = 0;
+	  
+#ifdef DEBUG
+	  std::cout<<"mTDC geo = "<<vme_geo<<", type = "<<vme_type<<std::endl;
+#endif  
+
 	  if (vme_type == 8)
-	    { // if is global header
-	      pdata++; len++;
-	      vme_type = getbits(*pdata,2,12,5);
-	      //multihit = 0;
-	      while (vme_type == 0)
-		{ // this indicates a TDC measurement
-		  Int_t vme_chn = getbits(*pdata,2,6,5);
-		  //std::cout << "     tdc vme_chn = " << vme_chn << std::endl;
-		  multihit = event_out->nhit5[vme_chn];
-		  //std::cout << "     tdc multihit = " << multihit << std::endl;
-		  if (multihit < 10)
-		    {
-		      Int_t value = getbits(*pdata,1,1,21);
-		      //std::cout << "     tdc value = " << value << std::endl;
-		      if (value > 0)
-			{
-			  event_out->vme2s[vme_chn][multihit] = value;
-			  event_out->nhit5[vme_chn]++;
-			  //hVME2_TDC[vme_chn]->Fill(value);
-			}
-		    }
-		  pdata++; len++;
+	    {
+	      while (len < lenMax) 
+		{
+#ifdef DEBUG
+		  std::cout<<"new :"<<std::bitset<32>(*pdata)<<std::endl;
+#endif
 		  vme_type = getbits(*pdata,2,12,5);
+		  if(vme_type==1) // headerTDC
+		    { 
+		      pdata++; len++;
+		    }
+		  //multihit = 0;
+#ifdef DEBUG
+		  std::cout<<"reading MTDC "<<vme_type<<std::endl;
+		  std::cout<<std::bitset<32>(*pdata)<<std::endl;
+#endif
+		  vme_type = getbits(*pdata,2,12,5);
+		  if(vme_type == 0)
+		    {
+		      // this indicates a TDC measurement
+		      Int_t vme_chn = getbits(*pdata,2,6,5);
+		      Int_t LeadingOrTrailing = getbits(*pdata,2,11,1);
+		      multihit = event_out->nhit5[vme_chn];
+		      //std::cout << "     tdc vme_chn = " << vme_chn;
+		      //std::cout << " multihit: " << multihit << std::endl;
+		      if (multihit >= 10)
+			continue;
+		      
+		      if(LeadingOrTrailing == 0)
+			{
+			  Int_t value = getbits(*pdata,1,1,21);
+			  //std::cout << " +-> tdc L value = " << value << std::endl;
+			  if (value > 0)
+			    {
+			      event_out->vme2s[vme_chn][multihit] = value;
+			      event_out->nhit5[vme_chn]++;
+			      //hVME2_TDC[vme_chn]->Fill(value);
+			    }
+			}
+		  
+		      else
+			{
+			  Int_t value = getbits(*pdata,1,1,21);
+			  //std::cout << " +-> tdc T value = " << value << std::endl;
+			  if (value > 0)
+			    event_out->vme2s_trailing[vme_chn][multihit] = value;
+			}
+		    
+		      pdata++; len++;
+		    }
+		  else
+		    {
+		      // TDC trailer vme_type == 3 
+		      if(vme_type != 3 && vme_type !=16)
+			std::cout<<"E> MTDC strange type :"<<vme_type<<std::endl;
+		      pdata++; len++;
+		      if(vme_type==16)
+			break;
+		    }
 		}
-	    }
-	  if(getbits(*pdata,2,12,5)==16 && len<lenMax)
-	    {//EOB
-	      pdata++; len++;
 	    }
 	}
       break;
       // ID=65 loop
 		    
     case 20:
-      UnpackUserSubevent(psubevt, event_out); //for historical reasons
-      break;
+#ifdef DEBUG
+      std::cout<<"ProcID "<<20<<std::endl;
+#endif      
+      //UnpackUserSubevent(psubevt, event_out); //for historical reasons
+      
+      if(ModSetup->Nb_Scaler > 0)
+	{
+	  /** \note FRS SCALER module data (1 longword per channel)   
+	   *  This module has sequential readout therefore no channel
+	   *  number contained in the data longwords. 
+	   */
+	  // read the header longword and extract slot, type & length
+#ifdef DEBUG
+	  std::cout<<"word :"<<std::bitset<32>(*pdata)<<" "<<std::endl;
+#endif  
+	  Int_t vme_geo = getbits(*pdata,2,12,5);
+	  Int_t vme_type = getbits(*pdata,2,9,3);
+	  Int_t vme_nlw =  getbits(*pdata,2,3,6);
+	  pdata++; len++;
+	  if(vme_type!=4)
+	    std::cout<<"E> Scaler type missed match ! GEO"<<vme_geo<<" "<<" type 4 =/="<<vme_type<<std::endl;
+	  
+#ifdef DEBUG
+	  std::cout<<"Scaler :"<<vme_geo<<" "<<vme_type<<" "<<vme_nlw<<std::endl;
+#endif	  
+	  // read the data 
+	  if (vme_nlw > 0)
+	    {
+	      for(int i=0;i<vme_nlw;i++)
+		{
+		  if(ModSetup->Scaler32bit)
+		    {
+		      event_out->vme1[vme_geo][i] = *pdata;
+#ifdef DEBUG
+		      std::cout<<" Ch "<<i<<"# "<<event_out->vme0[vme_geo][i] <<std::endl;
+#endif
+		    }
+		  else
+		    {
+		      Int_t sc_data = get2bits(*pdata,1,1,26);
+		      Int_t  sc_ch = get2bits(*pdata,1,27,5);
+		      if(sc_ch != i)
+			std::cout<<"E> Scaler missed match channel !"<<sc_ch<<" "<<i<<" "<<psubevt->GetProcid()<<std::endl;
+		      event_out->vme1[vme_geo][i] = sc_data;
+#ifdef DEBUG
+		      std::cout<<" Ch "<<sc_ch<<"# "<<sc_data<<std::endl;
+#endif
+		    }
+		  pdata++; len++;
+		}
+	      // std::cout<<"1Hz unpack, "<<event_out->vme0[6][3]<<std::endl;
+	      // read and ignore the expected "end-of-block" longword   
+	      //pdata++; len++;
+	    }
+	}
+
+      /* for ProcID = 20 - rest of the unpacking */
+      while (len < (psubevt->GetDlen()-2)/2)
+	{
+      
+	  /* read the header longword and extract slot, type & length  */
+	  Int_t vme_chn = 0;
+	  Int_t vme_geo = getbits(*pdata,2,12,5);
+	  Int_t vme_type = getbits(*pdata,2,9,3);
+	  Int_t vme_nlw =  getbits(*pdata,1,9,6);
+	  pdata++; len++;
+#ifdef DEBUG
+	  std::cout<<"data "<<vme_geo<<" "<<vme_type<<" "<<vme_nlw;
+#endif      
+	  const auto it_Module = it_Crate->second.find(vme_geo);
+	  if(it_Module == it_Crate->second.end())
+	    std::cout<<"E> Crate Mapping does not have this module (vmeGEO) "<<vme_geo<<" in Crate :"<<psubevt->GetProcid()<<std::endl;
+
+	  int IdMod = it_Module->second;
+#ifdef DEBUG
+	  std::cout<<" idmod:"<<IdMod<<std::endl;
+#endif      
+	  // read the data
+	  if(vme_type == 6)
+	    {
+	      // not valid data !
+	      const auto MaxCh = ModSetup->Nb_Channels.find(vme_geo); 
+	      for(int i=0;i<MaxCh->second;++i)
+		{
+		  h_UnpackStatus->Fill(IdMod*32+i,"not valid/Header",1.);
+		  //h_UnpackStatus->Fill(IdMod*MaxCh->second+i,6.);
+		}
+	  
+	    }
+	  //    std::cout<<"type = "<<vme_type<<"nlw = "<<vme_nlw<<std::endl;
+	  /* read the data */
+	  if ((vme_type == 2) && (vme_nlw > 0))
+	    {
+	      for(int i=0;i<vme_nlw;i++)
+		{  
+		  vme_geo = getbits(*pdata,2,12,5);
+		  vme_type = getbits(*pdata,2,9,3);
+		  vme_chn = getbits(*pdata,2,1,5);
+		  event_out->vme1[vme_geo][vme_chn] = getbits(*pdata,1,1,16);	                 
+		  //printf("DATA:%d %d %d\n",vme_geo,vme_chn,event_out->vme1[vme_geo][vme_chn] ); 
+	      
+		  int vme_statusVD = getbits(*pdata,14,1,1);
+		  int vme_statusUN = getbits(*pdata,13,1,1);
+		  int vme_statusOV = getbits(*pdata,12,1,1);
+
+		  if(vme_statusVD == 1)
+		    h_UnpackStatus->Fill(IdMod*32.+vme_chn,"valid",1.);
+		  else
+		    h_UnpackStatus->Fill(IdMod*32.+vme_chn,"not valid/Data",1.);
+	      
+		  if(vme_statusUN == 1)
+		    h_UnpackStatus->Fill(IdMod*32.+vme_chn,"UnderThreshold",1.);
+	      
+		  if(vme_statusOV == 1)
+		    h_UnpackStatus->Fill(IdMod*32.+vme_chn,"Overflow",1.);
+
+#ifdef DEBUG
+		  std::cout<<" Ch "<<vme_chn<<" "<<event_out->vme1[vme_geo][vme_chn]<<" status ["<<vme_statusVD<<", "<<vme_statusUN<<", "<<vme_statusOV<<"]"<<std::endl;
+#endif
+		  pdata++; len++;
+		}
+	  
+	  /* read and ignore the expected "end-of-block" longword */
+	  pdata++; len++;
+	}
+      
+    }  /* end of the while... loop  */
+  
+
+
+  break;
     default :
       break;
     } // end switch prodID
@@ -458,18 +703,67 @@ Bool_t TFRSUnpackProc::Event_Extract(TFRSUnpackEvent* event_out, TGo4MbsSubEvent
 
 }
 
-
+#ifdef USELESS
 void TFRSUnpackProc::UnpackUserSubevent(TGo4MbsSubEvent* psubevt, TFRSUnpackEvent* tgt)
 {
+  const auto it_Crate = ModSetup->MapCrates.find(psubevt->GetProcid());
+  if(it_Crate == ModSetup->MapCrates.end())
+    std::cout<<"E> Crate Mapping does not have this ProcID :"<<psubevt->GetProcid()<<std::endl;
 
   Int_t *pdata = psubevt->GetDataField();	
   Int_t len = 0;  
 
+  if(ModSetup->Nb_Scaler > 0)
+    {
+      /** \note FRS SCALER module data (1 longword per channel)   
+       *  This module has sequential readout therefore no channel
+       *  number contained in the data longwords. 
+       */
+      // read the header longword and extract slot, type & length
+      std::cout<<"word :"<<std::bitset<32>(*pdata)<<" "<<std::endl;
+      
+      Int_t vme_geo = getbits(*pdata,2,12,5);
+      Int_t vme_type = getbits(*pdata,2,9,3);
+      Int_t vme_nlw =  getbits(*pdata,2,3,6);
+      pdata++; len++;
+      if(vme_type!=4)
+	std::cout<<"E> Scaler type missed match ! GEO"<<vme_geo<<" "<<" type 4 =/="<<vme_type<<std::endl;
+
+      std::cout<<"Scaler :"<<vme_geo<<" "<<vme_type<<" "<<vme_nlw<<std::endl;
+
+      // read the data 
+      if (vme_nlw > 0)
+	{
+	  for(int i=0;i<vme_nlw;i++)
+	    {
+	      if(ModSetup->Scaler32bit)
+		{
+		  tgt->vme1[vme_geo][i] = *pdata;
+		  std::cout<<" Ch "<<i<<"# "<<tgt->vme0[vme_geo][i] <<std::endl;
+		}
+	      else
+		{
+		  Int_t sc_data = get2bits(*pdata,1,1,26);
+		  Int_t  sc_ch = get2bits(*pdata,1,27,5);
+		  tgt->vme1[vme_geo][i] = sc_data;
+		  std::cout<<" Ch "<<sc_ch<<"# "<<sc_data<<std::endl;
+		}
+	      pdata++; len++;
+	    }
+	  // std::cout<<"1Hz unpack, "<<tgt->vme0[6][3]<<std::endl;
+	  // read and ignore the expected "end-of-block" longword   
+	  //pdata++; len++;
+	}
+    }
+
+
+  
   /* read the header longword and extract slot, type & length  */
   Int_t vme_geo = getbits(*pdata,2,12,5);
   //Int_t vme_type = getbits(*pdata,2,9,3);
   Int_t vme_nlw =  getbits(*pdata,1,1,6);
   pdata++; len++;
+
 
   /* read the data from scaler */
   if (vme_nlw > 0)
@@ -494,7 +788,27 @@ void TFRSUnpackProc::UnpackUserSubevent(TGo4MbsSubEvent* psubevt, TFRSUnpackEven
       Int_t vme_type = getbits(*pdata,2,9,3);
       Int_t vme_nlw =  getbits(*pdata,1,1,6);
       pdata++; len++;
+      //std::cout<<"data "<<vme_geo<<" "<<vme_type<<" "<<vme_nlw;
       
+      const auto it_Module = it_Crate->second.find(vme_geo);
+      if(it_Module == it_Crate->second.end())
+	std::cout<<"E> Crate Mapping does not have this module (vmeGEO) "<<vme_geo<<" in Crate :"<<psubevt->GetProcid()<<std::endl;
+
+      int IdMod = it_Module->second;
+      //std::cout<<" idmod:"<<IdMod<<std::endl;
+      
+      // read the data
+      if(vme_type == 6)
+	{
+	  // not valid data !
+	  const auto MaxCh = ModSetup->Nb_Channels.find(vme_geo); 
+	  for(int i=0;i<MaxCh->second;++i)
+	    {
+	      h_UnpackStatus->Fill(IdMod*32+i,"not valid/Header",1.);
+	      //h_UnpackStatus->Fill(IdMod*MaxCh->second+i,6.);
+	    }
+	  
+	}
       //    std::cout<<"type = "<<vme_type<<"nlw = "<<vme_nlw<<std::endl;
       /* read the data */
       if ((vme_type == 2) && (vme_nlw > 0))
@@ -506,6 +820,25 @@ void TFRSUnpackProc::UnpackUserSubevent(TGo4MbsSubEvent* psubevt, TFRSUnpackEven
 	      vme_chn = getbits(*pdata,2,1,5);
 	      tgt->vme1[vme_geo][vme_chn] = getbits(*pdata,1,1,16);	                 
 	      //printf("DATA:%d %d %d\n",vme_geo,vme_chn,tgt->vme1[vme_geo][vme_chn] ); 
+	      
+	      int vme_statusVD = getbits(*pdata,14,1,1);
+	      int vme_statusUN = getbits(*pdata,13,1,1);
+	      int vme_statusOV = getbits(*pdata,12,1,1);
+
+	      if(vme_statusVD == 1)
+		h_UnpackStatus->Fill(IdMod*32.+vme_chn,"valid",1.);
+	      else
+		h_UnpackStatus->Fill(IdMod*32.+vme_chn,"not valid/Data",1.);
+	      
+	      if(vme_statusUN == 1)
+		h_UnpackStatus->Fill(IdMod*32.+vme_chn,"UnderThreshold",1.);
+	      
+	      if(vme_statusOV == 1)
+		h_UnpackStatus->Fill(IdMod*32.+vme_chn,"Overflow",1.);
+
+
+
+
 	      pdata++; len++;
 	    }
 	  
@@ -524,7 +857,7 @@ void TFRSUnpackProc::UnpackUserSubevent(TGo4MbsSubEvent* psubevt, TFRSUnpackEven
   // 	if (hVME1_17[i]) hVME1_17[i]->Fill(tgt->vme1[17][i] & 0xfff);
   //     }
 }  
-
+#endif
 
 
 Bool_t TFRSUnpackProc::FillHistograms(TFRSUnpackEvent* event)

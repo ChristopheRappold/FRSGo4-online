@@ -22,10 +22,12 @@ public:
 private:
 
   Bool_t Event_Extract(TFRSUnpackEvent* event_out, TGo4MbsSubEvent* rawsub, int type_event=1);
+#ifdef USELESS
   void UnpackUserSubevent(TGo4MbsSubEvent* psubevt, TFRSUnpackEvent* tgt);
-
+#endif
   TFRSParameter* frs ;
-  
+  TModParameter* ModSetup;
+    
   TH1I            *hTrigger;         //!
      
   TH1I            *hVME0_8[32];      //! FRS crate
@@ -40,7 +42,12 @@ private:
   TH1I            *hVME1_16[32];     //!
   TH1I            *hVME1_17[32];     //!      
   TH1I            *hVME2_TDC[32];
-            
+
+
+  TH2I * h_UnpackStatus;
+
+  
+  
   ClassDef(TFRSUnpackProc,1)
 };
 
