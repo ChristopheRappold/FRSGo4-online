@@ -41,17 +41,31 @@ Int_t TFRSUnpackEvent::Init()
 //   return rev;
 // }
 
-void TFRSUnpackEvent::Clear(Option_t *t) { 
-   for(int i=0;i<21;i++){
-     for(int j=0;j<32;j++){
-       vme0[i][j] = 0;  
-       vme1[i][j] = 0;              
-		}
+void TFRSUnpackEvent::Clear(Option_t *t)
+{
+  EventFlag = -1;
+  
+  for(int i=0;i<21;i++)
+    {
+      for(int j=0;j<32;j++)
+	{
+	  vme0[i][j] = 0;  
+	  vme1[i][j] = 0;              
 	}
-    for(int j=0;j<32;j++){   
-		vme2scaler[j]=0;   
-		}
-       
+    }
+  for(int j=0;j<32;j++)
+    vme2scaler[j]=0;   
+
+  for (int i = 0; i < 32; ++i)
+    {
+      for (int j = 0; j < 10; ++j)
+	{
+	  event_out->vme2s[i][j] = 0;
+	  event_out->vme2s_trailing[i][j] = 0;
+	}    
+      event_out->nhit5[i] = 0;
+    }  
+
    qlength = 0;
    qtype = 0;
    qsubtype = 0;
