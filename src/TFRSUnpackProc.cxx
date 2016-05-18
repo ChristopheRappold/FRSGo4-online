@@ -37,6 +37,9 @@ TFRSUnpackProc::TFRSUnpackProc(const char* name) :  TFRSBasicProc(name)
       std::cout<<"E> Electronic Module parameters not set properly, it is nullptr !"<<std::endl;
       std::exit(-1);
     }
+  previousTimeStamp[0] = 0;
+  previousTimeStamp[1] = 0;
+  currentTimeStamp = 0;
   
   bool remove_histos = (frs!=nullptr) && (!frs->fill_raw_histos);
   
@@ -52,19 +55,33 @@ TFRSUnpackProc::TFRSUnpackProc(const char* name) :  TFRSBasicProc(name)
 
       hVME1_8[n]  = MakeH1ISeries("Raw data/VME1", 8, 1, n, remove_histos);
       hVME1_9[n]  = MakeH1ISeries("Raw data/VME1", 9, 1, n, remove_histos);
-
+      hVME1_3[n]  = MakeH1ISeries("Raw data/VME1", 3, 1, n, remove_histos);
+      hVME1_15[n] = MakeH1ISeries("Raw data/VME1", 15, 1, n, remove_histos);
+      
       //hVME1_16[n] = MakeH1ISeries("Raw data/VME1", 16, 1, n, remove_histos);
       //hVME1_17[n] = MakeH1ISeries("Raw data/VME1", 17, 1, n, remove_histos);
-      hVME1_16[n] = MakeH1ISeries("Raw data/VME1", 15, 1, n, remove_histos);
-      hVME1_17[n] = MakeH1ISeries("Raw data/VME1", 4, 1, n, remove_histos);
 
-      hVME2_TDC[n] = MakeH1ISeries3("Raw data/VME2", 9, 2, n, remove_histos);
+      hVME2_TDC[n] = MakeH1ISeries3("Raw data/VME2", 0, 2, n, remove_histos);
  
+      hVME3_TDC[n] = MakeH1ISeries3("Raw data/VME3", 2, 2, n, remove_histos);
       //hVME2_12[n] = MakeH1ISeries("Raw data/VME2", 12, 2, n, remove_histos);
     }
 
-  h_UnpackStatus = MakeH2I("Unpack","Status",2*21*32,0.,2*21*32,10,0.,10.,"#Ch","Status",1);
+  h_VME0_8All  = MakeH2I("Raw data/VME0","V0_Module_geo8AllCh",32,0,32,512,0,4096,"#Ch","",1);
+  h_VME0_9All  = MakeH2I("Raw data/VME0","V0_Module_geo9AllCh",32,0,32,512,0,4096,"#Ch","",1);
+  h_VME0_11All = MakeH2I("Raw data/VME0","V0_Module_geo11AllCh",32,0,32,512,0,4096,"#Ch","",1);
+  h_VME0_12All = MakeH2I("Raw data/VME0","V0_Module_geo12AllCh",32,0,32,512,0,4096,"#Ch","",1);
   
+  h_VME1_8All  = MakeH2I("Raw data/VME1","V1_Module_geo8AllCh",32,0,32,512,0,4096,"#Ch","",1);
+  h_VME1_9All  = MakeH2I("Raw data/VME1","V1_Module_geo9AllCh",32,0,32,512,0,4096,"#Ch","",1);
+  h_VME1_3All  = MakeH2I("Raw data/VME1","V1_Module_geo3AllCh",32,0,32,512,0,4096,"#Ch","",1);
+  h_VME1_15All = MakeH2I("Raw data/VME1","V1_Module_geo15AllCh",32,0,32,512,0,4096,"#Ch","",1);
+
+  hVME2_TDCAll = MakeH2I("Raw data/VME2","V2_Module_AllCh",32,0,32,512,0,4096,"#Ch","",1);
+  hVME3_TDCAll = MakeH2I("Raw data/VME3","V3_Module_AllCh",32,0,32,512,0,4096,"#Ch","",1);
+  
+  h_UnpackStatus = MakeH2I("Unpack","Status",2*21*32,0.,2*21*32,10,0.,10.,"#Ch","Status",1);
+  h_TSFlagStatus = MakeH2I("Unpack","TS_flagStatus",1000,0,1000,10,0,10,"Diff_TS","Status",1);
 }
 
 TFRSUnpackProc::~TFRSUnpackProc()
@@ -104,14 +121,14 @@ Bool_t TFRSUnpackProc::BuildEvent(TGo4EventElement* output)
   /* ---------------------- ProcID = 10 ------------------ */
 
   /*  Check that the EVENT type and subtype are OK:  */
-  if((fInput->GetType()!=10) || (fInput->GetSubtype()!=1))
-    {
-      std::cout << "Wrong event type " << fInput->GetType() << std::endl;
-      return kFALSE;
-      //  }else{
-      //    std::cout << "Good event type " << fInput->GetType() << std::endl;
-      //    return;
-    }
+  // if((fInput->GetType()!=10) || (fInput->GetSubtype()!=1))
+  //   {
+  //     std::cout << "Wrong event type " << fInput->GetType() << std::endl;
+  //     return kFALSE;
+  //     //  }else{
+  //     //    std::cout << "Good event type " << fInput->GetType() << std::endl;
+  //     //    return;
+  //   }
   
   // If trigger 14 or 15, event fully can be skipped
   if((fInput->GetTrigger()==14) || (fInput->GetTrigger()==15))
@@ -311,15 +328,17 @@ Bool_t TFRSUnpackProc::Event_Extract(TFRSUnpackEvent* event_out, TGo4MbsSubEvent
 	  /** \note FRS TIME STAMP module data (3 longwords)   
 	   *   has no header or end-of-block info, we must hardwire GEO = 20.
 	   */
-	  Int_t vme_chn = 0;
-	  
-	  for (int i=0;i<4;i++)
+	  Long64_t tempTS = 0;
+	  static const Long64_t bit_weight[4] = {0x1,0x10000,0x100000000,0x1000000000000};
+	  for (int i=0;i<4;++i)
 	    {
-	      event_out->vme0[20][vme_chn++] = getbits(*pdata,1,1,16);
+	      event_out->vme0[20][i] = getbits(*pdata,1,1,16);
+	      tempTS += event_out->vme0[20][i]*bit_weight[i];
 	      //event_out->vme0[20][vme_chn++] = getbits(*pdata,2,1,16);
 	      pdata++; len++;
 	    }
-	  
+	  previousTimeStamp[0] = currentTimeStamp;
+	  currentTimeStamp = tempTS;
 	}
       
       if( (psubevt->GetType() != 88) )
@@ -338,6 +357,12 @@ Bool_t TFRSUnpackProc::Event_Extract(TFRSUnpackEvent* event_out, TGo4MbsSubEvent
 	  Int_t vme_type = getbits(*pdata,2,9,3);
 	  Int_t vme_nlw =  getbits(*pdata,2,3,6);
 	  pdata++; len++;
+
+	  const auto it_Module = it_Crate->second.find(vme_geo);
+	  int IdMod = it_Module->second;
+	  if(it_Module == it_Crate->second.end())
+	    std::cout<<"E> Crate Mapping does not have this module (vmeGEO) "<<vme_geo<<" in Crate :"<<psubevt->GetProcid()<<std::endl;
+
 	  if(vme_type!=4)
 	    std::cout<<"E> Scaler type missed match ! GEO"<<vme_geo<<" "<<" type 4 =/="<<vme_type<<std::endl;
 
@@ -351,7 +376,8 @@ Bool_t TFRSUnpackProc::Event_Extract(TFRSUnpackEvent* event_out, TGo4MbsSubEvent
 		{
 		  if(ModSetup->Scaler32bit)
 		    {
-		      event_out->vme0[vme_geo][i] = *pdata;
+		      //event_out->vme0[vme_geo][i] = *pdata;
+		      event_out->vme2scaler[i] = *pdata;
 #ifdef DEBUG
 		      std::cout<<" Ch "<<i<<"# "<<event_out->vme0[vme_geo][i] <<std::endl;
 #endif
@@ -362,7 +388,8 @@ Bool_t TFRSUnpackProc::Event_Extract(TFRSUnpackEvent* event_out, TGo4MbsSubEvent
 		      Int_t  sc_ch = get2bits(*pdata,1,27,5);
 		      if(sc_ch != i)
 			std::cout<<"E> Scaler missed match channel !"<<sc_ch<<" "<<i<<" "<<psubevt->GetProcid()<<std::endl;
-		      event_out->vme0[vme_geo][i] = sc_data;
+		      //event_out->vme0[vme_geo][i] = sc_data;
+		      event_out->vme2scaler[i] = sc_data;
 #ifdef DEBUG
 		      std::cout<<" Ch "<<sc_ch<<"# "<<sc_data<<std::endl;
 #endif
@@ -447,34 +474,34 @@ Bool_t TFRSUnpackProc::Event_Extract(TFRSUnpackEvent* event_out, TGo4MbsSubEvent
       break; 
       // end proc ID=10
 		    
-    case 15:
-      //proc ID=15 - TimeStamp
-      // get pointer on data   
+    // case 15:
+    //   //proc ID=15 - TimeStamp
+    //   // get pointer on data   
       
-      //Int_t vme_geo;
-      //Int_t vme_nlw;
-      //Int_t vme_type;
+    //   //Int_t vme_geo;
+    //   //Int_t vme_nlw;
+    //   //Int_t vme_type;
       
-      if (lenMax<2)
-	{
-	  std::cout << "Bad timming subevent data" << std::endl;
-	  return kFALSE;
-	}
+    //   if (lenMax<2)
+    // 	{
+    // 	  std::cout << "Bad timming subevent data" << std::endl;
+    // 	  return kFALSE;
+    // 	}
       
-      //Titris information read in subevent 15 as module number 20 in vme0
-      //and then system time (2x32 bits words) put in the same way
-      vme_chn = 0  ; 
+    //   //Titris information read in subevent 15 as module number 20 in vme0
+    //   //and then system time (2x32 bits words) put in the same way
+    //   vme_chn = 0  ; 
       
-      for (int i=0;i<5;i++)
-	{
-	  event_out->vme0[20][vme_chn++] = getbits(*pdata,1,1,16);
-	  event_out->vme0[20][vme_chn++] = getbits(*pdata,2,1,16);
-	  pdata++; len++;
-	}
+    //   for (int i=0;i<5;i++)
+    // 	{
+    // 	  event_out->vme0[20][vme_chn++] = getbits(*pdata,1,1,16);
+    // 	  event_out->vme0[20][vme_chn++] = getbits(*pdata,2,1,16);
+    // 	  pdata++; len++;
+    // 	}
       
       
-      break;
-      // ID=15 loop
+    //   break;
+    //   // ID=15 loop
       
     case 30:
       //proc ID=65 - User CRATE
@@ -503,7 +530,12 @@ Bool_t TFRSUnpackProc::Event_Extract(TFRSUnpackEvent* event_out, TGo4MbsSubEvent
 	  Int_t vme_type = getbits(*pdata,2,12,5);
 	  pdata++; len++;
 	  Int_t multihit = 0;//, counter = 0;
-	  
+
+	  const auto it_Module = it_Crate->second.find(vme_geo);
+	  int IdMod = it_Module->second;
+	  if(it_Module == it_Crate->second.end())
+	    std::cout<<"E> Crate Mapping does not have this module (vmeGEO) "<<vme_geo<<" in Crate :"<<psubevt->GetProcid()<<std::endl;
+
 #ifdef DEBUG
 	  std::cout<<"mTDC geo = "<<vme_geo<<", type = "<<vme_type<<std::endl;
 #endif  
@@ -588,7 +620,7 @@ Bool_t TFRSUnpackProc::Event_Extract(TFRSUnpackEvent* event_out, TGo4MbsSubEvent
 	    }
 	}
       break;
-      // ID=65 loop
+      // ID=30 loop
 		    
     case 20:
 #ifdef DEBUG
@@ -729,14 +761,17 @@ Bool_t TFRSUnpackProc::Event_Extract(TFRSUnpackEvent* event_out, TGo4MbsSubEvent
 	  /** \note FRS TIME STAMP module data (3 longwords)   
 	   *   has no header or end-of-block info, we must hardwire GEO = 20.
 	   */
-	  Int_t vme_chn = 0;
-	  
-	  for (int i=0;i<4;i++)
+	  Long64_t tempTS = 0;
+	  static const Long64_t bit_weight[4] = {0x1,0x10000,0x100000000,0x1000000000000};
+	  for (int i=0;i<4;++i)
 	    {
-	      event_out->vme3[20][vme_chn++] = getbits(*pdata,1,1,16);
+	      event_out->vme3[20][i] = getbits(*pdata,1,1,16);
+	      tempTS += event_out->vme3[20][i]*bit_weight[i];
 	      //event_out->vme0[20][vme_chn++] = getbits(*pdata,2,1,16);
 	      pdata++; len++;
 	    }
+	  previousTimeStamp[1] = currentTimeStamp;
+	  currentTimeStamp = tempTS;	  
 	}
 
       if( (psubevt->GetType() != 88) )
@@ -748,7 +783,7 @@ Bool_t TFRSUnpackProc::Event_Extract(TFRSUnpackEvent* event_out, TGo4MbsSubEvent
 	  // v820 -> no header 16 ch of 32 bits.
       for(int i=0;i<16;++i)
 	{
-	  event_out->vme3[0][i] = *pdata;
+	  event_out->vme3scaler[i] = *pdata;
 #ifdef DEBUG
 	  std::cout<<" Ch "<<i<<"# "<<event_out->vme3[0][i] <<std::endl;
 #endif
@@ -769,6 +804,10 @@ Bool_t TFRSUnpackProc::Event_Extract(TFRSUnpackEvent* event_out, TGo4MbsSubEvent
 	  Int_t vme_type = getbits(*pdata,2,12,5);
 	  pdata++; len++;
 	  Int_t multihit = 0;//, counter = 0;
+
+	  const auto it_Module = it_Crate->second.find(vme_geo);
+	  if(it_Module == it_Crate->second.end())
+	    std::cout<<"E> Crate Mapping does not have this module (vmeGEO) "<<vme_geo<<" in Crate :"<<psubevt->GetProcid()<<std::endl;
 	  
 #ifdef DEBUG
 	  std::cout<<"mTDC geo = "<<vme_geo<<", type = "<<vme_type<<std::endl;
@@ -1023,35 +1062,83 @@ void TFRSUnpackProc::UnpackUserSubevent(TGo4MbsSubEvent* psubevt, TFRSUnpackEven
 Bool_t TFRSUnpackProc::FillHistograms(TFRSUnpackEvent* event)
 {
 
-  hTrigger->Fill(event->qtrigger);
 
+  
+  hTrigger->Fill(event->qtrigger);
+  for(size_t i = 0;i<ModSetup->EventFlags.size();++i)
+    if(event->EventFlag==ModSetup->EventFlags[i])
+      {
+	if(previousTimeStamp[i]>0)
+	  {
+	    h_TSFlagStatus->Fill((currentTimeStamp-previousTimeStamp[i])*1e-3,i);
+	    //std::cout<<" eventFlag :"<<event->EventFlag<<" "<<currentTimeStamp-previousTimeStamp[i]<<" "<<currentTimeStamp<<"\n";
+	  }
+	// else
+	//   std::cout<<"First eventFlag :"<<event->EventFlag<<" "<<currentTimeStamp<<"\n";
+	  
+      }
+  if(event->EventFlag==ModSetup->EventFlags.back())
+    {
+      	if(previousTimeStamp[0]>0)
+	  {
+	    h_TSFlagStatus->Fill((currentTimeStamp-previousTimeStamp[0])*1e-3,3);
+	    //std::cout<<" +-> "<<event->EventFlag<<" "<<currentTimeStamp-previousTimeStamp[0]<<"\n";
+	  }
+    }
   if(frs->fill_raw_histos)
     {
+      
       for(int i=0;i<32;i++)
 	{
 	  if (hVME0_8[i]) hVME0_8[i]->Fill(event->vme0[8][i] & 0xfff);
 	  if (hVME0_9[i]) hVME0_9[i]->Fill(event->vme0[9][i] & 0xfff);
 	  if (hVME0_11[i]) hVME0_11[i]->Fill(event->vme0[11][i] & 0xfff);
 	  if (hVME0_12[i]) hVME0_12[i]->Fill(event->vme0[12][i] & 0xfff);
+	  if( h_VME0_8All )
+	    h_VME0_8All->Fill(event->vme0[8][i] & 0xfff,i);
+	  if( h_VME0_9All )
+	    h_VME0_9All->Fill(event->vme0[9][i] & 0xfff,i);
+	  if( h_VME0_11All )
+	    h_VME0_11All->Fill(event->vme0[11][i] & 0xfff,i);
+	  if( h_VME0_12All )
+	    h_VME0_12All->Fill(event->vme0[12][i] & 0xfff,i);
+
 	  //if (hVME0_13[i]) hVME0_13[i]->Fill(event->vme0[13][i] & 0xfff);
 	  //if (hVME0_14[i]) hVME0_14[i]->Fill(event->vme0[14][i] & 0xfff);
 	}
 
       for(int i=0; i<32; ++i)
 	for(int j=0; j<10; ++j)
-	  if(event->vme2s[i][j] > 0)
-	    {
-	      hVME2_TDC[i]->Fill(event->vme2s[i][j]);
-	    }
+	  {
+	    if(event->vme2s[i][j] > 0)
+	      {
+		hVME2_TDC[i]->Fill(event->vme2s[i][j]);
+	      }
 
+	    if(event->vme3s_MT[i][j] > 0)
+	      {
+		hVME3_TDC[i]->Fill(event->vme3s_MT[i][j]);
+	      }
+
+	  }
       // 	  // from UnpackUserSubevent 
       // 	  // if ((frs!=0) && frs->fill_raw_histos)
       for(int i=0;i<32;i++)
 	{
 	  if (hVME1_8[i]) hVME1_8[i]->Fill(event->vme1[8][i] & 0xfff);
 	  if (hVME1_9[i]) hVME1_9[i]->Fill(event->vme1[9][i] & 0xfff);
-	  if (hVME1_16[i]) hVME1_16[i]->Fill(event->vme1[15][i] & 0xfff);
-	  if (hVME1_17[i]) hVME1_17[i]->Fill(event->vme1[17][i] & 0xfff);
+	  if (hVME1_3[i]) hVME1_3[i]->Fill(event->vme1[3][i] & 0xfff);
+	  if (hVME1_15[i]) hVME1_15[i]->Fill(event->vme1[15][i] & 0xfff);
+	  
+	  if( h_VME1_8All )
+	    h_VME1_8All->Fill(event->vme1[8][i] & 0xfff,i);
+	  if( h_VME1_9All )
+	    h_VME1_9All->Fill(event->vme1[9][i] & 0xfff,i);
+	  if( h_VME1_3All )
+	    h_VME1_3All->Fill(event->vme1[3][i] & 0xfff,i);
+	  if( h_VME1_15All )
+	    h_VME1_15All->Fill(event->vme1[15][i] & 0xfff,i);
+
 	}
     }
 

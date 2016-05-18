@@ -28,25 +28,39 @@ private:
   TFRSParameter* frs ;
   TModParameter* ModSetup;
     
-  TH1I            *hTrigger;         //!
-     
-  TH1I            *hVME0_8[32];      //! FRS crate
-  TH1I            *hVME0_9[32];      //!
-  TH1I            *hVME0_11[32];     //!
-  TH1I            *hVME0_12[32];     //!
-  TH1I            *hVME0_13[32];     //!
-  TH1I            *hVME0_14[32];     //!
-   
-  TH1I            *hVME1_8[32];      //! TPC User crate
-  TH1I            *hVME1_9[32];      //!
-  TH1I            *hVME1_16[32];     //!
-  TH1I            *hVME1_17[32];     //!      
-  TH1I            *hVME2_TDC[32];
+  TH1I* hTrigger;         //!
+        	
+  TH1I* hVME0_8[32];      //! FRS crate
+  TH1I* hVME0_9[32];      //!
+  TH1I* hVME0_11[32];     //!
+  TH1I* hVME0_12[32];     //!
+  TH1I* hVME0_13[32];     //!
+  TH1I* hVME0_14[32];     //!
+        	
+  TH1I* hVME1_8[32];      //! TPC User crate
+  TH1I* hVME1_9[32];      //!
+  TH1I* hVME1_15[32];     //!
+  TH1I* hVME1_3[32];     //!      
+        	
+  TH1I* hVME2_TDC[32]; //!
+  TH1I* hVME3_TDC[32]; //!
 
+  TH2I* h_VME0_8All ;  //!
+  TH2I* h_VME0_9All ;  //!
+  TH2I* h_VME0_11All;  //!
+  TH2I* h_VME0_12All;  //!
+  TH2I* h_VME1_8All ;  //!
+  TH2I* h_VME1_9All ;  //!
+  TH2I* h_VME1_3All ;  //!
+  TH2I* h_VME1_15All;  //!
+  TH2I* hVME2_TDCAll;  //!
+  TH2I* hVME3_TDCAll;  //!
+  TH2I* h_UnpackStatus; //!
+  TH2I* h_TSFlagStatus; //!
 
-  TH2I * h_UnpackStatus;
-
-  
+  bool firstTS[2] ;
+  Long64_t previousTimeStamp[2];
+  Long64_t currentTimeStamp;
   
   ClassDef(TFRSUnpackProc,1)
 };
