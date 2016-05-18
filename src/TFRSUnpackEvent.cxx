@@ -50,20 +50,27 @@ void TFRSUnpackEvent::Clear(Option_t *t)
       for(int j=0;j<32;j++)
 	{
 	  vme0[i][j] = 0;  
-	  vme1[i][j] = 0;              
+	  vme1[i][j] = 0;	       
+	  vme3[i][j] = 0;	       
 	}
     }
   for(int j=0;j<32;j++)
-    vme2scaler[j]=0;   
+      vme2scaler[j]=0;
 
   for (int i = 0; i < 32; ++i)
     {
       for (int j = 0; j < 10; ++j)
 	{
-	  vme2s[i][j] = 0;
-	  vme2s_trailing[i][j] = 0;
+	  vme2s[i][j] = -10;
+	  vme2s_trailing[i][j] = -10;
+	  vme3s_MT[i][j] = -10;
+	  vme3s_MT_trailing[i][j] = -10;
 	}    
-      nhit5[i] = 0;
+      nhit5[i][1] = 0;
+      nhit5[i][0] = 0;
+     
+      vme3_MT_nhit5[i][0] = 0;
+      vme3_MT_nhit5[i][1] = 0;
     }  
 
    qlength = 0;

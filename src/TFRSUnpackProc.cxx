@@ -13,7 +13,7 @@
 #include <bitset>
 //#include  <stdio.h>
 
-//#DEBUG
+//#define DEBUG
 
 TFRSUnpackProc::TFRSUnpackProc() : TFRSBasicProc("FRSUnpackProc")
 {
@@ -52,8 +52,11 @@ TFRSUnpackProc::TFRSUnpackProc(const char* name) :  TFRSBasicProc(name)
 
       hVME1_8[n]  = MakeH1ISeries("Raw data/VME1", 8, 1, n, remove_histos);
       hVME1_9[n]  = MakeH1ISeries("Raw data/VME1", 9, 1, n, remove_histos);
-      hVME1_16[n] = MakeH1ISeries("Raw data/VME1", 16, 1, n, remove_histos);
-      hVME1_17[n] = MakeH1ISeries("Raw data/VME1", 17, 1, n, remove_histos);
+
+      //hVME1_16[n] = MakeH1ISeries("Raw data/VME1", 16, 1, n, remove_histos);
+      //hVME1_17[n] = MakeH1ISeries("Raw data/VME1", 17, 1, n, remove_histos);
+      hVME1_16[n] = MakeH1ISeries("Raw data/VME1", 15, 1, n, remove_histos);
+      hVME1_17[n] = MakeH1ISeries("Raw data/VME1", 4, 1, n, remove_histos);
 
       hVME2_TDC[n] = MakeH1ISeries3("Raw data/VME2", 9, 2, n, remove_histos);
  
@@ -178,7 +181,7 @@ Bool_t TFRSUnpackProc::BuildEvent(TGo4EventElement* output)
     
 	  /*  Check the SUBevent type and subtype!             */
 	
-	  if( !( (psubevt->GetType() == 10) && (psubevt->GetSubtype() == 1) )    &&
+	  if( !( (psubevt->GetType() == 12) && (psubevt->GetSubtype() == 1) )    &&
 	      !( (psubevt->GetType() == 36) && (psubevt->GetSubtype() == 3600) ) &&
 	      !( (psubevt->GetType() == 88) && (psubevt->GetSubtype() == 8800) ) )
 	    {  // for all data 
@@ -278,9 +281,16 @@ Bool_t TFRSUnpackProc::Event_Extract(TFRSUnpackEvent* event_out, TGo4MbsSubEvent
       len++; // 0x200
 #ifdef DEBUG
       std::cout<<" Event FLAG :"<<std::endl;
-      std::cout<<std::bitset<32>(event_flag)<<"\n"<<std::bitset<32>(ModSetup->EventFlags[0])<<std::endl;
+      std::cout<<std::bitset<32>(event_flag)<<"\n";
+      for(Int_t elem : ModSetup->EventFlags)
+	std::cout<<std::bitset<32>(elem)<<"\n";
 #endif
-      event_out->EventFlag = event_flag;
+      bool foundFlag = false;
+      for(int setupFlag : ModSetup->EventFlags)
+	if(event_flag == setupFlag)
+	  foundFlag = true;
+      if(foundFlag)
+	event_out->EventFlag = event_flag;
     }
 
   
@@ -291,23 +301,22 @@ Bool_t TFRSUnpackProc::Event_Extract(TFRSUnpackEvent* event_out, TGo4MbsSubEvent
 #ifdef DEBUG
       std::cout<<"ProcID :"<<10<<std::endl;
 #endif      
-      pdata++; len++; // remove 0xbaba.baba
 
       // get pointer on data   
 
       //Int_t *pdata = psubevt->GetDataField();
       //Int_t len = 0;
-      if(ModSetup->Nb_TimeStamp > 0 && (psubevt->GetType() == 10) )
+      if(ModSetup->Nb_TimeStamp > 0 && (psubevt->GetType() == 12) )
 	{
 	  /** \note FRS TIME STAMP module data (3 longwords)   
 	   *   has no header or end-of-block info, we must hardwire GEO = 20.
 	   */
 	  Int_t vme_chn = 0;
 	  
-	  for (int i=0;i<3;i++)
+	  for (int i=0;i<4;i++)
 	    {
 	      event_out->vme0[20][vme_chn++] = getbits(*pdata,1,1,16);
-	      event_out->vme0[20][vme_chn++] = getbits(*pdata,2,1,16);
+	      //event_out->vme0[20][vme_chn++] = getbits(*pdata,2,1,16);
 	      pdata++; len++;
 	    }
 	  
@@ -315,6 +324,8 @@ Bool_t TFRSUnpackProc::Event_Extract(TFRSUnpackEvent* event_out, TGo4MbsSubEvent
       
       if( (psubevt->GetType() != 88) )
 	break;
+
+      pdata++; len++; // remove 0xbaba.baba
 
       if(ModSetup->Nb_Scaler > 0)
 	{
@@ -502,7 +513,7 @@ Bool_t TFRSUnpackProc::Event_Extract(TFRSUnpackEvent* event_out, TGo4MbsSubEvent
 	      while (len < lenMax) 
 		{
 #ifdef DEBUG
-		  std::cout<<"new :"<<std::bitset<32>(*pdata)<<std::endl;
+		  std::cout<<"word : "<<std::bitset<32>(*pdata)<<" ";
 #endif
 		  vme_type = getbits(*pdata,2,12,5);
 		  if(vme_type==1) // headerTDC
@@ -511,51 +522,67 @@ Bool_t TFRSUnpackProc::Event_Extract(TFRSUnpackEvent* event_out, TGo4MbsSubEvent
 		    }
 		  //multihit = 0;
 #ifdef DEBUG
-		  std::cout<<"reading MTDC "<<vme_type<<std::endl;
-		  std::cout<<std::bitset<32>(*pdata)<<std::endl;
+		  std::cout<<"reading :"<<vme_type<<std::endl;
 #endif
 		  vme_type = getbits(*pdata,2,12,5);
+#ifdef DEBUG
+		  std::cout<<"word : "<<std::bitset<32>(*pdata)<<" type:"<<vme_type<<" ";
+#endif
 		  if(vme_type == 0)
 		    {
 		      // this indicates a TDC measurement
 		      Int_t vme_chn = getbits(*pdata,2,6,5);
 		      Int_t LeadingOrTrailing = getbits(*pdata,2,11,1);
-		      multihit = event_out->nhit5[vme_chn];
-		      //std::cout << "     tdc vme_chn = " << vme_chn;
-		      //std::cout << " multihit: " << multihit << std::endl;
+		      Int_t value = getbits(*pdata,1,1,21);
+
+		      multihit = event_out->nhit5[vme_chn][LeadingOrTrailing];
+#ifdef DEBUG
+		      std::cout << "     tdc vme_chn = " << vme_chn;
+		      std::cout << " multihit: " << multihit << " ";
+#endif
 		      if (multihit >= 10)
 			continue;
 		      
 		      if(LeadingOrTrailing == 0)
 			{
-			  Int_t value = getbits(*pdata,1,1,21);
-			  //std::cout << " +-> tdc L value = " << value << std::endl;
+#ifdef DEBUG
+			  std::cout << " +-> tdc L value = " << value << std::endl;
+#endif
 			  if (value > 0)
 			    {
 			      event_out->vme2s[vme_chn][multihit] = value;
-			      event_out->nhit5[vme_chn]++;
 			      //hVME2_TDC[vme_chn]->Fill(value);
 			    }
 			}
 		  
 		      else
 			{
-			  Int_t value = getbits(*pdata,1,1,21);
-			  //std::cout << " +-> tdc T value = " << value << std::endl;
+#ifdef DEBUG
+			  std::cout << " +-> tdc T value = " << value << std::endl;
+#endif
 			  if (value > 0)
 			    event_out->vme2s_trailing[vme_chn][multihit] = value;
 			}
+		      event_out->nhit5[vme_chn][LeadingOrTrailing]++;
 		    
 		      pdata++; len++;
 		    }
 		  else
 		    {
 		      // TDC trailer vme_type == 3 
+#ifdef DEBUG
+		      std::cout<<"\n";
+#endif
 		      if(vme_type != 3 && vme_type !=16)
 			std::cout<<"E> MTDC strange type :"<<vme_type<<std::endl;
-		      pdata++; len++;
 		      if(vme_type==16)
-			break;
+			{
+			  Int_t vme_geoEnd = getbits(*pdata,1,1,5);
+			  if(vme_geo!=vme_geoEnd)
+			    std::cout<<"E> MTDC strange end buffer header :"<<vme_type<<" "<<vme_geo<<" != "<<vme_geoEnd<<std::endl; 
+			  break;
+			}
+		      pdata++; len++;
 		    }
 		}
 	    }
@@ -569,56 +596,56 @@ Bool_t TFRSUnpackProc::Event_Extract(TFRSUnpackEvent* event_out, TGo4MbsSubEvent
 #endif      
       //UnpackUserSubevent(psubevt, event_out); //for historical reasons
       
-      if(ModSetup->Nb_Scaler > 0)
-	{
-	  /** \note FRS SCALER module data (1 longword per channel)   
-	   *  This module has sequential readout therefore no channel
-	   *  number contained in the data longwords. 
-	   */
-	  // read the header longword and extract slot, type & length
-#ifdef DEBUG
-	  std::cout<<"word :"<<std::bitset<32>(*pdata)<<" "<<std::endl;
-#endif  
-	  Int_t vme_geo = getbits(*pdata,2,12,5);
-	  Int_t vme_type = getbits(*pdata,2,9,3);
-	  Int_t vme_nlw =  getbits(*pdata,2,3,6);
-	  pdata++; len++;
-	  if(vme_type!=4)
-	    std::cout<<"E> Scaler type missed match ! GEO"<<vme_geo<<" "<<" type 4 =/="<<vme_type<<std::endl;
+//       if(ModSetup->Nb_Scaler > 0)
+// 	{
+// 	  /** \note FRS SCALER module data (1 longword per channel)   
+// 	   *  This module has sequential readout therefore no channel
+// 	   *  number contained in the data longwords. 
+// 	   */
+// 	  // read the header longword and extract slot, type & length
+// #ifdef DEBUG
+// 	  std::cout<<"word :"<<std::bitset<32>(*pdata)<<" "<<std::endl;
+// #endif  
+// 	  Int_t vme_geo = getbits(*pdata,2,12,5);
+// 	  Int_t vme_type = getbits(*pdata,2,9,3);
+// 	  Int_t vme_nlw =  getbits(*pdata,2,3,6);
+// 	  pdata++; len++;
+// 	  if(vme_type!=4)
+// 	    std::cout<<"E> Scaler type missed match ! GEO"<<vme_geo<<" "<<" type 4 =/="<<vme_type<<std::endl;
 	  
-#ifdef DEBUG
-	  std::cout<<"Scaler :"<<vme_geo<<" "<<vme_type<<" "<<vme_nlw<<std::endl;
-#endif	  
-	  // read the data 
-	  if (vme_nlw > 0)
-	    {
-	      for(int i=0;i<vme_nlw;i++)
-		{
-		  if(ModSetup->Scaler32bit)
-		    {
-		      event_out->vme1[vme_geo][i] = *pdata;
-#ifdef DEBUG
-		      std::cout<<" Ch "<<i<<"# "<<event_out->vme0[vme_geo][i] <<std::endl;
-#endif
-		    }
-		  else
-		    {
-		      Int_t sc_data = get2bits(*pdata,1,1,26);
-		      Int_t  sc_ch = get2bits(*pdata,1,27,5);
-		      if(sc_ch != i)
-			std::cout<<"E> Scaler missed match channel !"<<sc_ch<<" "<<i<<" "<<psubevt->GetProcid()<<std::endl;
-		      event_out->vme1[vme_geo][i] = sc_data;
-#ifdef DEBUG
-		      std::cout<<" Ch "<<sc_ch<<"# "<<sc_data<<std::endl;
-#endif
-		    }
-		  pdata++; len++;
-		}
-	      // std::cout<<"1Hz unpack, "<<event_out->vme0[6][3]<<std::endl;
-	      // read and ignore the expected "end-of-block" longword   
-	      //pdata++; len++;
-	    }
-	}
+// #ifdef DEBUG
+// 	  std::cout<<"Scaler :"<<vme_geo<<" "<<vme_type<<" "<<vme_nlw<<std::endl;
+// #endif	  
+// 	  // read the data 
+// 	  if (vme_nlw > 0)
+// 	    {
+// 	      for(int i=0;i<vme_nlw;i++)
+// 		{
+// 		  if(ModSetup->Scaler32bit)
+// 		    {
+// 		      event_out->vme1[vme_geo][i] = *pdata;
+// #ifdef DEBUG
+// 		      std::cout<<" Ch "<<i<<"# "<<event_out->vme0[vme_geo][i] <<std::endl;
+// #endif
+// 		    }
+// 		  else
+// 		    {
+// 		      Int_t sc_data = get2bits(*pdata,1,1,26);
+// 		      Int_t  sc_ch = get2bits(*pdata,1,27,5);
+// 		      if(sc_ch != i)
+// 			std::cout<<"E> Scaler missed match channel !"<<sc_ch<<" "<<i<<" "<<psubevt->GetProcid()<<std::endl;
+// 		      event_out->vme1[vme_geo][i] = sc_data;
+// #ifdef DEBUG
+// 		      std::cout<<" Ch "<<sc_ch<<"# "<<sc_data<<std::endl;
+// #endif
+// 		    }
+// 		  pdata++; len++;
+// 		}
+// 	      // std::cout<<"1Hz unpack, "<<event_out->vme0[6][3]<<std::endl;
+// 	      // read and ignore the expected "end-of-block" longword   
+// 	      //pdata++; len++;
+// 	    }
+// 	}
 
       /* for ProcID = 20 - rest of the unpacking */
       while (len < (psubevt->GetDlen()-2)/2)
@@ -686,15 +713,148 @@ Bool_t TFRSUnpackProc::Event_Extract(TFRSUnpackEvent* event_out, TGo4MbsSubEvent
 		  pdata++; len++;
 		}
 	  
-	  /* read and ignore the expected "end-of-block" longword */
+	      /* read and ignore the expected "end-of-block" longword */
+	      pdata++; len++;
+	    }
+      
+	}  /* end of the while... loop  */
+      
+
+
+      break;
+    case 40 :
+      
+      if(ModSetup->Nb_TimeStamp > 0 && (psubevt->GetType() == 12) )
+	{
+	  /** \note FRS TIME STAMP module data (3 longwords)   
+	   *   has no header or end-of-block info, we must hardwire GEO = 20.
+	   */
+	  Int_t vme_chn = 0;
+	  
+	  for (int i=0;i<4;i++)
+	    {
+	      event_out->vme3[20][vme_chn++] = getbits(*pdata,1,1,16);
+	      //event_out->vme0[20][vme_chn++] = getbits(*pdata,2,1,16);
+	      pdata++; len++;
+	    }
+	}
+
+      if( (psubevt->GetType() != 88) )
+	break;
+
+      pdata++; len++; // remove 0xbaba.baba
+
+      
+	  // v820 -> no header 16 ch of 32 bits.
+      for(int i=0;i<16;++i)
+	{
+	  event_out->vme3[0][i] = *pdata;
+#ifdef DEBUG
+	  std::cout<<" Ch "<<i<<"# "<<event_out->vme3[0][i] <<std::endl;
+#endif
 	  pdata++; len++;
 	}
+
+
+      static std::bitset<32> barrier_test(0xbabababa);
+      if(std::bitset<32>(*pdata) !=barrier_test)
+	std::cout<<"E> ProcID 40 : Barrier missed !"<<std::bitset<32>(*pdata)<<" =/= 0xbabababa | "<<barrier_test<<std::endl;
+      pdata++; len++;
       
-    }  /* end of the while... loop  */
-  
+      
+      if(ModSetup->Nb_TDC>0)
+	{
+	  //v1290 TDC              
+	  Int_t vme_geo = getbits(*pdata,1,1,5);
+	  Int_t vme_type = getbits(*pdata,2,12,5);
+	  pdata++; len++;
+	  Int_t multihit = 0;//, counter = 0;
+	  
+#ifdef DEBUG
+	  std::cout<<"mTDC geo = "<<vme_geo<<", type = "<<vme_type<<std::endl;
+#endif  
 
+	  if (vme_type == 8)
+	    {
+	      while (len < lenMax) 
+		{
+#ifdef DEBUG
+		  std::cout<<"word : "<<std::bitset<32>(*pdata)<<" ";
+#endif
+		  vme_type = getbits(*pdata,2,12,5);
+		  if(vme_type==1) // headerTDC
+		    { 
+		      pdata++; len++;
+		    }
+		  //multihit = 0;
+#ifdef DEBUG
+		  std::cout<<"reading "<<vme_type<<std::endl;
+#endif
+		  vme_type = getbits(*pdata,2,12,5);
+#ifdef DEBUG
+		  std::cout<<" word : "<<std::bitset<32>(*pdata)<<" type:"<<vme_type<<" ";
 
-  break;
+#endif
+		  if(vme_type == 0)
+		    {
+		      // this indicates a TDC measurement
+		      Int_t vme_chn = getbits(*pdata,2,6,5);
+		      Int_t LeadingOrTrailing = getbits(*pdata,2,11,1);
+		      Int_t value = getbits(*pdata,1,1,21);
+		      multihit = event_out->vme3_MT_nhit5[vme_chn][LeadingOrTrailing];
+#ifdef DEBUG
+		      std::cout << "     tdc vme_chn = " << vme_chn;
+		      std::cout << " multihit: " << multihit << " ";
+#endif
+		      if (multihit >= 10)
+			continue;
+		      
+		      if(LeadingOrTrailing == 0)
+			{
+#ifdef DEBUG
+			  std::cout << " +-> tdc L value = " << value << std::endl;
+#endif
+			  if (value > 0)
+			    {
+			      event_out->vme3s_MT[vme_chn][multihit] = value;
+			      //hVME2_TDC[vme_chn]->Fill(value);
+			    }
+			}
+		  
+		      else
+			{
+#ifdef DEBUG
+			  std::cout << " +-> tdc T value = " << value << std::endl;
+#endif
+			  if (value > 0)
+			    event_out->vme2s_trailing[vme_chn][multihit] = value;
+			}
+		      event_out->vme3_MT_nhit5[vme_chn][LeadingOrTrailing]++;
+		    
+		      pdata++; len++;
+		    }
+		  else
+		    {
+		      // TDC trailer vme_type == 3
+#ifdef DEBUG
+		      std::cout<<"\n";
+#endif
+		      if(vme_type != 3 && vme_type !=16)
+			std::cout<<"E> MTDC strange type :"<<vme_type<<std::endl;
+		      if(vme_type==16)
+			{
+			  Int_t vme_geoEnd = getbits(*pdata,1,1,5);
+			  if(vme_geo!=vme_geoEnd)
+			    std::cout<<"E> MTDC strange end buffer header :"<<vme_type<<" "<<vme_geo<<" != "<<vme_geoEnd<<std::endl; 
+			  break;
+			}
+		      pdata++; len++;
+
+		    }
+		}
+	    }
+	}
+      break;
     default :
       break;
     } // end switch prodID
