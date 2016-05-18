@@ -703,28 +703,36 @@ void setup_s411_jun16()
 
   //std::unordered_map<int,int> CrateTPC;
   std::map<int,int> CrateTPC;
-  CrateTPC.insert(std::pair<int,int>(5,IdMod++));
+  //CrateTPC.insert(std::pair<int,int>(5,IdMod++));
   CrateTPC.insert(std::pair<int,int>(8,IdMod++));
   CrateTPC.insert(std::pair<int,int>(9,IdMod++));
   CrateTPC.insert(std::pair<int,int>(15,IdMod++));
-  CrateTPC.insert(std::pair<int,int>(4,IdMod++));
+  CrateTPC.insert(std::pair<int,int>(3,IdMod++));
   
   //std::unordered_map<int,int> CrateUser;
   std::map<int,int> CrateUser;
   CrateUser.insert(std::pair<int,int>(0,IdMod++));
 
+  std::map<int,int> CrateMT;
+  CrateMT.insert(std::pair<int,int>(0,IdMod++));
+  CrateMT.insert(std::pair<int,int>(2,IdMod++));
+  
   Map1* temp1 = new Map1("temp1");
   Map1* temp2 = new Map1("temp2");
   Map1* temp3 = new Map1("temp3");
+  Map1* temp4 = new Map1("temp4");
   temp1->map=CrateFRS;
   temp2->map=CrateTPC;
   temp3->map=CrateUser;
+  temp4->map=CrateMT;
   TObjString* key1 = new TObjString("10");
   TObjString* key2 = new TObjString("20");
   TObjString* key3 = new TObjString("30");
+  TObjString* key4 = new TObjString("40");
   ElecMod->Maptemp.Add(key1,temp1);
   ElecMod->Maptemp.Add(key2,temp2);
   ElecMod->Maptemp.Add(key3,temp3);
+  ElecMod->Maptemp.Add(key4,temp4);
   // ElecMod->MapCrates.insert(std::pair<int,std::unordered_map<int,int> >(10,CrateFRS));
   // ElecMod->MapCrates.insert(std::pair<int,std::unordered_map<int,int> >(20,CrateTPC));
   // ElecMod->MapCrates.insert(std::pair<int,std::unordered_map<int,int> >(30,CrateUser));
@@ -739,15 +747,18 @@ void setup_s411_jun16()
   ElecMod->ModType.push_back("FRS_TDC_2");
   ElecMod->ModType.push_back("FRS_QDC_1");
   ElecMod->ModType.push_back("FRS_ADC_1");
-  ElecMod->ModType.push_back("TPC_SC_1");
   ElecMod->ModType.push_back("TPC_TDC_1");
   ElecMod->ModType.push_back("TPC_TDC_2");
   ElecMod->ModType.push_back("TPC_QDC_1");
   ElecMod->ModType.push_back("TPC_QDC_2");
   ElecMod->ModType.push_back("USER_MTDC_1");
+  ElecMod->ModType.push_back("MT_SC_1");
+  ElecMod->ModType.push_back("MT_MTDC_1");
 
   ElecMod->Scaler32bit=1;
-  ElecMod->EventFlags.push_back(0x00000000);
+  //ElecMod->EventFlags.push_back(0x00000000);
+  ElecMod->EventFlags.push_back(0x00000100);
+  ElecMod->EventFlags.push_back(0x00000200);
   
   // ElecMod->ModType.push_back("QDC_11");
   // ElecMod->ModType.push_back("QDC_12");
