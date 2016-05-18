@@ -685,7 +685,7 @@ void setup_s411_jun16()
   ElecMod->Nb_ADC = 1;
   ElecMod->Nb_TDC = 5;
   ElecMod->Nb_Scaler = 2;
-  ElecMod->Nb_TimeStamp = 0;
+  ElecMod->Nb_TimeStamp = 2;
   
   for(int i = 0;i<64;++i)
     ElecMod->Nb_Channels.insert(std::pair<int,int>(i,32));
