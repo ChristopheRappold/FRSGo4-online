@@ -33,9 +33,10 @@ public:
   
   UInt_t vme0[21][32];         // FRS crate                                
   UInt_t vme1[21][32];         // TPC crate 
-  UInt_t vme3[21][32];         // TPC crate 
+  UInt_t vme3[21][32];         // Mtof crate 
 
   Int_t vme2scaler[32];         // User Crate Messhure
+  Int_t vme3scaler[32];         // User Crate Messhure
 
   Int_t vme2s[32][10];           // User TDC (V1290) 
   Int_t vme2s_trailing[32][10];  // User TDC (V1290) 

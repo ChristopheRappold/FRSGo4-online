@@ -55,8 +55,11 @@ void TFRSUnpackEvent::Clear(Option_t *t)
 	}
     }
   for(int j=0;j<32;j++)
+    {
       vme2scaler[j]=0;
-
+      vme3scaler[j]=0;
+    }
+  
   for (int i = 0; i < 32; ++i)
     {
       for (int j = 0; j < 10; ++j)
