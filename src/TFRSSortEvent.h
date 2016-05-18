@@ -33,7 +33,7 @@ public:
       
   // time stamp data  
   Int_t         ts_id;                                
-  Int_t         ts_word[3]; //for the titris time stammping
+  Int_t         ts_word[4]; //for the titris time stammping
   Int_t         tsys_word[3]; //for the system time
   Long64_t      timestamp;  // absolute time stamp value
   Double_t      timespill;  // relative time from start of the spill 

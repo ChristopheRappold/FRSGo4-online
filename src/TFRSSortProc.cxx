@@ -40,10 +40,11 @@ Bool_t TFRSSortProc::BuildEvent(TGo4EventElement* output)
   
   //  tgt->ts_id = src->vme0[20][0];
   tgt->ts_word[0] = src->vme0[20][0];
-  tgt->ts_word[1] = src->vme0[20][2];
-  tgt->ts_word[2] = src->vme0[20][4];
+  tgt->ts_word[1] = src->vme0[20][1];
+  tgt->ts_word[2] = src->vme0[20][2];
+  tgt->ts_word[3] = src->vme0[20][3];
 
-  tgt->timestamp = Long64_t(1)*tgt->ts_word[0] + Long64_t(0x10000)*tgt->ts_word[1] + Long64_t(0x10000)*Long64_t(0x10000)*tgt->ts_word[2];
+  tgt->timestamp = Long64_t(1)*tgt->ts_word[0] + Long64_t(0x10000)*tgt->ts_word[1] + Long64_t(0x100000000)*tgt->ts_word[2] + Long64_t(0x1000000000000)*tgt->ts_word[3];
   // printf("qtrigger=%d timestamp=%ld \n",src->qtrigger,tgt->timestamp);
 
   tgt->tsys_word[0] = src->vme0[20][6] ; //s time low word
