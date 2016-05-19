@@ -37,7 +37,8 @@ Bool_t TFRSSortProc::BuildEvent(TGo4EventElement* output)
   /* now we can assign the parameters according to cabling:  */
 
   /* ### timestamp: */
-  
+  tgt->EventFlag = src->EventFlag;
+
   //  tgt->ts_id = src->vme0[20][0];
   tgt->ts_word[0] = src->vme0[20][0];
   tgt->ts_word[1] = src->vme0[20][1];
@@ -92,7 +93,7 @@ Bool_t TFRSSortProc::BuildEvent(TGo4EventElement* output)
   for(int i=0;i<32;i++)
     {
       tgt->sc_long[i] = src->vme2scaler[i];    
-      tgt->sc_long2[i] = src->vme1[5][i];
+      tgt->sc_long2[i] = src->vme3scaler[i];//src->vme1[5][i];
     }
 
   //std::cout<<"1Hz sort,"<<src->vme0[6][3]<<std::endl;       
@@ -102,34 +103,35 @@ Bool_t TFRSSortProc::BuildEvent(TGo4EventElement* output)
   
     
   /* ### MW anodes:  */
-  for(int i=0;i<4;i++)
+  for(int i=0;i<13;i++)
     tgt->mw_an[i] = src->vme0[8][i] & 0xfff;
     
   /* ### MW cathodes:  */
-
-  /* ----- MW 11 (No. 1) ----- */
-  tgt->mw_xr[0] = src->vme0[8][16] & 0xfff;
-  tgt->mw_xl[0] = src->vme0[8][17] & 0xfff;
-  tgt->mw_yu[0] = src->vme0[8][18] & 0xfff;
-  tgt->mw_yd[0] = src->vme0[8][19] & 0xfff;
-
-  /* ----- MW 21 (No. 2) ----- */
-  tgt->mw_xr[1] = src->vme0[8][20] & 0xfff;
-  tgt->mw_xl[1] = src->vme0[8][21] & 0xfff;
-  tgt->mw_yu[1] = src->vme0[8][22] & 0xfff;
-  tgt->mw_yd[1] = src->vme0[8][23] & 0xfff;
-
-  /* ----- MW 22 (No. 3) ----- */
-  tgt->mw_xr[2] = src->vme0[8][24] & 0xfff;
-  tgt->mw_xl[2] = src->vme0[8][25] & 0xfff;
-  tgt->mw_yu[2] = src->vme0[8][26] & 0xfff;
-  tgt->mw_yd[2] = src->vme0[8][27] & 0xfff;
-
-  /* ----- MW 31 (No. 4) ----- */
-  tgt->mw_xr[3] = src->vme0[8][28] & 0xfff;
-  tgt->mw_xl[3] = src->vme0[8][29] & 0xfff;
-  tgt->mw_yu[3] = src->vme0[8][30] & 0xfff;
-  tgt->mw_yd[3] = src->vme0[8][31] & 0xfff;
+  // from MW11 -> MW31
+  for(int i=0;i<4;++i)
+    {  
+      tgt->mw_xr[i] = src->vme0[8][16+i*4] & 0xfff;
+      tgt->mw_xl[i] = src->vme0[8][17+i*4] & 0xfff;
+      tgt->mw_yu[i] = src->vme0[8][18+i*4] & 0xfff;
+      tgt->mw_yd[i] = src->vme0[8][19+i*4] & 0xfff;
+    }
+  // from MW41 -> MW51
+  for(int i=0;i<3;++i)
+    {
+      tgt->mw_xr[i+4] = src->vme0[9][0+i*4] & 0xfff;
+      tgt->mw_xl[i+4] = src->vme0[9][1+i*4] & 0xfff;
+      tgt->mw_yu[i+4] = src->vme0[9][2+i*4] & 0xfff;
+      tgt->mw_yd[i+4] = src->vme0[9][3+i*4] & 0xfff;
+    }
+  // skip MW61
+  // from MW71 -> MWB2
+  for(int i=0;i<5;++i)
+    {
+      tgt->mw_xr[i+8] = src->vme0[9][12+i*4] & 0xfff;
+      tgt->mw_xl[i+8] = src->vme0[9][13+i*4] & 0xfff;
+      tgt->mw_yu[i+8] = src->vme0[9][14+i*4] & 0xfff;
+      tgt->mw_yd[i+8] = src->vme0[9][15+i*4] & 0xfff;
+    }
 
 
 
@@ -162,44 +164,44 @@ Bool_t TFRSSortProc::BuildEvent(TGo4EventElement* output)
   
   // TPC 5 + TPC 6 (TPC 41 + TPC 42 @ S4)
   // TPC 5
-  tgt->tpc_a[4][0]=src->vme1[17][0] & 0xfff;
-  tgt->tpc_a[4][1]=src->vme1[17][1] & 0xfff;
-  tgt->tpc_a[4][2]=src->vme1[17][2] & 0xfff;
-  tgt->tpc_a[4][3]=src->vme1[17][3] & 0xfff;
-  tgt->tpc_l[4][0]=src->vme1[17][4] & 0xfff;
-  tgt->tpc_r[4][0]=src->vme1[17][5] & 0xfff;
-  tgt->tpc_l[4][1]=src->vme1[17][6] & 0xfff;
-  tgt->tpc_r[4][1]=src->vme1[17][7] & 0xfff;
+  tgt->tpc_a[4][0]=src->vme1[3][0] & 0xfff;
+  tgt->tpc_a[4][1]=src->vme1[3][1] & 0xfff;
+  tgt->tpc_a[4][2]=src->vme1[3][2] & 0xfff;
+  tgt->tpc_a[4][3]=src->vme1[3][3] & 0xfff;
+  tgt->tpc_l[4][0]=src->vme1[3][4] & 0xfff;
+  tgt->tpc_r[4][0]=src->vme1[3][5] & 0xfff;
+  tgt->tpc_l[4][1]=src->vme1[3][6] & 0xfff;
+  tgt->tpc_r[4][1]=src->vme1[3][7] & 0xfff;
 
   //TPC 6
-  tgt->tpc_a[5][0]=src->vme1[17][8] & 0xfff;
-  tgt->tpc_a[5][1]=src->vme1[17][9] & 0xfff;
-  tgt->tpc_a[5][2]=src->vme1[17][10] & 0xfff;
-  tgt->tpc_a[5][3]=src->vme1[17][11] & 0xfff;
-  tgt->tpc_l[5][0]=src->vme1[17][12] & 0xfff;
-  tgt->tpc_r[5][0]=src->vme1[17][13] & 0xfff;
-  tgt->tpc_l[5][1]=src->vme1[17][14] & 0xfff;
-  tgt->tpc_r[5][1]=src->vme1[17][15] & 0xfff;
+  tgt->tpc_a[5][0]=src->vme1[3][8] & 0xfff;
+  tgt->tpc_a[5][1]=src->vme1[3][9] & 0xfff;
+  tgt->tpc_a[5][2]=src->vme1[3][10] & 0xfff;
+  tgt->tpc_a[5][3]=src->vme1[3][11] & 0xfff;
+  tgt->tpc_l[5][0]=src->vme1[3][12] & 0xfff;
+  tgt->tpc_r[5][0]=src->vme1[3][13] & 0xfff;
+  tgt->tpc_l[5][1]=src->vme1[3][14] & 0xfff;
+  tgt->tpc_r[5][1]=src->vme1[3][15] & 0xfff;
 
   //TPC 1
-  tgt->tpc_a[0][0]=src->vme1[16][0] & 0xfff;
-  tgt->tpc_a[0][1]=src->vme1[16][1] & 0xfff;
-  tgt->tpc_a[0][2]=src->vme1[16][2] & 0xfff;
-  tgt->tpc_a[0][3]=src->vme1[16][3] & 0xfff;
-  tgt->tpc_l[0][0]=src->vme1[16][4] & 0xfff;
-  tgt->tpc_r[0][0]=src->vme1[16][5] & 0xfff;
-  tgt->tpc_l[0][1]=src->vme1[16][6] & 0xfff;
-  tgt->tpc_r[0][1]=src->vme1[16][7] & 0xfff;
+  tgt->tpc_a[0][0]=src->vme1[15][0] & 0xfff;
+  tgt->tpc_a[0][1]=src->vme1[15][1] & 0xfff;
+  tgt->tpc_a[0][2]=src->vme1[15][2] & 0xfff;
+  tgt->tpc_a[0][3]=src->vme1[15][3] & 0xfff;
+  tgt->tpc_l[0][0]=src->vme1[15][4] & 0xfff;
+  tgt->tpc_r[0][0]=src->vme1[15][5] & 0xfff;
+  tgt->tpc_l[0][1]=src->vme1[15][6] & 0xfff;
+  tgt->tpc_r[0][1]=src->vme1[15][7] & 0xfff;
 
   // TPC 2
-  tgt->tpc_a[1][0]=src->vme1[16][8] & 0xfff;
-  tgt->tpc_a[1][1]=src->vme1[16][9] & 0xfff;
-  tgt->tpc_a[1][2]=src->vme1[16][10] & 0xfff;
-  tgt->tpc_a[1][3]=src->vme1[16][11] & 0xfff;
-  tgt->tpc_l[1][0]=src->vme1[16][12] & 0xfff;
-  tgt->tpc_r[1][0]=src->vme1[16][13] & 0xfff;
-  tgt->tpc_l[1][1]=src->vme1[16][14] & 0xfff;
-  tgt->tpc_r[1][1]=src->vme1[16][15] & 0xfff;
+  tgt->tpc_a[1][0]=src->vme1[15][8] & 0xfff;
+  tgt->tpc_a[1][1]=src->vme1[15][9] & 0xfff;
+  tgt->tpc_a[1][2]=src->vme1[15][10] & 0xfff;
+  tgt->tpc_a[1][3]=src->vme1[15][11] & 0xfff;
+  tgt->tpc_l[1][0]=src->vme1[15][12] & 0xfff;
+  tgt->tpc_r[1][0]=src->vme1[15][13] & 0xfff;
+  tgt->tpc_l[1][1]=src->vme1[15][14] & 0xfff;
+  tgt->tpc_r[1][1]=src->vme1[15][15] & 0xfff;
  
   //TDC
 
@@ -270,6 +272,8 @@ Bool_t TFRSSortProc::BuildEvent(TGo4EventElement* output)
   tgt->de_21r = src->vme0[11][17] & 0xfff;
   tgt->de_41l = src->vme0[11][18] & 0xfff;
   tgt->de_41r = src->vme0[11][19] & 0xfff;  
+  tgt->de_81l = src->vme0[11][20] & 0xfff;
+  tgt->de_81r = src->vme0[11][21] & 0xfff;  
   tgt->de_v1l = 0;
   tgt->de_v1r = 0;  
   tgt->de_v2l = 0;
@@ -286,9 +290,9 @@ Bool_t TFRSSortProc::BuildEvent(TGo4EventElement* output)
   tgt->dt_41l_41r = src->vme0[12][1] & 0xfff;
   tgt->dt_21l_41l = src->vme0[12][2] & 0xfff;
   tgt->dt_21r_41r = src->vme0[12][3] & 0xfff;
-  tgt->dt_42l_42r = src->vme0[12][7] & 0xfff;  
-  //  tgt->dt_42l_21l = 0; //
-  //  tgt->dt_42r_21r = 0; //
+  tgt->dt_42l_42r = src->vme0[12][4] & 0xfff;  
+  tgt->dt_42l_21l = src->vme0[12][5] & 0xfff; //
+  tgt->dt_42r_21r = src->vme0[12][6] & 0xfff; //
   
 
   /* ### MUSIC OLD:  */
@@ -304,14 +308,14 @@ Bool_t TFRSSortProc::BuildEvent(TGo4EventElement* output)
   for(int i=0;i<8;i++)
     {
       tgt->music_e1[i] = src->vme0[12][8+i] & 0xfff;
-      tgt->music_e2[i] = src->vme0[12][24+i] & 0xfff;    
+      //tgt->music_e2[i] = src->vme0[12][24+i] & 0xfff;    
     }
     
   /* ### MUSIC temp & pressure:  */
-  tgt->music_pres[0] = src->vme0[12][23] & 0xfff;
-  //tgt->music_pres[0] = 0; 
-  tgt->music_temp[0] = src->vme0[12][22] & 0xfff;
-  //tgt->music_temp[0] = 0;
+  //tgt->music_pres[0] = src->vme0[12][23] & 0xfff;
+  tgt->music_pres[0] = 0; 
+  //tgt->music_temp[0] = src->vme0[12][22] & 0xfff;
+  tgt->music_temp[0] = 0;
 
   /*  not included in readout! */
   tgt->music_pres[1] = 0;
@@ -321,19 +325,30 @@ Bool_t TFRSSortProc::BuildEvent(TGo4EventElement* output)
   tgt->music_pres[2] = 0;
   tgt->music_temp[2] = 0;
 
-
+  //Single anode 
+  tgt->SingleAnode_adc = src->vme0[12][20] & 0xfff; 
+  
   //Si detectors 
-  tgt->si_adc1 = src->vme0[12][20]& 0xfff; 
-  tgt->si_adc2 = src->vme0[12][21]& 0xfff;
+  tgt->si_adc1 = src->vme0[12][24] & 0xfff; 
+  tgt->si_adc2 = src->vme0[12][25] & 0xfff;
+  tgt->si_adc3 = src->vme0[12][26] & 0xfff; 
+  tgt->si_adc4 = src->vme0[12][27] & 0xfff;
+  tgt->si_adc5 = src->vme0[12][28] & 0xfff; 
 
   //Channeltron detectors (vme must be adjusted)
-  tgt->ct_signal = src->vme2scaler[20]& 0xfff; 
+  tgt->ct_time = src->vme3s_MT[2][0] & 0xfff;
+  tgt->ct_signal = src->vme2scaler[20] & 0xfff; 
   tgt->ct_trigger_DU = src->vme2scaler[5]& 0xfff;
   tgt->ct_trigger_SY = src->vme2scaler[6]& 0xfff;
 
   //Electron current measurement (vme must be adjused)
   tgt->ec_signal = src->vme0[12][1]& 0xfff;
-
+  
+  // mrtof
+  tgt->mrtof_start = src->vme3s_MT[0][0] & 0xfff;
+  tgt->mrtof_stop = src->vme3s_MT[1][0] & 0xfff;
+  
+  
   return kTRUE;
 }
 
