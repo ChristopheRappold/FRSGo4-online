@@ -1112,12 +1112,14 @@ Bool_t TFRSUnpackProc::FillHistograms(TFRSUnpackEvent* event)
 	  {
 	    if(event->vme2s[i][j] > 0)
 	      {
-		hVME2_TDC[i]->Fill(event->vme2s[i][j]);
+		if (hVME2_TDC[i])
+		  hVME2_TDC[i]->Fill(event->vme2s[i][j]);
 	      }
 
 	    if(event->vme3s_MT[i][j] > 0)
 	      {
-		hVME3_TDC[i]->Fill(event->vme3s_MT[i][j]);
+		if (hVME3_TDC[i])
+		  hVME3_TDC[i]->Fill(event->vme3s_MT[i][j]);
 	      }
 
 	  }
