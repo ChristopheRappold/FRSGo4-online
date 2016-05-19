@@ -61,9 +61,9 @@ TFRSUnpackProc::TFRSUnpackProc(const char* name) :  TFRSBasicProc(name)
       //hVME1_16[n] = MakeH1ISeries("Raw data/VME1", 16, 1, n, remove_histos);
       //hVME1_17[n] = MakeH1ISeries("Raw data/VME1", 17, 1, n, remove_histos);
 
-      hVME2_TDC[n] = MakeH1ISeries3("Raw data/VME2", 0, 2, n, remove_histos);
+      hVME2_TDC[n] = MakeH1ISeries3("Raw data/VME2", 1, 2, n, remove_histos);
  
-      hVME3_TDC[n] = MakeH1ISeries3("Raw data/VME3", 2, 2, n, remove_histos);
+      hVME3_TDC[n] = MakeH1ISeries3("Raw data/VME3", 2, 3, n, remove_histos);
       //hVME2_12[n] = MakeH1ISeries("Raw data/VME2", 12, 2, n, remove_histos);
     }
 
@@ -77,8 +77,8 @@ TFRSUnpackProc::TFRSUnpackProc(const char* name) :  TFRSBasicProc(name)
   h_VME1_3All  = MakeH2I("Raw data/VME1","V1_Module_geo3AllCh",32,0,32,512,0,4096,"#Ch","",1);
   h_VME1_15All = MakeH2I("Raw data/VME1","V1_Module_geo15AllCh",32,0,32,512,0,4096,"#Ch","",1);
 
-  hVME2_TDCAll = MakeH2I("Raw data/VME2","V2_Module_AllCh",32,0,32,512,0,4096,"#Ch","",1);
-  hVME3_TDCAll = MakeH2I("Raw data/VME3","V3_Module_AllCh",32,0,32,512,0,4096,"#Ch","",1);
+  hVME2_TDCAll = MakeH2I("Raw data/VME2","V2_Module_AllCh",32,0,32,1024,0,1048576,"#Ch","",1);
+  hVME3_TDCAll = MakeH2I("Raw data/VME3","V3_Module_AllCh",32,0,32,1024,0,1048576,"#Ch","",1);
   
   h_UnpackStatus = MakeH2I("Unpack","Status",2*21*32,0.,2*21*32,10,0.,10.,"#Ch","Status",1);
   h_TSFlagStatus = MakeH2I("Unpack","TS_flagStatus",1000,0,1000,10,0,10,"Diff_TS","Status",1);
@@ -1114,12 +1114,16 @@ Bool_t TFRSUnpackProc::FillHistograms(TFRSUnpackEvent* event)
 	      {
 		if (hVME2_TDC[i])
 		  hVME2_TDC[i]->Fill(event->vme2s[i][j]);
+		if (hVME2_TDCAll)
+		  hVME2_TDCAll->Fill(i,event->vme2s[i][j]);
 	      }
 
 	    if(event->vme3s_MT[i][j] > 0)
 	      {
 		if (hVME3_TDC[i])
 		  hVME3_TDC[i]->Fill(event->vme3s_MT[i][j]);
+		if(hVME3_TDCAll)
+		  hVME3_TDCAll->Fill(i,event->vme3s_MT[i][j]);
 	      }
 
 	  }
