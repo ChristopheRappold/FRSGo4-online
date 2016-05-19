@@ -30,7 +30,7 @@ public:
       
       
   // MON part
-      
+  Int_t EventFlag;
   // time stamp data  
   Int_t         ts_id;                                
   Int_t         ts_word[4]; //for the titris time stammping
@@ -54,11 +54,11 @@ public:
       
      
   // part of MW parameter
-  Int_t         mw_an[4];       /*  anode time              */
-  Int_t         mw_xl[4];       /*  Rohdaten                */
-  Int_t         mw_xr[4];       /*                          */
-  Int_t         mw_yu[4];       /*                          */ 
-  Int_t         mw_yd[4];       /*                          */
+  Int_t         mw_an[13];       /*  anode time              */
+  Int_t         mw_xl[13];       /*  Rohdaten                */
+  Int_t         mw_xr[13];       /*                          */
+  Int_t         mw_yu[13];       /*                          */ 
+  Int_t         mw_yd[13];       /*                          */
 
   // TPC part //(HAPOL-25/03/06) 6 TPCs each one with 2 delay lines each!!
   Int_t tpc_l[6][2];
@@ -81,6 +81,8 @@ public:
   Int_t         de_41d;          /* dE SCI41 down            */
   Int_t         de_42l;          /* de SCI42 left            */
   Int_t         de_42r;          /* de SCI42 right           */
+  Int_t         de_81r;          /* de SCI81 right           */
+  Int_t         de_81l;          /* de SCI81 left            */
   Int_t         de_21ld;         /* dE SCI21 left delayed    */  
   Int_t         de_21rd;         /* de SCI21 right delayed   */ 
   Int_t         de_v1l;          /* dE veto1 left            */  
@@ -110,20 +112,30 @@ public:
   // MUSIC3 part (OLD MUSIC)
   Int_t         music_e3[4];     /* Raw energy signals       */
   Int_t         music_t3[4];     /* Raw drift times          */
-		
+
+  // Single Anode
+  Int_t SingleAnode_adc;
+  
   //Si detectors
   Int_t si_adc1;
   Int_t si_adc2;
+  Int_t si_adc3;
+  Int_t si_adc4;
+  Int_t si_adc5;
 
   //Channeltron detector
   Int_t 	ct_signal;
+  Int_t         ct_time;
   Bool_t 	ct_trigger_DU;
   Bool_t 	ct_trigger_SY;
-
+  
   //Electron current measurement
   Int_t	ec_signal;
 
-      
+  // MR-TOF
+  Int_t mrtof_start;
+  Int_t mrtof_stop;
+  
                   
 
 private:

@@ -39,13 +39,24 @@ Int_t TFRSSortEvent::Init()
 // }
 
 void TFRSSortEvent::Clear(Option_t *t)
-{ 
+{
+  EventFlag = 0;
+  
   ts_id = 0;
-  for(int i=0;i<3;i++) ts_word[i] = 0;
+  for(int i=0;i<4;i++)
+    ts_word[i] = 0;
+  for(int i=0;i<3;i++)
+    tsys_word[i] = 0;
+  
   timestamp = 0;
   timespill = 0.;
+  timespill2 = 0.;
 
+  systemtime_ms = 0.;
+  systemtime_s = 0.;
+  
   pattern = 0;
+  trigger = 0;
   
   for(int i=0;i<32;i++)
     {
@@ -54,7 +65,7 @@ void TFRSSortEvent::Clear(Option_t *t)
     }
   //  ic_de = 0;
   
-  for(int i=0;i<4;i++)
+  for(int i=0;i<13;i++)
     {
       mw_an[i] = 0; 
       mw_xl[i] = 0;
@@ -89,6 +100,8 @@ void TFRSSortEvent::Clear(Option_t *t)
   de_41d = 0;
   de_42l = 0;
   de_42r = 0;
+  de_81l = 0;
+  de_81r = 0;
   de_21ld = 0; 
   de_21rd = 0;
   de_v1l = 0;
@@ -119,22 +132,31 @@ void TFRSSortEvent::Clear(Option_t *t)
     }
 
   
-  music_pres[0] = 0; music_pres[1] = 0;
-  music_temp[0] = 0; music_temp[1] = 0;
-  music_pres[2] = 0; music_temp[2] = 0;
+  music_pres[0] = 0; music_pres[1] = 0;  music_pres[2] = 0;
+  music_temp[0] = 0; music_temp[1] = 0;  music_temp[2] = 0;
 
 	
   //Si detectors
   si_adc1=0;
   si_adc2=0;
+  si_adc3=0;
+  si_adc4=0;
+  si_adc5=0;
 
+  SingleAnode_adc = 0;
+  
   //Channeltron detectors
   ct_signal=0;
+  ct_time = 0;
   ct_trigger_DU=kFALSE;
   ct_trigger_SY=kTRUE;
        
   //Elctron current
   ec_signal=0;
+
+  mrtof_start = 0;
+  mrtof_stop = 0;
+  
 }
 
 ClassImp(TFRSSortEvent)
