@@ -2,6 +2,8 @@
 #define TFRSUSERPROCESSOR_H
 
 #include "TFRSBasicProc.h"
+#include "TFRSAnlEvent.h"
+#include "TFRSParameter.h"
 #include "TFile.h"
 #include "TTree.h"
 #include "TObject.h"
@@ -16,19 +18,24 @@ public:
   TFRSUserProc() ;
   TFRSUserProc(const char* name);
   virtual ~TFRSUserProc() ;
-   
+
   void FRSUserProc(TFRSUserEvent* tgt);
 
+  
 protected:   
-  void Create_ROOT_Tree_Data();
-  void Process_ROOT_Tree_Analysis(TFRSSortEvent &srt, TFRSCalibrEvent &cal, TFRSAnlEvent &anl, TFRSUserEvent &tgt);
+  //void Create_ROOT_Tree_Data();
+  void CopyPrevious(TFRSAnlEvent &anl) ;
+  void Process_Analysis(TFRSSortEvent &srt, TFRSCalibrEvent &cal, TFRSAnlEvent &anl, TFRSUserEvent &tgt);
 
+  TFRSAnlEvent previous;
 
-  TFile *evtFile;
+  TModParameter* Setup ;
+
+  // TFile *evtFile;
 	
-  TTree* allEvtTree;
-  TTree* impTree;
-  TTree* decTree;
+  // TTree* allEvtTree;
+  // TTree* impTree;
+  // TTree* decTree;
 
 
   ClassDef(TFRSUserProc,1)
