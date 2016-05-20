@@ -28,7 +28,7 @@ public:
       
   virtual Int_t Init();  
 
-  Int_t EventFlags;
+  Int_t EventFlag;
   //Scalers
   UInt_t freeTrig;
   UInt_t acptTrig;

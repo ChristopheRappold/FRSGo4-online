@@ -42,7 +42,7 @@ Int_t TFRSAnlEvent::Init()
 void TFRSAnlEvent::Clear(Option_t *t)
 {
   // MUSIC part  
-  EventFlags = 0;
+  EventFlag = 0;
   
   for(int i=0;i<8;i++)
     {

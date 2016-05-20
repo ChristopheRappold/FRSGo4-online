@@ -39,7 +39,7 @@ Int_t TFRSCalibrEvent::Init()
 
 void TFRSCalibrEvent::Clear(Option_t *t)
 { 
-  EventFlags = 0;
+  EventFlag = 0;
 
   seconds = 0;
   tenthsecs = 0;

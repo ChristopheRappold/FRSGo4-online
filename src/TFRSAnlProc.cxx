@@ -78,6 +78,11 @@ Bool_t TFRSAnlProc::BuildEvent(TGo4EventElement* output)
   if ((srt==nullptr) || (clb==nullptr))
     return kFALSE;
 
+  if(srt->EventFlag != clb->EventFlag)
+    std::cout<<"E> AnlProc BuildEvent : EventFlag miss matched between Sort and Calib ! "<<srt->EventFlag <<" != "<< clb->EventFlag <<"\n";
+
+  poutevt->EventFlag = srt->EventFlag;
+
   Procceed_MUSIC_Analysis(*srt, *clb, *poutevt);
   Procceed_SCI_Analysis(*srt, *clb, *poutevt);
   Procceed_ID_Analysis(*srt, *clb, *poutevt);

@@ -66,6 +66,8 @@ Bool_t TFRSCalibrProc::BuildEvent(TGo4EventElement* output)
     if (src->pattern>500){
     }
   */
+  tgt->EventFlag = src->EventFlag;
+  
   Process_MON_Analysis(*src, *tgt);
   Process_TPC_Analysis(*src, *tgt);
   Process_MW_Analysis(*src, *tgt);
