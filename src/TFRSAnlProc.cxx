@@ -86,6 +86,7 @@ Bool_t TFRSAnlProc::BuildEvent(TGo4EventElement* output)
   Procceed_MUSIC_Analysis(*srt, *clb, *poutevt);
   Procceed_SCI_Analysis(*srt, *clb, *poutevt);
   Procceed_ID_Analysis(*srt, *clb, *poutevt);
+  Procceed_MRTOF_Analysis(*srt, *clb, *poutevt); 
 
   return kTRUE;
 }
@@ -1177,6 +1178,13 @@ void TFRSAnlProc::Procceed_ID_Analysis(TFRSSortEvent& srt, TFRSCalibrEvent& clb,
 	    }
 	}
     }
+}
+
+void TFRSAnlProc::Procceed_MRTOF_Analysis(TFRSSortEvent& srt, TFRSCalibrEvent& clb, TFRSAnlEvent& tgt) 
+{
+  tgt.mrtof_start=srt.mrtof_start;
+  tgt.mrtof_stop =srt.mrtof_stop;
+  
 }
 
 ClassImp(TFRSAnlProc)

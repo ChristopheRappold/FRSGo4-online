@@ -32,7 +32,8 @@ private:
   void Procceed_MUSIC_Analysis(TFRSSortEvent& srt, TFRSCalibrEvent& clb, TFRSAnlEvent& tgt);  
   void Procceed_SCI_Analysis(TFRSSortEvent& srt, TFRSCalibrEvent& clb, TFRSAnlEvent& tgt);
   void Procceed_ID_Analysis(TFRSSortEvent& srt, TFRSCalibrEvent&  clb, TFRSAnlEvent& tgt);
-      
+  void Procceed_MRTOF_Analysis(TFRSSortEvent& srt, TFRSCalibrEvent& clb, TFRSAnlEvent& tgt);       
+
   TMUSICParameter* music;
   TSCIParameter* sci;
   TFRSParameter* frs;
