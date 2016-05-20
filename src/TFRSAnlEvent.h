@@ -141,12 +141,16 @@ public:
   Double_t      ts2;  // relative time from start of the spill does not reset at end extraction
 
 
+  // MRTOF part :
+  Int_t mrtof_start;
+  Int_t mrtof_stop;
+
 private:
 
   // TFRSAnlProc *fxProc;        //! This is processor
   // TGo4FileSource *fxFileSrc;  //! This is file source
 
-  ClassDef(TFRSAnlEvent,1)
+  ClassDef(TFRSAnlEvent,2)
 };
 
 #endif //TFRSANLEVENT_H
