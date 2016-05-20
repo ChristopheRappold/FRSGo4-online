@@ -115,7 +115,7 @@ void setup_s411_jun16()
   mw->x_factor[4] = 0.25; // MW41 
   mw->x_factor[5] = 0.25; // MW42
   mw->x_factor[8] = 0.25; // MW71
-  mw->x_factor[9] = 0.25; // MW81   
+  mw->x_factor[9] = 0.25; // MW81   not modified
   mw->x_factor[10] = 0.125; // MW82 [mm/ns] 11.05.06  CN 4ns/mm delay line
 
    
