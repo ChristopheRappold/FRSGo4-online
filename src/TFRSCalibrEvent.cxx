@@ -39,6 +39,8 @@ Int_t TFRSCalibrEvent::Init()
 
 void TFRSCalibrEvent::Clear(Option_t *t)
 { 
+  EventFlags = 0;
+
   seconds = 0;
   tenthsecs = 0;
   hundrethsecs = 0;	//mik

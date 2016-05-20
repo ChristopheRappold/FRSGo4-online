@@ -15,6 +15,8 @@ public:
   //virtual Int_t Fill();
   virtual void Clear(Option_t *t="");
       
+  Int_t EventFlag;
+  
   // MUSIC part
   Int_t         music1_anodes_cnt;
   Int_t         music2_anodes_cnt;

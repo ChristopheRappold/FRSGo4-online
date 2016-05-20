@@ -27,7 +27,8 @@ public:
   virtual void Clear(Option_t *t="");  
       
   virtual Int_t Init();  
-     
+
+  Int_t EventFlags;
   //Scalers
   UInt_t freeTrig;
   UInt_t acptTrig;
