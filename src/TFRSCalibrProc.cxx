@@ -508,8 +508,10 @@ void TFRSCalibrProc::Create_TPC_Hist()
 // Creation of Si data & histograms
 void TFRSCalibrProc::Create_SI_Hist()
 {
-  hsi_e1 = MakeH1I("Si/e1","Si_1 energy [keV]",5000,0,10000);
-  hsi_e2 = MakeH1I("Si/e2","Si_2 energy [keV]",5000,0,10000);
+  hsi_e1 = MakeH1I("Si/e1","Si_1 DU energy [keV]",5000,0,10000);
+  hsi_e2 = MakeH1I("Si/e2","Si_2 DU energy [keV]",5000,0,10000);
+  hsi_e3 = MakeH1I("Si/e1","Si_3 gate energy [keV]",5000,0,10000);
+  hsi_e4 = MakeH1I("Si/e2","Si_4 sled energy [keV]",5000,0,10000);
 
 }
 // Creation of Channeltron data & histograms
@@ -1126,6 +1128,8 @@ void TFRSCalibrProc::Process_SI_Analysis(const TFRSSortEvent& src, TFRSCalibrEve
   // Si alpha
   tgt.si_e1 = (si->si_factor1*src.si_adc1)+si->si_offset1;
   tgt.si_e2 = (si->si_factor2*src.si_adc2)+si->si_offset2;
+  tgt.si_e3 = (si->si_factor3*src.si_adc3)+si->si_offset3;
+  tgt.si_e4 = (si->si_factor4*src.si_adc4)+si->si_offset4;
 
   // fill histogram for first si detector trigger ==2
   if(src.trigger==2)
@@ -1135,6 +1139,14 @@ void TFRSCalibrProc::Process_SI_Analysis(const TFRSSortEvent& src, TFRSCalibrEve
   // fill histogram for second si detector trigger ==3
   if(src.trigger==3)
     hsi_e2->Fill(tgt.si_e2);
+  
+  // fill histogram for first si detector trigger ==2
+  if(src.trigger==2)
+    hsi_e3->Fill(tgt.si_e3);
+  
+  // fill histogram for first si detector trigger ==2
+  if(src.trigger==2)
+    hsi_e4->Fill(tgt.si_e4);
   
 }
 

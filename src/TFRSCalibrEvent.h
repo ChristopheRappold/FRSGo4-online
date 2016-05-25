@@ -132,6 +132,9 @@ public:
   //Si detectors
   Float_t si_e1;
   Float_t si_e2;
+  Float_t si_e3;
+  Float_t si_e4;
+
 
 private:
   // TFRSCalibrProc   *fxProc;  //! Don't put this to file

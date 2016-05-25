@@ -212,6 +212,8 @@ private:
   //Si detector
   TH1I *hsi_e1;
   TH1I *hsi_e2;
+  TH1I *hsi_e3;
+  TH1I *hsi_e4;
 
   //Channeltron detector
   TH1I 	*hct_all;
