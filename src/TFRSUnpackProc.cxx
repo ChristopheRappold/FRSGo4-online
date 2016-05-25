@@ -23,7 +23,7 @@ TFRSUnpackProc::TFRSUnpackProc() : TFRSBasicProc("FRSUnpackProc")
 
 TFRSUnpackProc::TFRSUnpackProc(const char* name) :  TFRSBasicProc(name) 
 { 
-  hTrigger = MakeH1I("Raw data", "newTrigger", 16, 0.5, 16.5); 
+  hTrigger = MakeH1I("Raw_data", "newTrigger", 16, 0.5, 16.5); 
 
   frs = dynamic_cast<TFRSParameter*>(GetParameter("FRSPar"));
   ModSetup = dynamic_cast<TModParameter*>(GetParameter("ModPar"));
@@ -230,6 +230,8 @@ Bool_t TFRSUnpackProc::BuildEvent(TGo4EventElement* output)
 	    case 3: //Ion catcher Si 2
 	    case 4: //Ion catcher Si 3 (not used)
 	    case 5: //trigger 10 Hz for scaler readout
+	    case 7:
+	    case 11:
 	    case 12:   // start of extraction, not used
 	    case 13:
 	      // end of extraction, not used 
