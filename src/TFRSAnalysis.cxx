@@ -172,6 +172,8 @@ TFRSAnalysis::TFRSAnalysis(const char* lmd,
   ModPar = new TModParameter("ModPar");
   AddParameter(ModPar);
   
+  MRtofPar = new TMRTOFMSParameter("MRTOFMSPar");
+  AddParameter(MRtofPar);
 }
 
 Bool_t TFRSAnalysis::InitEventClasses() 

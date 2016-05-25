@@ -71,6 +71,8 @@ private:
   TIDParameter          *fIDPar;     //!
   TSIParameter          *fSIPar;     //!
   TModParameter * ModPar; //!
+  TMRTOFMSParameter* MRtofPar; //!
+
   
   TH1I                  *fSize;      //!
   Int_t                 fEvents;     //!
