@@ -13,6 +13,7 @@
 #pragma link C++ class TSCIParameter+;
 #pragma link C++ class TIDParameter+;
 #pragma link C++ class TSIParameter+;
+#pragma link C++ class TMRTOFMSParameter+;
 #pragma link C++ class TFRSAnalysis+;
 #pragma link C++ class TFRSBasicProc+;
 #pragma link C++ class TFRSUnpackEvent+;
