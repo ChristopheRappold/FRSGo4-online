@@ -1029,14 +1029,23 @@ void TFRSCalibrProc::Process_TPC_Analysis(const TFRSSortEvent& src, TFRSCalibrEv
   // *****Relative distances for tracking (S388)
   //  Float_t dist_TPC1_TPC2 = 1.;         
   //distances at S2 for exp s388 measured 'by eye' (i.e. not very precise)! AE, 8.8.2012
+  // Float_t dist_TPC4_target1 = 455.;  // 8.8.12, s388: taget1 is first Si detector at S2 
+  //                                    // using: TPC4->chamber= 150 mm, chamber->Si(1)= 305 mm
+  // Float_t dist_TPC3_TPC4 = 610.; // exp S417+S411 Oct2014
+  // //Float_t dist_TPC3_focS2 = 2860 - 2013 ; //exp S411 Oct2014
+  // Float_t dist_TPC3_focS2 = 0. ; //exp S417 Oct2014 focus on TPC21
+  // Float_t dist_TPC5_TPC6 = 1595. - 385. ; // Oct.2014, exp s411 
+  // Float_t dist_TPC6_focS4  = 2349. - 1595. ; // Oct.2014, exp s411
+
+  Float_t dist_TPC6_target2  = 1015.; // 8.08.12, exp s388 target2= OTPC entrance (check distance)
+
   Float_t dist_TPC4_target1 = 455.;  // 8.8.12, s388: taget1 is first Si detector at S2 
                                      // using: TPC4->chamber= 150 mm, chamber->Si(1)= 305 mm
-  Float_t dist_TPC3_TPC4 = 610.; // exp S417+S411 Oct2014
-  //Float_t dist_TPC3_focS2 = 2860 - 2013 ; //exp S411 Oct2014
-  Float_t dist_TPC3_focS2 = 0. ; //exp S417 Oct2014 focus on TPC21
-  Float_t dist_TPC5_TPC6 = 1595. - 385. ; // Oct.2014, exp s411 
-  Float_t dist_TPC6_focS4  = 2349. - 1595. ; // Oct.2014, exp s411
-  Float_t dist_TPC6_target2  = 1015.; // 8.08.12, exp s388 target2= OTPC entrance (check distance)
+
+  Float_t dist_TPC3_TPC4 = 1782.0- 604.; 
+  Float_t dist_TPC3_focS2 = 604.-2165. ; 
+  Float_t dist_TPC5_TPC6 = 2063.5 - 382.5 ; 
+  Float_t dist_TPC6_focS4  = 2200. - 2063.5 ;
 
 
   //Position S2 tracked with TPCs 3 and 4 for focus
