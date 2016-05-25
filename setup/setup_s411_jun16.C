@@ -52,6 +52,12 @@ void setup_s411_jun16()
     return;
   }
 
+  TMRTOFMSParameter* mrtof = dynamic_cast<TMRTOFMSParameter*> (an->GetParameter("MRTOFMSPar"));
+  if (mrtof==0) {
+    cout << "!!!  Parameter MR-TOF-MSPar not found" << endl;
+    return;
+  }
+  
   TModParameter* ElecMod = dynamic_cast<TModParameter*>(an->GetParameter("ModPar"));
    
   cout << endl << "setup script started" << endl;
@@ -676,6 +682,16 @@ void setup_s411_jun16()
   si->si_offset1=-550.59; //CH 18.10.2014
   si->si_factor2=3.809; //CH 18.10.2014
   si->si_offset2=-529.01; //CH 18.10.2014
+  si->si_factor3=3.2596; //CH 21.05.2016
+  si->si_offset3=-550.59; //CH 21.05.2016|
+  si->si_factor4=3.2596; //CH 21.05.2016
+  si->si_offset4=-550.59; //CH 21.05.2016
+  
+  //MR-TOF-MS
+  mrtof->MRTOFMS_a=0.069;
+  mrtof->MRTOFMS_b=0.71;
+  mrtof->MRTOFMS_t0=0;
+  mrtof->MRTOFMS_tFRS=0;
 
   cout << "Focus distance S4: " << frs->dist_focS4 << endl;
 
