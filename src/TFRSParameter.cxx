@@ -1210,12 +1210,51 @@ Bool_t TSIParameter::UpdateFrom(TGo4Parameter* par) {
   }		
   si_factor1 = from->si_factor1;
   si_factor2 = from->si_factor2;
+  si_factor3 = from->si_factor3;
+  si_factor4 = from->si_factor4;
 
   si_offset1 = from->si_offset1;
   si_offset2 = from->si_offset2;
+  si_offset3 = from->si_offset3;
+  si_offset4 = from->si_offset4;
 
   return kTRUE;		
 }
 
 ClassImp(TSIParameter)
 
+
+TMRTOFMSParameter::TMRTOFMSParameter() : TGo4Parameter("TMRTOFMSParameter") {
+
+}
+
+TMRTOFMSParameter::TMRTOFMSParameter(const char* name) : TGo4Parameter(name) {
+
+} 
+
+
+TMRTOFMSParameter::~TMRTOFMSParameter() {
+
+}
+
+void TMRTOFMSParameter::Print(Option_t*) const {
+  std::cout << "Parameter " << GetName() << std::endl;
+  return ;
+}
+
+Bool_t TMRTOFMSParameter::UpdateFrom(TGo4Parameter* par) {
+  TMRTOFMSParameter *from = dynamic_cast<TMRTOFMSParameter*> (par);
+  if (from==0) {
+    std::cout << "Wrong parameter object: " << par->ClassName() << std::endl; 
+    return kFALSE;   
+  }		
+  MRTOFMS_a = from->MRTOFMS_a;
+  MRTOFMS_b = from->MRTOFMS_b;
+  MRTOFMS_t0 = from->MRTOFMS_t0;
+  MRTOFMS_tFRS = from->MRTOFMS_tFRS;
+
+
+  return kTRUE;		
+}
+
+ClassImp(TMRTOFMSParameter)

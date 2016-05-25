@@ -266,11 +266,32 @@ public:
 
   Float_t si_factor1;
   Float_t si_factor2;
+  Float_t si_factor3;
+  Float_t si_factor4;
   Float_t si_offset1;
   Float_t si_offset2;
+  Float_t si_offset3;
+  Float_t si_offset4;
 
   ClassDef(TSIParameter,1)
 };   
+
+// MRTOF parameters
+class TMRTOFMSParameter : public TGo4Parameter {
+public:
+  TMRTOFMSParameter();  
+  TMRTOFMSParameter(const char* name); 
+  virtual ~TMRTOFMSParameter();
+  virtual void Print(Option_t* t="") const;
+  virtual Bool_t UpdateFrom(TGo4Parameter*);
+
+  Float_t MRTOFMS_a;
+  Float_t MRTOFMS_b;
+  Float_t MRTOFMS_t0;
+  Float_t MRTOFMS_tFRS;
+
+  ClassDef(TMRTOFMSParameter,1)
+};  
 
 #endif //TFRSPARAMETER_H
 
