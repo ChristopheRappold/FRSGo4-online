@@ -54,7 +54,7 @@ private:
   // from MON analysis
   Bool_t        fbFirstEvent;
   //unsigned int  scaler_save[64];
-  UInt_t         scaler_save[64];
+  Long64_t         scaler_save[64];
   UInt_t         firstsec;
   UInt_t         firsttenthsec;
   UInt_t         firsthundrethsec;	//mik
