@@ -435,8 +435,8 @@ void setup_s411_jun16()
   tpc->y_offset[1][3] =  37.13; 
 
   // index 2 for Sc21  
-  sci->x_a[0][2] =  0;  //  SC21 calibration ch->mm 
-  sci->x_a[1][2] =  1; //  
+  sci->x_a[0][2] =  -12.0271*330.;  //  SC21 calibration ch->mm 
+  sci->x_a[1][2] =  0.0104297*330.; //  
   sci->x_a[2][2] =  0.000000;  // 
   sci->x_a[3][2] =  0.000000;  //                            
   sci->x_a[4][2] =  0.000000;  //                             
@@ -455,8 +455,8 @@ void setup_s411_jun16()
   */
 
   // index 5 for Sc41
-  sci->x_a[0][5] = 0.;  //  SC41 calibration ch->mm 
-  sci->x_a[1][5] = 1.;  //
+  sci->x_a[0][5] = -5.84328*330.;  //  SC41 calibration ch->mm 
+  sci->x_a[1][5] = 0.00558294;  //
   sci->x_a[2][5] = 0.000000;   //
   sci->x_a[3][5] = 0.000000;   //                            
   sci->x_a[4][5] = 0.000000;   //                             
@@ -474,10 +474,10 @@ void setup_s411_jun16()
 
 
   // TOF 
-  sci->tac_off[0] = 0.;  //SC21L-R  // not used online
-  sci->tac_off[1] = 0.;  //SC41L-R 
-  sci->tac_off[2] = 0.;  //SC41L-SC21L
-  sci->tac_off[3] = 0.;  //SC41R-SC21R
+  sci->tac_off[0] = 12027.1;  //SC21L-R  // not used online
+  sci->tac_off[1] = 5843.28;  //SC41L-R 
+  sci->tac_off[2] = 7718.14;  //SC41L-SC21L
+  sci->tac_off[3] = 8452.87;  //SC41R-SC21R
   sci->tac_off[4] = 0.;  //SC42L-SC42R
   sci->tac_off[5] = 0.;  //SC42L-SC21L
   sci->tac_off[6] = 0.;  //SC42R-SC21R
@@ -486,14 +486,21 @@ void setup_s411_jun16()
   // TAC calibration factors assumed for agata
   //   sci->tac_factor[0] = 5.571;   //SC21L-R [ps/ch]  , range 25 ns
   //   sci->tac_factor[1] = 5.604;   //SC41L-R [ps/ch]  , range 25 ns  
-  sci->tac_factor[0] = 5.89623;   //SC21L-R [ps/ch]  , range 25 ns, CH 19.10.2014
-  sci->tac_factor[1] = 5.51268;   //SC41L-R [ps/ch]  , range 25 ns, CH 19.10.2014
-  sci->tac_factor[4] = 5.609;      //SC42L-R [ps/ch]  , range 25 ns
+  // sci->tac_factor[0] = 5.89623;   //SC21L-R [ps/ch]  , range 25 ns, CH 19.10.2014
+  // sci->tac_factor[1] = 5.51268;   //SC41L-R [ps/ch]  , range 25 ns, CH 19.10.2014
+  // sci->tac_factor[4] = 5.609;      //SC42L-R [ps/ch]  , range 25 ns
 
-  //   sci->tac_factor[2] = 16.809;  // SC41L-SC21L [ps/ch] , range 75 ns
-  //   sci->tac_factor[3] = 17.149;  // SC41R-SC21R [ps/ch] , range 75 ns 
-  sci->tac_factor[2] = 10.55619;  // SC41L-SC21L [ps/ch] , range 50 ns, CH 19.10.2014
-  sci->tac_factor[3] = 11.17427;  // SC41R-SC21R [ps/ch] , range 50 ns, CH 19.10.2014 
+  // //   sci->tac_factor[2] = 16.809;  // SC41L-SC21L [ps/ch] , range 75 ns
+  // //   sci->tac_factor[3] = 17.149;  // SC41R-SC21R [ps/ch] , range 75 ns 
+  // sci->tac_factor[2] = 10.55619;  // SC41L-SC21L [ps/ch] , range 50 ns, CH 19.10.2014
+  // sci->tac_factor[3] = 11.17427;  // SC41R-SC21R [ps/ch] , range 50 ns, CH 19.10.2014 
+
+
+  sci->tac_factor[0] = 10.4297;   //SC21L-R [ps/ch], range 10 ns 
+  sci->tac_factor[1] = 5.58294;   //SC41L-R [ps/ch], range 10 ns
+  sci->tac_factor[2] = 20.8056;  //SC41L-SC21L [ps/ch], range 10 ns
+  sci->tac_factor[3] = 21.806;  //SC41R-SC21R [ps/ch], range 10 ns
+
   sci->tac_factor[5] = 1.;   //
   sci->tac_factor[6] = 1.;   //
 
