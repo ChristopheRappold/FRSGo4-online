@@ -156,6 +156,7 @@ void TFRSSortEvent::Clear(Option_t *t)
 
   mrtof_start = 0;
   mrtof_stop = 0;
+  mrtof_stopDelay = 0;
   
 }
 

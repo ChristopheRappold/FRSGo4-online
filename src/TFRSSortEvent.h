@@ -135,6 +135,7 @@ public:
   // MR-TOF
   Int_t mrtof_start;
   Int_t mrtof_stop;
+  Int_t mrtof_stopDelay;
   
                   
 

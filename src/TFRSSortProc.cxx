@@ -346,7 +346,8 @@ Bool_t TFRSSortProc::BuildEvent(TGo4EventElement* output)
   
   // mrtof
   tgt->mrtof_start = src->vme3s_MT[0][0] & 0xfff;
-  tgt->mrtof_stop = src->vme3s_MT[1][0] & 0xfff;
+  tgt->mrtof_stopDelay = src->vme3s_MT[1][0] & 0xfff;
+  tgt->mrtof_stop = src->vme3s_MT[2][0] & 0xfff;
   
   
   return kTRUE;
