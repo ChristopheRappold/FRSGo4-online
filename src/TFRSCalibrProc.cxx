@@ -476,9 +476,9 @@ void TFRSCalibrProc::Create_MON_Hist()
 			      "x at OTPC entrance [mm]","y at OTPC entrance [mm]",2);
    //  hTPC_XY_S4_target1d=MakeH2I("TPC/S4","S4_XY_target1d",1000,-100.5,100.5,1000,-100.5,100.5,
    //			"x-S4 at H2 target [mm]","y-S4 at H2 target [mm]",2);
-   hTPC_XAX_S4=MakeH2I("TPC/S4","angle_vs_x_S4", 240,-120.,120., 240,-50.0,50.0,
+   hTPC_XAX_S4=MakeH2I("TPC/S4","angle_vs_x_S4", 400,-100.,100., 250,-25.0,25.0,
 		       "X at S4 [mm] ","x angle [mrad] ", 2);  
-   hTPC_XS4_AX_S2 =MakeH2I("TPC/S4","angle_s2_at vs x_S4", 240,-120.,120., 240,-50.0,50.0,
+   hTPC_XS4_AX_S2 =MakeH2I("TPC/S4","angle_s2_at vs x_S4", 400,-100.,100., 250,-25.0,25.0,
 			   "X at S4 [mm] ","angle(x) at S2 [mrad] ", 2);
 
 
