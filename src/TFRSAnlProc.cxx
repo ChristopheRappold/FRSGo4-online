@@ -599,34 +599,34 @@ void TFRSAnlProc::Procceed_MUSIC_Analysis(TFRSSortEvent& srt, TFRSCalibrEvent& c
       
       /* Position (X) correction by TPC */       //TO DO!!!
       
-      //     if(!music->b_selfcorr1 && tgt.b_de3) {
-      //       if(clb.b_mw_xsum[4] && clb.b_mw_xsum[5] && tgt.b_de3) {
-
-      //         Float_t p1 = clb.music1_x1;
-      //         Float_t p2 = clb.music1_x2;
-      //         Float_t p3 = clb.music1_x3;
-      //         Float_t p4 = clb.music1_x4;
-      //         tgt.x1_mean = (p1+p2+p3+p4)/4.;	// Mean position 
+      if(!music->b_selfcorr1 && tgt.b_de3) {
+	if(clb.b_mw_xsum[4] && clb.b_mw_xsum[5] && tgt.b_de3) {
+	  
+	  Float_t p1 = clb.music1_x1;
+	  Float_t p2 = clb.music1_x2;
+	  Float_t p3 = clb.music1_x3;
+	  Float_t p4 = clb.music1_x4;
+	  tgt.x1_mean = (p1+p2+p3+p4)/4.;	// Mean position 
  
-      //         // hMUSIC3_dEx->Fill(tgt.x1_mean, tgt.de[2]);
-      // 			if(bDrawHist) 
-      //         		hMUSIC3_dEx->Fill(clb.focx_s4, tgt.de[2]);
-
-      //         Float_t power = 1., Corr = 0.;
-      //         for(int i=0;i<4;i++) {
-      //           Corr += music->pos_a1[i] * power;
-      //           power *= tgt.x1_mean;  
-      //         }
+              // hMUSIC3_dEx->Fill(tgt.x1_mean, tgt.de[2]);
+	  if(bDrawHist) 
+	    hMUSIC3_dEx->Fill(clb.focx_s4, tgt.de[2]);
+	  
+	  Float_t power = 1., Corr = 0.;
+	  for(int i=0;i<4;i++) {
+	    Corr += music->pos_a1[i] * power;
+	    power *= tgt.x1_mean;  
+	  }
       
-      //         if (Corr!=0) {
-      //           Corr = music->pos_a1[0] / Corr;
-      //           tgt.de_cor[2] = tgt.de[2] * Corr;
-      //         }
-      
-      // 			if(bDrawHist) 
-      //         		hMUSIC3_dExc->Fill(tgt.x1_mean, tgt.de_cor[2]);
-      //       }
-      //     }
+	  if (Corr!=0) {
+	    Corr = music->pos_a1[0] / Corr;
+	    tgt.de_cor[2] = tgt.de[2] * Corr;
+	  }
+	  
+	  if(bDrawHist) 
+	    hMUSIC3_dExc->Fill(tgt.x1_mean, tgt.de_cor[2]);
+	}
+      }
       
 
       /* Special gate on corrected music for cleaning x2 vs. AoQ spectrum */
@@ -821,7 +821,7 @@ void TFRSAnlProc::Procceed_ID_Analysis(TFRSSortEvent& srt, TFRSCalibrEvent& clb,
   tgt.id_trigger=srt.trigger;
   /* accumulate raw detof spectrum  */
   if(bDrawHist) 
-    hID_dEToF->Fill(tgt.sci_tof2, tgt.de[0]);
+    hID_dEToF->Fill(tgt.sci_tof2, tgt.de[2]);
   // tgt.sci_e[idx] = sqrt( (tgt.sci_l[idx] - sci->le_a[0][idx]) * sci->le_a[1][idx] 
   //                   * (tgt.sci_r[idx] - sci->re_a[0][idx]) * sci->re_a[1][idx]);
   
