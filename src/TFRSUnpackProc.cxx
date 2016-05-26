@@ -1072,7 +1072,7 @@ Bool_t TFRSUnpackProc::FillHistograms(TFRSUnpackEvent* event)
       {
 	if(previousTimeStamp[i]>0)
 	  {
-	    h_TSFlagStatus->Fill((currentTimeStamp-previousTimeStamp[i])*1e-3,i);
+	    h_TSFlagStatus->Fill((currentTimeStamp-previousTimeStamp[i])*1e-4,i);
 	    //std::cout<<" eventFlag :"<<event->EventFlag<<" "<<currentTimeStamp-previousTimeStamp[i]<<" "<<currentTimeStamp<<"\n";
 	  }
 	// else
@@ -1083,7 +1083,7 @@ Bool_t TFRSUnpackProc::FillHistograms(TFRSUnpackEvent* event)
     {
       	if(previousTimeStamp[0]>0)
 	  {
-	    h_TSFlagStatus->Fill((currentTimeStamp-previousTimeStamp[0])*1e-3,3);
+	    h_TSFlagStatus->Fill((currentTimeStamp-previousTimeStamp[0])*1e-4,3);
 	    //std::cout<<" +-> "<<event->EventFlag<<" "<<currentTimeStamp-previousTimeStamp[0]<<"\n";
 	  }
     }
@@ -1097,13 +1097,13 @@ Bool_t TFRSUnpackProc::FillHistograms(TFRSUnpackEvent* event)
 	  if (hVME0_11[i]) hVME0_11[i]->Fill(event->vme0[11][i] & 0xfff);
 	  if (hVME0_12[i]) hVME0_12[i]->Fill(event->vme0[12][i] & 0xfff);
 	  if( h_VME0_8All )
-	    h_VME0_8All->Fill(event->vme0[8][i] & 0xfff,i);
+	    h_VME0_8All->Fill(i,event->vme0[8][i] & 0xfff);
 	  if( h_VME0_9All )
-	    h_VME0_9All->Fill(event->vme0[9][i] & 0xfff,i);
+	    h_VME0_9All->Fill(i,event->vme0[9][i] & 0xfff);
 	  if( h_VME0_11All )
-	    h_VME0_11All->Fill(event->vme0[11][i] & 0xfff,i);
+	    h_VME0_11All->Fill(i,event->vme0[11][i] & 0xfff);
 	  if( h_VME0_12All )
-	    h_VME0_12All->Fill(event->vme0[12][i] & 0xfff,i);
+	    h_VME0_12All->Fill(i,event->vme0[12][i] & 0xfff);
 
 	  //if (hVME0_13[i]) hVME0_13[i]->Fill(event->vme0[13][i] & 0xfff);
 	  //if (hVME0_14[i]) hVME0_14[i]->Fill(event->vme0[14][i] & 0xfff);
@@ -1139,13 +1139,13 @@ Bool_t TFRSUnpackProc::FillHistograms(TFRSUnpackEvent* event)
 	  if (hVME1_15[i]) hVME1_15[i]->Fill(event->vme1[15][i] & 0xfff);
 	  
 	  if( h_VME1_8All )
-	    h_VME1_8All->Fill(event->vme1[8][i] & 0xfff,i);
+	    h_VME1_8All->Fill(i,event->vme1[8][i] & 0xfff);
 	  if( h_VME1_9All )
-	    h_VME1_9All->Fill(event->vme1[9][i] & 0xfff,i);
+	    h_VME1_9All->Fill(i,event->vme1[9][i] & 0xfff);
 	  if( h_VME1_3All )
-	    h_VME1_3All->Fill(event->vme1[3][i] & 0xfff,i);
+	    h_VME1_3All->Fill(i,event->vme1[3][i] & 0xfff);
 	  if( h_VME1_15All )
-	    h_VME1_15All->Fill(event->vme1[15][i] & 0xfff,i);
+	    h_VME1_15All->Fill(i,event->vme1[15][i] & 0xfff);
 
 	}
     }
