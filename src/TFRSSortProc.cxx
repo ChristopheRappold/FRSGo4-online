@@ -10,11 +10,13 @@
 TFRSSortProc::TFRSSortProc() : TFRSBasicProc("FRSSortProc") 
 {
   StartOfSpilTime = -1;
+  PreviousTS = -1;
 }
 
 TFRSSortProc::TFRSSortProc(const char* name) : TFRSBasicProc(name) 
 { 
   StartOfSpilTime = -1;
+  PreviousTS = -1;
   counter = 0;
 }
 
@@ -48,12 +50,15 @@ Bool_t TFRSSortProc::BuildEvent(TGo4EventElement* output)
   tgt->timestamp = Long64_t(1)*tgt->ts_word[0] + Long64_t(0x10000)*tgt->ts_word[1] + Long64_t(0x100000000)*tgt->ts_word[2] + Long64_t(0x1000000000000)*tgt->ts_word[3];
   // printf("qtrigger=%d timestamp=%ld \n",src->qtrigger,tgt->timestamp);
 
-  tgt->tsys_word[0] = src->vme0[20][6] ; //s time low word
-  tgt->tsys_word[1] = src->vme0[20][7] ; //s time high worid... we do not use it
-  tgt->tsys_word[2] = src->vme0[20][8] ; //ms time since the previous s time (ftime routine)
+  tgt->tsys_word[0] = Long64_t(1)*tgt->ts_word[0] + Long64_t(0x10000)*tgt->ts_word[1] ; //s time low word
+  tgt->tsys_word[1] = Long64_t(0x100000000)*tgt->ts_word[2] + Long64_t(0x1000000000000)*tgt->ts_word[3] ; //s time high worid... we do not use it
+  if(PreviousTS < 0)
+    tgt->tsys_word[2] = 0;
+  else
+    tgt->tsys_word[2] = (tgt->timestamp - PreviousTS)*1.e-5 ; //ms time since the previous s time (ftime routine)
 
-  tgt->systemtime_s = tgt->tsys_word[0] ; 
-  tgt->systemtime_ms = 1000*(tgt->systemtime_s)+tgt->tsys_word[2] ; 
+  tgt->systemtime_s = tgt->tsys_word[2]*1e-3; //tgt->tsys_word[0] ; 
+  tgt->systemtime_ms= tgt->tsys_word[2] ; 
 
 
   if (src->qtrigger==12)
@@ -75,12 +80,12 @@ Bool_t TFRSSortProc::BuildEvent(TGo4EventElement* output)
   // calculate time from spill start in sec
   if (StartOfSpilTime>=0) 
     { 
-      tgt->timespill = (tgt->timestamp - StartOfSpilTime) / 50000000.;
+      tgt->timespill = (tgt->timestamp - StartOfSpilTime) * 1e-2;// microsec // 50000000.;
       //tgt->timespill = 1;
       //printf("timespill= %f \n",tgt->timespill);    
     }
   
-  tgt->timespill2 = (tgt->timestamp - StartOfSpilTime2) / 50000000.;
+  tgt->timespill2 = (tgt->timestamp - StartOfSpilTime2) * 1e-2; //microsec  // 50000000.;
   //tgt->timespill2 = 1; 
 
   /* ### Pattern ###*/

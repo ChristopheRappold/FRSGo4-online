@@ -19,7 +19,8 @@ public:
 protected:
   Long64_t StartOfSpilTime;
   Long64_t StartOfSpilTime2; //does not reset at end of extraction
-
+  Long64_t PreviousTS;
+  
   Int_t counter;
 
 
