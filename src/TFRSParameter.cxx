@@ -1096,6 +1096,15 @@ TIDParameter::TIDParameter() : TGo4Parameter("TIDParameter") {
 	for(int k=0;k<2;++k)
 	  ID_Z_AoverQ[i][j][k] = 0;
     }
+  for(int i=0;i<6;++i)
+    {
+      ID_x2AoverQ_num[i] = 0;
+
+      for(int j=0;j<6;++j)
+	for(int k=0;k<2;++k)
+	  ID_x2AoverQ[i][j][k] = 0;
+    }
+
 }
 
 TIDParameter::TIDParameter(const char* name) : TGo4Parameter(name) {
@@ -1137,6 +1146,16 @@ TIDParameter::TIDParameter(const char* name) : TGo4Parameter(name) {
 	for(int k=0;k<2;++k)
 	  ID_Z_AoverQ[i][j][k] = 0;
     }
+  for(int i=0;i<6;++i)
+    {
+      ID_x2AoverQ_num[i] = 0;
+
+      for(int j=0;j<6;++j)
+	for(int k=0;k<2;++k)
+	  ID_x2AoverQ[i][j][k] = 0;
+    }
+
+
 } 
 
 TIDParameter::~TIDParameter() {
@@ -1201,13 +1220,22 @@ Bool_t TIDParameter::UpdateFrom(TGo4Parameter* par) {
   zgate_low = from->zgate_low;
   zgate_high = from->zgate_high;
 
-    for(int i=0;i<5;++i)
+  for(int i=0;i<5;++i)
     {
       ID_Z_AoverQ_num[i] = from->ID_Z_AoverQ_num[i];
 
       for(int j=0;j<ID_Z_AoverQ_num[i];++j)
 	for(int k=0;k<2;++k)
 	  ID_Z_AoverQ[i][j][k] = from->ID_Z_AoverQ[i][j][k];
+    }
+
+  for(int i=0;i<6;++i)
+    {
+      ID_x2AoverQ_num[i] = from->ID_x2AoverQ_num[i];
+
+      for(int j=0;j<ID_x2AoverQ_num[i];++j)
+	for(int k=0;k<2;++k)
+	  ID_x2AoverQ[i][j][k] = from->ID_x2AoverQ[i][j][k];
     }
 
   

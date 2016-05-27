@@ -257,6 +257,10 @@ public:
 
   Int_t   ID_Z_AoverQ_num[5];
   Float_t ID_Z_AoverQ [5][5][2];
+
+  Int_t   ID_x2AoverQ_num[6];
+  Float_t ID_x2AoverQ [6][5][2];
+
   
   ClassDef(TIDParameter,1)
 };

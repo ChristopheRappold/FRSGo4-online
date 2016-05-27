@@ -107,26 +107,35 @@ void TFRSAnlProc::Create_MUSIC_Hist()
 
    hMUSIC1_dE1dE2 = MakeH2I("MUSIC/MUSIC(1)/E","dE1_dE2",1024,0,4096,1024,0,4096,"dE1","dE2",2);
 
-       for(int i=0;i<4;i++)
+   for(int i=0;i<4;i++)
+     {
+       sprintf(name,"MUSIC3_E(%d)",i);  
+       sprintf(xtitle,"dE MUSIC3(%d)",i);
+       hMUSIC3_E[i] = MakeH1I("MUSIC/MUSIC(3)/E",name,4096,0,4096,xtitle,2,6);
+       for(int k=0;k<5;++k)
 	 {
-	   sprintf(name,"MUSIC3_E(%d)",i);  
-	   sprintf(xtitle,"dE MUSIC3(%d)",i);
-	   hMUSIC3_E[i] = MakeH1I("MUSIC/MUSIC(3)/E",name,4096,0,4096,xtitle,2,6);
-	   for(int k=0;k<5;++k)
-	     {
-       
-	       sprintf(name,"MUSIC3_z_AoQ_E(%d)gate(%d)",i,k);  
-	       sprintf(xtitle,"dE MUSIC3(%d) gate(%d)",i,k);
-	       hMUSIC3_z_AoQ_E[i][k] = MakeH1I("MUSIC/MUSIC(3)/E",name,4096,0,4096,xtitle,2,6);
 	   
-	       sprintf(name,"MUSIC3_music_z_E(%d)gate(%d)",i,k);  
-	       sprintf(xtitle,"dE MUSIC3(%d) gate(%d)",i,k);
-	       hMUSIC3_music_z_E[i][k] = MakeH1I("MUSIC/MUSIC(3)/E",name,4096,0,4096,xtitle,2,6); 
-	     }
-	   sprintf(name,"MUSIC3_T(%d)",i);  
-	   sprintf(xtitle,"dT MUSIC3(%d) ",i);
-	   hMUSIC3_T[i] = MakeH1I("MUSIC/MUSIC(3)/T",name,4096,0,4096,xtitle,2,6); 
+	   sprintf(name,"MUSIC3_z_AoQ_E(%d)gate(%d)",i,k);  
+	   sprintf(xtitle,"dE MUSIC3(%d) zAoQgate(%d)",i,k);
+	   hMUSIC3_z_AoQ_E[i][k] = MakeH1I("MUSIC/MUSIC(3)/E",name,4096,0,4096,xtitle,2,6);
+
+	   sprintf(name,"MUSIC3_music_z_E(%d)gate(%d)",i,k);  
+	   sprintf(xtitle,"dE MUSIC3(%d) gate(%d)",i,k);
+	   hMUSIC3_music_z_E[i][k] = MakeH1I("MUSIC/MUSIC(3)/E",name,4096,0,4096,xtitle,2,6); 
 	 }
+       for(int k=0;k<6;++k)
+	 {
+	   sprintf(name,"MUSIC3_x2AoQ_E(%d)gate(%d)",i,k);  
+	   sprintf(xtitle,"dE MUSIC3(%d) x2AoQgate(%d)",i,k);
+	   hMUSIC3_x2AoQ_E[i][k] = MakeH1I("MUSIC/MUSIC(3)/E",name,4096,0,4096,xtitle,2,6);
+
+
+	 }
+
+       sprintf(name,"MUSIC3_T(%d)",i);  
+       sprintf(xtitle,"dT MUSIC3(%d) ",i);
+       hMUSIC3_T[i] = MakeH1I("MUSIC/MUSIC(3)/T",name,4096,0,4096,xtitle,2,6); 
+     }
      
 
        hMUSIC1_dE = MakeH1I("MUSIC/MUSIC(1)/E","MUSIC1_dE",4000,0.0,4000.0,"Average dE MUSIC1 (root)",2,6);
@@ -309,7 +318,7 @@ void TFRSAnlProc::Create_ID_Hist()
   hID_Z_AoQ_zsame = MakeH2I("ID","ID_Z_AoQ_zsame", 600,2.1,2.8, 600,35.,95.,
 			    "Z1==Z2 A/Q s2-s4", "Z s2-s4", 2); 
   
-  
+  hID_x2x4 = MakeH2I("ID","ID_x2_x4",1000,-100,100,1000,-100,100,"x2 mm","x4 mm",2);
 
   hID_Z_AoQ_corr = MakeH2I("ID","ID_Z_AoQ_corr", 300,1.2,2.8, 300,30.,95.,
 			   "A/Q s2-s4", "Z s2-s4", 2); 
@@ -359,15 +368,67 @@ void TFRSAnlProc::Create_ID_Hist()
      {40000.,    0.}}; 
   cID_dEToF = MakePolyCond("ID","cID_dEToF",4, cID_dEToF_points, hID_dEToF->GetName());
   
-  Float_t cID_x2AoQ_points[4][2] = 
-    {{  2.009 ,   87.121 },
-     {  2.0113,  -82.0475},
-     {  2.3872,  -82.3590},
-     {  2.3886,   85.8756}};
-  cID_x2AoQ = MakePolyCond("ID","cID_x2AoQ", 4, cID_x2AoQ_points, hID_x2AoQ->GetName());
+  int num_ID_x2AoQ[6] = {5, 5, 5, 5, 5, 5};
+  Float_t init_ID_x2AoQ[6][5][2] =
+     {
+       {{  2.009 ,   87.121 },
+	{  2.0113,  -82.0475},
+	{  2.3872,  -82.3590},
+	{  2.3872,  -82.3590},
+	{  2.3886,   85.8756}
+       },
+       {{  2.009 ,   87.121 },
+	{  2.0113,  -82.0475},
+	{  2.3872,  -82.3590},
+	{  2.3872,  -82.3590},
+	{  2.3886,   85.8756}
+       },
+       {{  2.009 ,   87.121 },
+	{  2.0113,  -82.0475},
+	{  2.3872,  -82.3590},
+	{  2.3872,  -82.3590},
+	{  2.3886,   85.8756}
+       },
+       {{  2.009 ,   87.121 },
+	{  2.0113,  -82.0475},
+	{  2.3872,  -82.3590},
+	{  2.3872,  -82.3590},
+	{  2.3886,   85.8756}
+       },
+       {{  2.009 ,   87.121 },
+	{  2.0113,  -82.0475},
+	{  2.3872,  -82.3590},
+	{  2.3872,  -82.3590},
+	{  2.3886,   85.8756}
+       },
+       {{  2.009 ,   87.121 },
+	{  2.0113,  -82.0475},
+	{  2.3872,  -82.3590},
+	{  2.3872,  -82.3590},
+	{  2.3886,   85.8756}
+       }
+     };
   
+
+  // Float_t cID_x2AoQ_points[4][2] = 
+  //   {{  2.009 ,   87.121 },
+  //    {  2.0113,  -82.0475},
+  //    {  2.3872,  -82.3590},
+  //    {  2.3886,   85.8756}};
+  char name[50], title[100];
+  for(int i=0;i<6;++i)
+    {
+      sprintf(name,"cID_x2AoQ%d",i);
+      cID_x2AoQ[i] = MakePolyCond("ID",name,num_ID_x2AoQ[i],init_ID_x2AoQ[i], hID_x2AoQ->GetName());
+      //cID_Z_AoQ[i] = MakePolyCond("ID", name, num_ID_Z_AoQ[i], init_ID_Z_AoQ[i], hID_Z_AoQ->GetName());
+      sprintf(name,"ID_x4AoQ_x2AoQgate%d",i);
+      hID_x4AoQ_x2AoQgate[i] = MakeH2I("ID", name, 300,2.,2.8, 200,-100.,100.,"A/Q s2-s4", "gate on Z    X at S4 [mm]", 2);
+      
+    }
+
+
   int num_ID_Z_AoQ[5] = {5, 5, 5, 5, 5};
-   Float_t init_ID_Z_AoQ[5][5][2] =
+  Float_t init_ID_Z_AoQ[5][5][2] =
      {
        // ID_Z_AOQ(1)
        /* 213Fr setting */
@@ -407,7 +468,6 @@ void TFRSAnlProc::Create_ID_Hist()
         {2.58529,      52.1914},
         {2.57936,      52.6315}} };
   
-  char name[50], title[100];
   for(int i=0;i<5;i++)
     {
       
@@ -1065,13 +1125,30 @@ void TFRSAnlProc::Procceed_ID_Analysis(TFRSSortEvent& srt, TFRSCalibrEvent& clb,
 	  hID_x4AoQ->Fill(tgt.id_AoQ, tgt.id_x4);
 	  //    hID_Z2_AoQ->Fill(tgt.id_AoQ, tgt.id_z2);
 	  // hID_Z3_AoQ->Fill(tgt.id_AoQ, tgt.id_z3);
+	  hID_x2x4->Fill(tgt.id_x2,tgt.id_x4);
+
 	}
+
+      
+
       
       for (int i=0;i<5;i++)
 	tgt.id_b_x4AoQ_Z[i] = cID_x4AoQ_Z[i]->Test(tgt.id_AoQ, tgt.id_x4); 
 
-      tgt.id_b_x2AoQ = cID_x2AoQ->Test(tgt.id_AoQ, tgt.id_x2);
-    
+      tgt.id_b_x2AoQ = cID_x2AoQ[0]->Test(tgt.id_AoQ, tgt.id_x2);
+      for(int i=0;i<6;++i)
+	{
+	  if(cID_x2AoQ[0]->Test(tgt.id_AoQ, tgt.id_x2)==true)
+	    {
+	      hMUSIC3_x2AoQ_E[0][i]->Fill(srt.music_e3[0]);
+	      hMUSIC3_x2AoQ_E[1][i]->Fill(srt.music_e3[1]);
+	      hMUSIC3_x2AoQ_E[2][i]->Fill(srt.music_e3[2]);
+	      hMUSIC3_x2AoQ_E[3][i]->Fill(srt.music_e3[3]);	      
+
+	      hID_x4AoQ_x2AoQgate[i]->Fill(tgt.id_AoQ, tgt.id_x4);
+	    }
+	}
+	       
       if (tgt.id_b_z3)
 	{   
 	  if(bDrawHist)

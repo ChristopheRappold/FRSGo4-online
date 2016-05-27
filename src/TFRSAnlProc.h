@@ -48,10 +48,11 @@ private:
   TH1I          *hMUSIC2_dE;
 
   TH2I          *hMUSIC1_dE1dE2;
-
+  
   TH1I          *hMUSIC3_E[4];
   TH1I          *hMUSIC3_z_AoQ_E[4][5];
   TH1I          *hMUSIC3_music_z_E[4][5];
+  TH1I          *hMUSIC3_x2AoQ_E[4][6];
   TH1I          *hMUSIC3_T[4];
   TH1I          *hMUSIC3_dE;
   TH1I          *hMUSIC_pres[2];
@@ -128,13 +129,16 @@ private:
   TH1I          *hID_x2c[5];
   TH1I          *hID_target2c[5];
   TH2I          *hID_Z_AoQgate[5];
-
+  TH2I          *hID_x4AoQ_x2AoQgate[6];
+  
   TH2I          *hID_x4AoQ;
   TH2I          *hID_x4AoQ_zgate;
   TH2I          *hID_x4z;
   TH1I          *hID_Z_Q;
   TH2I          *hID_Sc21_Tx_1Hz;
 
+  TH2I          *hID_x2x4;
+  
   TH2I          *hID_xz;
   TH2I          *hID_yz;
   TH2I          *hID_xzc;
@@ -149,7 +153,7 @@ private:
   TGo4WinCond   *cID_x2;
   TGo4WinCond   *cID_x4;
   TGo4PolyCond  *cID_dEToF;
-  TGo4PolyCond  *cID_x2AoQ;
+  TGo4PolyCond  *cID_x2AoQ[6];
   TGo4PolyCond  *cID_Z_AoQ[5];
   TGo4PolyCond  *cID_x4AoQ_Z[5]; 
   TGo4WinCond   *cID_Z_Z[5]; 
