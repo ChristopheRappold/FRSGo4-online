@@ -106,6 +106,7 @@ private:
   TH1I          *hID_AoQ; 
   TH1I          *hID_AoQ_corr; 
   TH1I          *hID_Z; 
+  TH1I          *hID_ZmaxRange;
   TH1I          *hID_Z2;
   TH1I          *hID_Z3;
   TH2I          *hID_x2AoQ;

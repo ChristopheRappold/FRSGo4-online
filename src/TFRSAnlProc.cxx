@@ -307,6 +307,7 @@ void TFRSAnlProc::Create_ID_Hist()
   hID_AoQ_corr = MakeH1I("ID","ID_AoQ_corr",2000,1.0,3.0,"A/Q S2-S4",2,6);
   //   hID_Z = MakeH1I("ID",Form("ID_Z, gain=%f",music->e1_gain[0]),1000,10,93,"Z s2-s4",2,6);
   hID_Z = MakeH1I("ID","ID_Z",1000,0,93,"Z s2-s4",2,6);
+  hID_ZmaxRange = MakeH1I("ID","ID_ZmaxRange",1000,0,400,"Z s2-s4",2,6);
   hID_Z2 = MakeH1I("ID","ID_Z2",1000,0,93,"Z2 s2-s4",2,6);
   hID_Z3 = MakeH1I("ID","ID_Z3",1000,10,93,"Z3 s2-s4",2,6);
   
@@ -1045,8 +1046,10 @@ void TFRSAnlProc::Procceed_ID_Analysis(TFRSSortEvent& srt, TFRSCalibrEvent& clb,
       {
 	tgt.id_b_z = kTRUE;
 	if(bDrawHist) 
-	  hID_Z->Fill(tgt.id_z);
-      }
+	  {
+	    hID_Z->Fill(tgt.id_z);
+	    hID_ZmaxRange->Fill(tgt.id_z);
+	  }
     }
 
 
