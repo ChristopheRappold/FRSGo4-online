@@ -134,13 +134,13 @@ void TFRSAnlProc::Create_MUSIC_Hist()
    //   hMUSIC_pres[0] = MakeH1I("MUSIC/Pres","MUSIC_pres_0",3000,0,1500,"Pressure MUSIC 1 [mbar]",2,6);
    //   hMUSIC_pres[1] = MakeH1I("MUSIC/Pres","MUSIC_pres_1",3000,0,1500,"Pressure MUSIC 2 [mbar]",2,6);
         
-   hMUSIC3_dEx = MakeH2I("MUSIC/MUSIC(3)/E","MUSIC3_dEx",100,-100,100,200,0,4096,
+   hMUSIC3_dEx = MakeH2I("MUSIC/MUSIC(3)/E","MUSIC3_dEx",100,-150,150,400,0,4000,
                          "Average x position in MUSIC3","dE MUSIC3 [channels]",2);
   
    hMUSIC3_dECOR = MakeH1I("MUSIC/MUSIC(3)/E","MUSIC3_dECOR",4000,0.5,4000.5,"dE MUSIC3 corrected for position",2,6);
    
-   hMUSIC3_dExc = MakeH2I("MUSIC/MUSIC(3)","MUSIC3_dExc",100,-100,+100,200,0,4096,
-			  "Average x position in MUSIC3", "dE MUSIC3 (3)  [channels]", 2);
+   hMUSIC3_dExc = MakeH2I("MUSIC/MUSIC(3)","MUSIC3_dExc",100,-150,+150,400,0,4000,
+			  "Average x position in MUSIC3", "dEc MUSIC3 (3)  [channels]", 2);
 
    
    for(int i=0;i<8;i++)
@@ -297,7 +297,7 @@ void TFRSAnlProc::Create_ID_Hist()
   //   hID_Z = MakeH1I("ID",Form("ID_Z, gain=%f",music->e1_gain[0]),1000,10,93,"Z s2-s4",2,6);
   hID_Z = MakeH1I("ID","ID_Z",1000,0,93,"Z s2-s4",2,6);
   hID_Z2 = MakeH1I("ID","ID_Z2",1000,0,93,"Z2 s2-s4",2,6);
-  //   hID_Z3 = MakeH1I("ID","ID_Z3",1000,10,93,"Z3 s2-s4",2,6);
+     hID_Z3 = MakeH1I("ID","ID_Z3",1000,10,93,"Z3 s2-s4",2,6);
   
   
   hID_x2AoQ = MakeH2I("ID","ID_x2AoQ", 300,2.3,2.8, 200,-100.,100.,
@@ -600,18 +600,18 @@ void TFRSAnlProc::Procceed_MUSIC_Analysis(TFRSSortEvent& srt, TFRSCalibrEvent& c
       /* Position (X) correction by TPC */       //TO DO!!!
       
       if(!music->b_selfcorr1 && tgt.b_de3) {
-	if(clb.b_mw_xsum[4] && clb.b_mw_xsum[5] && tgt.b_de3) {
-	  
+	//	if(clb.b_mw_xsum[4] && clb.b_mw_xsum[5] && tgt.b_de3) {
+	if(clb.b_tpc_xy[4] && clb.b_tpc_xy[5] && tgt.b_de3) { 
 	  Float_t p1 = clb.music1_x1;
 	  Float_t p2 = clb.music1_x2;
 	  Float_t p3 = clb.music1_x3;
 	  Float_t p4 = clb.music1_x4;
 	  tgt.x1_mean = (p1+p2+p3+p4)/4.;	// Mean position 
- 
-              // hMUSIC3_dEx->Fill(tgt.x1_mean, tgt.de[2]);
-	  if(bDrawHist) 
-	    hMUSIC3_dEx->Fill(clb.focx_s4, tgt.de[2]);
-	  
+            
+	  if(bDrawHist) {
+	    // hMUSIC3_dEx->Fill(clb.focx_s4, tgt.de[2]);
+	    hMUSIC3_dEx->Fill(tgt.x1_mean, tgt.de[2]);
+	  }
 	  Float_t power = 1., Corr = 0.;
 	  for(int i=0;i<4;i++) {
 	    Corr += music->pos_a1[i] * power;
@@ -1042,7 +1042,6 @@ void TFRSAnlProc::Procceed_ID_Analysis(TFRSSortEvent& srt, TFRSCalibrEvent& clb,
       if(bDrawHist)
 	hID_Z_Z3->Fill(tgt.id_z,tgt.id_z3);
     }
-  
   /*------------------------------------------------*/
   /* Identification Plots                           */
   /*------------------------------------------------*/
@@ -1068,21 +1067,21 @@ void TFRSAnlProc::Procceed_ID_Analysis(TFRSSortEvent& srt, TFRSCalibrEvent& clb,
 
       tgt.id_b_x2AoQ = cID_x2AoQ->Test(tgt.id_AoQ, tgt.id_x2);
     
-      if (tgt.id_b_z)
+      if (tgt.id_b_z3)
 	{   
 	  if(bDrawHist)
 	    { 
 
 	      //  hID_Z_Q->Fill(tgt.id_z);
-	      hID_Z_AoQ->Fill(tgt.id_AoQ, tgt.id_z);
-	      hID_Z_AoQ_corr->Fill(tgt.id_AoQ_corr, tgt.id_z);
+	      hID_Z_AoQ->Fill(tgt.id_AoQ, tgt.id_z3);
+	      hID_Z_AoQ_corr->Fill(tgt.id_AoQ_corr, tgt.id_z3);
 	      //	hID_Z_AoQ_corrZoom->Fill(tgt.id_AoQ_corr,tgt.id_z);
-	      hID_x4z->Fill(tgt.id_z, tgt.id_x4); 
-	      if(tgt.id_z>= id->zgate_low && tgt.id_z<= id->zgate_high)
+	      hID_x4z->Fill(tgt.id_z3, tgt.id_x4); 
+	      if(tgt.id_z3>= id->zgate_low && tgt.id_z3<= id->zgate_high)
 		{
 		  hID_x4AoQ_zgate->Fill(tgt.id_AoQ_corr,tgt.id_x4);
 		}
-	      hID_Z_Sc21E->Fill(tgt.id_z, sqrt(tgt.sci_l[2]*tgt.sci_r[2]));
+	      hID_Z_Sc21E->Fill(tgt.id_z3, sqrt(tgt.sci_l[2]*tgt.sci_r[2]));
 
 
 	      if(tgt.id_b_z2)
@@ -1120,8 +1119,7 @@ void TFRSAnlProc::Procceed_ID_Analysis(TFRSSortEvent& srt, TFRSCalibrEvent& clb,
 	      //        tgt.id_b_z_AoQ[i] = cID_Z_AoQ[i]->Test(tgt.id_AoQ, tgt.id_z);      
 	
 	      if(i==0)
-		{  // up to 5 Aug it was [0] now [4]
-		  // quick and dirty moved to ID condtions H. Weick
+		{ 
 		  if (tgt.id_b_z_AoQ[0])
 		    { 
 		      hMUSIC3_z_AoQ_E[0]->Fill(srt.music_e3[0]);
