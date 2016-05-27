@@ -64,32 +64,32 @@ void setup_s411_jun16_75()
    
 
   // setup part 
-  an->SetupH2("ID_x4AoQ", 500, 2.3, 2.8, 200, -100, +100, "A/Q", "X2 [mm]");     
+  an->SetupH2("ID_x4AoQ", 500, 2.0, 2.8, 200, -100, +100, "A/Q", "X2 [mm]");     
   an->SetupH2("ID_Z_AoQ", 600, 2.0, 2.8,600 , 30, 95, "A/Q", "Z"); 
   an->SetupH2("ID_Z_AoQ_corr", 500, 2.0, 2.75, 600, 50, 98, "A/Q (a2 corr)", "Z"); 
   an->SetupH2("ID_x4z", 450, 50, 60.0, 500, -100, 100, "Z", "X4 [mm]"); 
 
   //      ID_dEToF
-  Float_t my_cID_Z_AoQ_points[5][2] =
-  // s411_57 133I
-  //	{{ 2.5184., 55.8700},
-  //	{ 2.5184., 57.1700},
-  //	{ 2.5305., 57.1700},
-  //	{ 2.5305., 55.7700},
-  //	{ 2.5184., 55.8700}};
-  // s411_57 133Te
-  //	{{ 2.5461., 56.2410},
-  //	{ 2.5461., 55.3040},
-  //	{ 2.5612., 55.3040},
-  //	{ 2.5612., 56.2410},
-  //	{ 2.5461., 56.2410}};
-  // s411_ 213Fr
-    {{ 2.45205, 86.7875},
-     { 2.46124, 86.7458},
-     { 2.46202, 88.1625},
-     { 2.4496, 88.1417},
-     { 2.45205, 86.7875}};
-  an->SetupPolyCond("cID_Z_AoQ(0)", 5, my_cID_Z_AoQ_points);
+  // Float_t my_cID_Z_AoQ_points[5][2] =
+  // // s411_57 133I
+  // //	{{ 2.5184., 55.8700},
+  // //	{ 2.5184., 57.1700},
+  // //	{ 2.5305., 57.1700},
+  // //	{ 2.5305., 55.7700},
+  // //	{ 2.5184., 55.8700}};
+  // // s411_57 133Te
+  // //	{{ 2.5461., 56.2410},
+  // //	{ 2.5461., 55.3040},
+  // //	{ 2.5612., 55.3040},
+  // //	{ 2.5612., 56.2410},
+  // //	{ 2.5461., 56.2410}};
+  // // s411_ 213Fr
+  //   {{ 2.45205, 86.7875},
+  //    { 2.46124, 86.7458},
+  //    { 2.46202, 88.1625},
+  //    { 2.4496, 88.1417},
+  //    { 2.45205, 86.7875}};
+  // an->SetupPolyCond("cID_Z_AoQ(0)", 5, my_cID_Z_AoQ_points);
 
 
   Float_t my_cID_dEToF_points[4][2] = 
@@ -100,16 +100,16 @@ void setup_s411_jun16_75()
   an->SetupPolyCond("cID_dEToF", 4, my_cID_dEToF_points);
    
 
-  /* 20Mg */
-  Float_t my_20mg_points[6][2]=
-    {{1.665,        13.1000},
-     {1.705,        12.9500},
-     {1.705,        12.2500},
-     {1.665,        12.1000},
-     {1.624,        12.2500},
-     {1.624,        12.9500}};
+  // /* 20Mg */
+  // Float_t my_20mg_points[6][2]=
+  //   {{1.665,        13.1000},
+  //    {1.705,        12.9500},
+  //    {1.705,        12.2500},
+  //    {1.665,        12.1000},
+  //    {1.624,        12.2500},
+  //    {1.624,        12.9500}};
 
-  an->SetupPolyCond("cID_Z_AoQ(3)", 6, my_20mg_points);
+  // an->SetupPolyCond("cID_Z_AoQ(3)", 6, my_20mg_points);
 
 
   // setup FRS parameter
@@ -531,7 +531,42 @@ void setup_s411_jun16_75()
   id->id_tofoff3  = 210000.;   // [ps] 
   id->id_path3    = 120000.;   // path/c [ps]  
 
+  id->ID_Z_AoverQ_num[0]=5; 
+  id->ID_Z_AoverQ_num[1]=5; 
+  id->ID_Z_AoverQ_num[2]=5; 
+  id->ID_Z_AoverQ_num[3]=5; 
+  id->ID_Z_AoverQ_num[4]=5; 
 
+  id->ID_Z_AoverQ[0][0][0]=2.18417; id->ID_Z_AoverQ[0][0][1]=75.5083;
+  id->ID_Z_AoverQ[0][1][0]=2.29006; id->ID_Z_AoverQ[0][1][1]=68.1225;
+  id->ID_Z_AoverQ[0][2][0]=2.2809;  id->ID_Z_AoverQ[0][2][1]=64.2503;
+  id->ID_Z_AoverQ[0][3][0]=2.17535; id->ID_Z_AoverQ[0][3][1]=71.2776;
+  id->ID_Z_AoverQ[0][4][0]=2.18417; id->ID_Z_AoverQ[0][4][1]=75.5083;
+
+  id->ID_Z_AoverQ[1][0][0]=2.19741; id->ID_Z_AoverQ[1][0][1]=80.5277; 
+  id->ID_Z_AoverQ[1][1][0]=2.32977; id->ID_Z_AoverQ[1][1][1]=71.0624; 
+  id->ID_Z_AoverQ[1][2][0]=2.32264; id->ID_Z_AoverQ[1][2][1]=67.1903; 
+  id->ID_Z_AoverQ[1][3][0]=2.17467; id->ID_Z_AoverQ[1][3][1]=76.6556; 
+  id->ID_Z_AoverQ[1][4][0]=2.19741; id->ID_Z_AoverQ[1][4][1]=80.5277; 
+
+  id->ID_Z_AoverQ[2][0][0]=2.24526; id->ID_Z_AoverQ[2][0][1]=82.0336; 
+  id->ID_Z_AoverQ[2][1][0]=2.33282; id->ID_Z_AoverQ[2][1][1]=75.58  ; 
+  id->ID_Z_AoverQ[2][2][0]=2.32332; id->ID_Z_AoverQ[2][2][1]=72.138 ; 
+  id->ID_Z_AoverQ[2][3][0]=2.22252; id->ID_Z_AoverQ[2][3][1]=79.0936; 
+  id->ID_Z_AoverQ[2][4][0]=2.24526; id->ID_Z_AoverQ[2][4][1]=82.0336; 
+
+  id->ID_Z_AoverQ[3][0][0]=2.26732; id->ID_Z_AoverQ[3][0][1]=84.9736; 
+  id->ID_Z_AoverQ[3][1][0]=2.35488; id->ID_Z_AoverQ[3][1][1]=78.52  ; 
+  id->ID_Z_AoverQ[3][2][0]=2.34538; id->ID_Z_AoverQ[3][2][1]=75.078 ; 
+  id->ID_Z_AoverQ[3][3][0]=2.24458; id->ID_Z_AoverQ[3][3][1]=82.0336; 
+  id->ID_Z_AoverQ[3][4][0]=2.26732; id->ID_Z_AoverQ[3][4][1]=84.9736; 
+
+  id->ID_Z_AoverQ[4][0][0]=2.26732; id->ID_Z_AoverQ[4][0][1]=84.9736; 
+  id->ID_Z_AoverQ[4][1][0]=2.35488; id->ID_Z_AoverQ[4][1][1]=78.52  ; 
+  id->ID_Z_AoverQ[4][2][0]=2.34538; id->ID_Z_AoverQ[4][2][1]=75.078 ; 
+  id->ID_Z_AoverQ[4][3][0]=2.24458; id->ID_Z_AoverQ[4][3][1]=82.0336; 
+  id->ID_Z_AoverQ[4][4][0]=2.26732; id->ID_Z_AoverQ[4][4][1]=84.9736; 
+  
   // B-rho values : change according to the FRS settings
   // from S411 211Po
   //    frs->bfield[0] = 1.17195;      // FRS D3 field [Tesla] 
