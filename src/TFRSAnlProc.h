@@ -109,7 +109,7 @@ private:
   TH1I          *hID_Z3;
   TH2I          *hID_x2AoQ;
   TH2I          *hID_Z_AoQ;
-  TH2I			  *hID_Z_AoQ_zsame;
+  TH2I		*hID_Z_AoQ_zsame;
   TH2I          *hID_Z_AoQ_corr;
   TH2I          *hID_Z_Sc21E;
   TH2I          *hID_Z_AoQ_corrZoom;

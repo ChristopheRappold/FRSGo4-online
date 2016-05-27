@@ -455,7 +455,7 @@ void TFRSAnlProc::Create_ID_Hist()
       hID_brhoc[i] = MakeH1I("ID",name,500,3,9,title,2,6);
 
       sprintf(name,"cID_Z_AoQ%d",i);
-      cID_Z_AoQ[i] = MakePolyCond("ID", name, num_ID_Z_AoQ[i], init_ID_Z_AoQ[i], hID_Z_AoQ_corr->GetName());
+      cID_Z_AoQ[i] = MakePolyCond("ID", name, num_ID_Z_AoQ[i], init_ID_Z_AoQ[i], hID_Z_AoQ->GetName());
   
 
       sprintf(name,"cID_x4AoQ_Z(%d)",i);
@@ -1120,9 +1120,9 @@ void TFRSAnlProc::Procceed_ID_Analysis(TFRSSortEvent& srt, TFRSCalibrEvent& clb,
 	      if(cID_Z_AoQ[i]==nullptr)
 		std::cout<<"E> cID_Z_AoQ["<<i<<"] nullptr "<<cID_Z_AoQ[i]<<" | "<<id->ID_Z_AoverQ_num[i]<<std::endl;
 	      
-	      //tgt.id_b_z_AoQ[i] = cID_Z_AoQ[i]->Test(tgt.id_AoQ_corr, tgt.id_z);      
+	      //tgt.id_b_z_AoQ[i] = cID_Z_AoQ[i]->Test(tgt.id_AoQ_corr, tgt.id_z3);      
 	      tgt.id_b_z_AoQ[i] = cID_Z_AoQ[i]->Test(tgt.id_AoQ, tgt.id_z3);      
-		
+	      
 		// if(i==0)
 		//   { 
 		//     if (tgt.id_b_z_AoQ[0])
