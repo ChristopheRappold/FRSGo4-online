@@ -229,6 +229,14 @@ Bool_t TFRSAnalysis::InitEventClasses()
   SetupPolyCond("cID_Z_AoQ3", 5, fIDPar->ID_Z_AoverQ[3]);
   SetupPolyCond("cID_Z_AoQ4", 5, fIDPar->ID_Z_AoverQ[4]);
 
+  SetupPolyCond("cID_x2AoQ0", 5, fIDPar->ID_x2AoverQ[0]);
+  SetupPolyCond("cID_x2AoQ1", 5, fIDPar->ID_x2AoverQ[1]);
+  SetupPolyCond("cID_x2AoQ2", 5, fIDPar->ID_x2AoverQ[2]);
+  SetupPolyCond("cID_x2AoQ3", 5, fIDPar->ID_x2AoverQ[3]);
+  SetupPolyCond("cID_x2AoQ4", 5, fIDPar->ID_x2AoverQ[4]);
+  SetupPolyCond("cID_x2AoQ5", 5, fIDPar->ID_x2AoverQ[5]);
+
+  
 
 
 
