@@ -1,6 +1,6 @@
 #include "Riostream.h"
     
-void setup_s411_jun16()
+void setup_s411_jun16_75()
 {
   // look up analysis object and all parameters 
     
@@ -65,7 +65,7 @@ void setup_s411_jun16()
 
   // setup part 
   an->SetupH2("ID_x4AoQ", 500, 2.3, 2.8, 200, -100, +100, "A/Q", "X2 [mm]");     
-  an->SetupH2("ID_Z_AoQ", 600, 2.25, 2.8,600 , 30, 95, "A/Q", "Z"); 
+  an->SetupH2("ID_Z_AoQ", 600, 2.0, 2.8,600 , 30, 95, "A/Q", "Z"); 
   an->SetupH2("ID_Z_AoQ_corr", 500, 2.0, 2.75, 600, 50, 98, "A/Q (a2 corr)", "Z"); 
   an->SetupH2("ID_x4z", 450, 50, 60.0, 500, -100, 100, "Z", "X4 [mm]"); 
 
@@ -435,8 +435,8 @@ void setup_s411_jun16()
   tpc->y_offset[1][3] =  37.13; 
 
   // index 2 for Sc21  
-  sci->x_a[0][2] =  -12.0271*330.;  //  SC21 calibration ch->mm 
-  sci->x_a[1][2] =  0.0104297*330.; //  
+  sci->x_a[0][2] =  -2065.2;  //  SC21 calibration ch->mm 27.05.2016
+  sci->x_a[1][2] =  0.73; //  27.05.2016 
   sci->x_a[2][2] =  0.000000;  // 
   sci->x_a[3][2] =  0.000000;  //                            
   sci->x_a[4][2] =  0.000000;  //                             
@@ -500,7 +500,7 @@ void setup_s411_jun16()
   sci->tac_factor[1] = 5.58294;   //SC41L-R [ps/ch], range 10 ns
   sci->tac_factor[2] = 20.8056;  //SC41L-SC21L [ps/ch], range 10 ns
   sci->tac_factor[3] = 21.806;  //SC41R-SC21R [ps/ch], range 10 ns
-  sci->tac_factor[4] = 1.0;
+
   sci->tac_factor[5] = 1.;   //
   sci->tac_factor[6] = 1.;   //
 
@@ -523,10 +523,8 @@ void setup_s411_jun16()
   //id->id_tofoff2  = 170680.0; // [ps]  S411 22.10.2014
   //id->id_tofoff2  = 170470.0; // [ps]  S411 shifted 25.10.2014
   //id->id_path2    = 121730.0; // path/c [ps]  S411_48 22.10.2014 
-//  id->id_tofoff2  = 242273.53; // [ps]  S411 shifted 25.10.2014
-//  id->id_path2    = 125102.32; // path/c [ps]  S411_48 22.10.2014 
-  id->id_tofoff2  = 242273.53; // [ps]  S411 shifted 26.05.2016
-  id->id_path2    = 125102.32; // path/c [ps]  26.05.2016 
+  id->id_tofoff2  = 242273.53; // [ps]  S411 shifted 25.10.2014
+  id->id_path2    = 125102.32; // path/c [ps]  S411_48 22.10.2014 
 
 
   //not used
@@ -555,11 +553,11 @@ void setup_s411_jun16()
   //    frs->bfield[2] = 0.8261;       // FRS D3 field [Tesla] 
   //    frs->bfield[3] = 0.82645;      // FRS D4 field [Tesla]
 
-  // from S411_74
-  frs->bfield[0] = 0.5989;      // FRS D3 field [Tesla] 
-  frs->bfield[1] = 0.5902;      // FRS D4 field [Tesla] 
-  frs->bfield[2] = 0.4642;       // FRS D3 field [Tesla] 
-  frs->bfield[3] = 0.4657;      // FRS D4 field [Tesla]
+  // from S411_71
+  frs->bfield[0] = 0.5000;      // FRS D3 field [Tesla] 
+  frs->bfield[1] = 0.4927;      // FRS D4 field [Tesla] 
+  frs->bfield[2] = 0.3942;       // FRS D3 field [Tesla] 
+  frs->bfield[3] = 0.3952;      // FRS D4 field [Tesla]
 
   // from S411 fragments_249  217at setting 60
   //    frs->bfield[0] = 1.16365;      // FRS D3 field [Tesla] 
@@ -640,15 +638,17 @@ void setup_s411_jun16()
   //frs->bfield[2] = 1.2592;       // FRS D3 field [Tesla] 
   //frs->bfield[3] = 1.26045;      // FRS D4 field [Tesla]
 
-  frs->dispersion[0] = -6.474266;     // FRS dispersion TA-S2     (TA2B-Rising optics: TA-S2)
-  frs->dispersion[1] =  7.2202681;    // FRS dispersion S2-S4     (TA2B-Rising optics: TA-S4) 
-  frs->magnification[1] = 1.115225;   // FRS magnification S2-S4  (TA2B-Rising optics: TA-S4)
-
+  frs->dispersion[0] = -6.474266; // RUN81-TA2B-220CM 27.05.2016
+  frs->dispersion[1] =  7.7064; // RUN81-TA2B-220CM 27.05.2016
+  frs->magnification[1] = 1.1903;   // RUN81-TA2B-220CM 27.05.2016
 
 
   // taken from agata s431_15
-  frs->rho0[0]   = 11.22374;    // FRS (D2) radius [m]    
-  frs->rho0[1]   = 11.282095;   // FRS (D3+D4)/2 radius [m]   
+  frs->rho0[0]   = 11.1215;    // FRS (D2) radius [m]   27.05.2016 
+  frs->rho0[1]   = 11.2588;   // FRS (D3+D4)/2 radius [m]  27.05.2016 
+  
+//  frs->rho0[0]   = 11.22374;    // FRS (D2) radius [m]    
+//  frs->rho0[1]   = 11.282095;   // FRS (D3+D4)/2 radius [m]   
 
   //   frs->rho0[0]   = 11.203 ;   // FRS (D1+D2)/2 radius [m]    
   //   frs->rho0[1]   = 11.2641 ;   // FRS (D3+D4)/2 radius [m]   16.09.11
@@ -678,15 +678,15 @@ void setup_s411_jun16()
   id->vel_a2[3] =  0.0; 
 	
   // MUSIC 3 velocity correction
-//  id->vel_a3[0] =  13951.37; //
-//  id->vel_a3[1] =  -38369.9; 
-//  id->vel_a3[2] =  28396.46;
-//  id->vel_a3[3] =  0.0;   
+  id->vel_a3[0] =  13951.37; //
+  id->vel_a3[1] =  -38369.9; 
+  id->vel_a3[2] =  28396.46;
+  id->vel_a3[3] =  0.0;    
   
-  id->vel_a3[0] =  0.0; //
-  id->vel_a3[1] =  1.0; 
-  id->vel_a3[2] =  0.0;
-  id->vel_a3[3] =  0.0; 
+//  id->vel_a3[0] =  0.0; //
+//  id->vel_a3[1] =  1.0; 
+//  id->vel_a3[2] =  0.0;
+//  id->vel_a3[3] =  0.0;  
 
   // gate on Z 
   id->zgate_low = 85;
