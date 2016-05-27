@@ -230,7 +230,11 @@ Bool_t TFRSUnpackProc::BuildEvent(TGo4EventElement* output)
 	    case 3: //Ion catcher Si 2
 	    case 4: //Ion catcher Si 3 (not used)
 	    case 5: //trigger 10 Hz for scaler readout
+	    case 6:
 	    case 7:
+	    case 8:
+	    case 9:
+	    case 10: 
 	    case 11:
 	    case 12:   // start of extraction, not used
 	    case 13:
@@ -575,8 +579,10 @@ Bool_t TFRSUnpackProc::Event_Extract(TFRSUnpackEvent* event_out, TGo4MbsSubEvent
 		      std::cout << " multihit: " << multihit << " ";
 #endif
 		      if (multihit >= 10)
-			continue;
-		      
+			{
+			  pdata++; len++;
+			  continue;
+			}
 		      if(LeadingOrTrailing == 0)
 			{
 #ifdef DEBUG
@@ -848,8 +854,10 @@ Bool_t TFRSUnpackProc::Event_Extract(TFRSUnpackEvent* event_out, TGo4MbsSubEvent
 		      std::cout << " multihit: " << multihit << " ";
 #endif
 		      if (multihit >= 10)
-			continue;
-		      
+			{
+			  pdata++; len++;
+			  continue;
+			}
 		      if(LeadingOrTrailing == 0)
 			{
 #ifdef DEBUG
