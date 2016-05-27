@@ -318,7 +318,7 @@ void TFRSAnlProc::Create_ID_Hist()
   hID_Z_AoQ_zsame = MakeH2I("ID","ID_Z_AoQ_zsame", 600,2.1,2.8, 600,35.,95.,
 			    "Z1==Z2 A/Q s2-s4", "Z s2-s4", 2); 
   
-  hID_x2x4 = MakeH2I("ID","ID_x2_x4",1000,-100,100,1000,-100,100,"x2 mm","x4 mm",2);
+  hID_x2x4 = MakeH2I("ID","ID_x2_x4",200,-100,100,200,-100,100,"x2 mm","x4 mm",2);
 
   hID_Z_AoQ_corr = MakeH2I("ID","ID_Z_AoQ_corr", 300,1.2,2.8, 300,30.,95.,
 			   "A/Q s2-s4", "Z s2-s4", 2); 
