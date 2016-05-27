@@ -134,13 +134,13 @@ void TFRSAnlProc::Create_MUSIC_Hist()
    //   hMUSIC_pres[0] = MakeH1I("MUSIC/Pres","MUSIC_pres_0",3000,0,1500,"Pressure MUSIC 1 [mbar]",2,6);
    //   hMUSIC_pres[1] = MakeH1I("MUSIC/Pres","MUSIC_pres_1",3000,0,1500,"Pressure MUSIC 2 [mbar]",2,6);
         
-   hMUSIC3_dEx = MakeH2I("MUSIC/MUSIC(3)/E","MUSIC3_dEx",100,-150,150,400,0,4000,
+   hMUSIC3_dEx = MakeH2I("MUSIC/MUSIC(3)/E","MUSIC3_dEx",100,-100,100,200,0,4096,
                          "Average x position in MUSIC3","dE MUSIC3 [channels]",2);
   
    hMUSIC3_dECOR = MakeH1I("MUSIC/MUSIC(3)/E","MUSIC3_dECOR",4000,0.5,4000.5,"dE MUSIC3 corrected for position",2,6);
    
-   hMUSIC3_dExc = MakeH2I("MUSIC/MUSIC(3)","MUSIC3_dExc",100,-150,+150,400,0,4000,
-			  "Average x position in MUSIC3", "dEc MUSIC3 (3)  [channels]", 2);
+   hMUSIC3_dExc = MakeH2I("MUSIC/MUSIC(3)","MUSIC3_dExc",100,-100,+100,200,0,4096,
+			  "Average x position in MUSIC3", "dE MUSIC3 (3)  [channels]", 2);
 
    
    for(int i=0;i<8;i++)
@@ -600,18 +600,18 @@ void TFRSAnlProc::Procceed_MUSIC_Analysis(TFRSSortEvent& srt, TFRSCalibrEvent& c
       /* Position (X) correction by TPC */       //TO DO!!!
       
       if(!music->b_selfcorr1 && tgt.b_de3) {
-	//	if(clb.b_mw_xsum[4] && clb.b_mw_xsum[5] && tgt.b_de3) {
-	if(clb.b_tpc_xy[4] && clb.b_tpc_xy[5] && tgt.b_de3) { 
+	if(clb.b_mw_xsum[4] && clb.b_mw_xsum[5] && tgt.b_de3) {
+	  
 	  Float_t p1 = clb.music1_x1;
 	  Float_t p2 = clb.music1_x2;
 	  Float_t p3 = clb.music1_x3;
 	  Float_t p4 = clb.music1_x4;
 	  tgt.x1_mean = (p1+p2+p3+p4)/4.;	// Mean position 
-            
-	  if(bDrawHist) {
-	    // hMUSIC3_dEx->Fill(clb.focx_s4, tgt.de[2]);
-	    hMUSIC3_dEx->Fill(tgt.x1_mean, tgt.de[2]);
-	  }
+ 
+              // hMUSIC3_dEx->Fill(tgt.x1_mean, tgt.de[2]);
+	  if(bDrawHist) 
+	    hMUSIC3_dEx->Fill(clb.focx_s4, tgt.de[2]);
+	  
 	  Float_t power = 1., Corr = 0.;
 	  for(int i=0;i<4;i++) {
 	    Corr += music->pos_a1[i] * power;
