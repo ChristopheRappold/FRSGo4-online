@@ -107,29 +107,31 @@ void TFRSAnlProc::Create_MUSIC_Hist()
 
    hMUSIC1_dE1dE2 = MakeH2I("MUSIC/MUSIC(1)/E","dE1_dE2",1024,0,4096,1024,0,4096,"dE1","dE2",2);
 
-   for(int i=0;i<4;i++)
-     {
-       sprintf(name,"MUSIC3_E(%d)",i);  
-       sprintf(xtitle,"dE MUSIC3(%d)",i);
-       hMUSIC3_E[i] = MakeH1I("MUSIC/MUSIC(3)/E",name,4096,0,4096,xtitle,2,6);
+       for(int i=0;i<4;i++)
+	 {
+	   sprintf(name,"MUSIC3_E(%d)",i);  
+	   sprintf(xtitle,"dE MUSIC3(%d)",i);
+	   hMUSIC3_E[i] = MakeH1I("MUSIC/MUSIC(3)/E",name,4096,0,4096,xtitle,2,6);
+	   for(int k=0;k<5;++k)
+	     {
+       
+	       sprintf(name,"MUSIC3_z_AoQ_E(%d)gate(%d)",i,k);  
+	       sprintf(xtitle,"dE MUSIC3(%d) gate(%d)",i,k);
+	       hMUSIC3_z_AoQ_E[i][k] = MakeH1I("MUSIC/MUSIC(3)/E",name,4096,0,4096,xtitle,2,6);
+	   
+	       sprintf(name,"MUSIC3_music_z_E(%d)gate(%d)",i,k);  
+	       sprintf(xtitle,"dE MUSIC3(%d) gate(%d)",i,k);
+	       hMUSIC3_music_z_E[i][k] = MakeH1I("MUSIC/MUSIC(3)/E",name,4096,0,4096,xtitle,2,6); 
+	     }
+	   sprintf(name,"MUSIC3_T(%d)",i);  
+	   sprintf(xtitle,"dT MUSIC3(%d) ",i);
+	   hMUSIC3_T[i] = MakeH1I("MUSIC/MUSIC(3)/T",name,4096,0,4096,xtitle,2,6); 
+	 }
+     
 
-       sprintf(name,"MUSIC3_z_AoQ_E(%d)",i);  
-       sprintf(xtitle,"dE MUSIC3(%d)",i);
-       hMUSIC3_z_AoQ_E[i] = MakeH1I("MUSIC/MUSIC(3)/E",name,4096,0,4096,xtitle,2,6);
-
-       sprintf(name,"MUSIC3_music_z_E(%d)",i);  
-       sprintf(xtitle,"dE MUSIC3(%d)",i);
-       hMUSIC3_music_z_E[i] = MakeH1I("MUSIC/MUSIC(3)/E",name,4096,0,4096,xtitle,2,6); 
-
-       sprintf(name,"MUSIC3_T(%d)",i);  
-       sprintf(xtitle,"dT MUSIC3(%d)",i);
-       hMUSIC3_T[i] = MakeH1I("MUSIC/MUSIC(3)/T",name,4096,0,4096,xtitle,2,6); 
-   }
-   
-
-   hMUSIC1_dE = MakeH1I("MUSIC/MUSIC(1)/E","MUSIC1_dE",4000,0.0,4000.0,"Average dE MUSIC1 (root)",2,6);
-   hMUSIC2_dE = MakeH1I("MUSIC/MUSIC(2)/E","MUSIC2_dE",4000,0.0,4000.0,"Average dE MUSIC2 (root)",2,6);
-   hMUSIC3_dE = MakeH1I("MUSIC/MUSIC(3)/E","MUSIC3_dE",4000,0.0,4000.0,"Average dE MUSIC3 (root)",2,6);
+       hMUSIC1_dE = MakeH1I("MUSIC/MUSIC(1)/E","MUSIC1_dE",4000,0.0,4000.0,"Average dE MUSIC1 (root)",2,6);
+       hMUSIC2_dE = MakeH1I("MUSIC/MUSIC(2)/E","MUSIC2_dE",4000,0.0,4000.0,"Average dE MUSIC2 (root)",2,6);
+       hMUSIC3_dE = MakeH1I("MUSIC/MUSIC(3)/E","MUSIC3_dE",4000,0.0,4000.0,"Average dE MUSIC3 (root)",2,6);
 
    //   hMUSIC_pres[0] = MakeH1I("MUSIC/Pres","MUSIC_pres_0",3000,0,1500,"Pressure MUSIC 1 [mbar]",2,6);
    //   hMUSIC_pres[1] = MakeH1I("MUSIC/Pres","MUSIC_pres_1",3000,0,1500,"Pressure MUSIC 2 [mbar]",2,6);
@@ -281,7 +283,7 @@ void TFRSAnlProc::Create_ID_Hist()
   //TMUSICParameter* music = (TMUSICParameter*) GetParameter("MUSICPar");
   //TFRSParameter* frs = (TFRSParameter*) GetParameter("FRSPar");    
   
-  hID_dEToF = MakeH2I("ID","ID_dEToF", 2000, 30000.,70000.,400,0,4000,
+  hID_dEToF = MakeH2I("ID","ID_dEToF", 2000, 00000.,70000.,400,0,4000,
 		      "tof S2-S4 Sci.Tof(2)", "Music_dE(1)", 2);
   
   
@@ -297,14 +299,12 @@ void TFRSAnlProc::Create_ID_Hist()
   //   hID_Z = MakeH1I("ID",Form("ID_Z, gain=%f",music->e1_gain[0]),1000,10,93,"Z s2-s4",2,6);
   hID_Z = MakeH1I("ID","ID_Z",1000,0,93,"Z s2-s4",2,6);
   hID_Z2 = MakeH1I("ID","ID_Z2",1000,0,93,"Z2 s2-s4",2,6);
-     hID_Z3 = MakeH1I("ID","ID_Z3",1000,10,93,"Z3 s2-s4",2,6);
+  hID_Z3 = MakeH1I("ID","ID_Z3",1000,10,93,"Z3 s2-s4",2,6);
   
   
-  hID_x2AoQ = MakeH2I("ID","ID_x2AoQ", 300,2.3,2.8, 200,-100.,100.,
-		      "A/Q s2-s4", "X at S2 [mm]", 2);
+  hID_x2AoQ = MakeH2I("ID","ID_x2AoQ", 300,2.0,2.8, 200,-100.,100.,"A/Q s2-s4", "X at S2 [mm]", 2);
   
-  hID_Z_AoQ = MakeH2I("ID","ID_Z_AoQ", 300,1.2,2.8, 400,40.,95.,
-		      "A/Q s2-s4", "Z s2-s4", 2); 
+  hID_Z_AoQ = MakeH2I("ID","ID_Z_AoQ", 300,1.2,2.8, 400,40.,95.,"A/Q s2-s4", "Z s2-s4", 2); 
   
   hID_Z_AoQ_zsame = MakeH2I("ID","ID_Z_AoQ_zsame", 600,2.1,2.8, 600,35.,95.,
 			    "Z1==Z2 A/Q s2-s4", "Z s2-s4", 2); 
@@ -336,14 +336,11 @@ void TFRSAnlProc::Create_ID_Hist()
   hID_Z_Sc21E = MakeH2I("ID","ID_Z_Sc21E", 300,0,25.,400,0,4000.,
 			"Z s2-s4", "sqrt(Sc21_L*sC21_R)", 2); 
   
-  hID_x4AoQ = MakeH2I("ID","ID_x4AoQ", 100,1.0,3.0, 100,-100.,100.,
-		      "A/Q s2-s4", "X at S4 [mm]", 2);
+  hID_x4AoQ = MakeH2I("ID","ID_x4AoQ", 100,1.0,3.0, 100,-100.,100.,"A/Q s2-s4", "X at S4 [mm]", 2);
   
-  hID_x4AoQ_zgate = MakeH2I("ID","ID_x4AoQ_zgate", 300,2.3,2.8, 200,-100.,100.,
-			    "A/Q s2-s4", "gate on Z    X at S4 [mm]", 2);
+  hID_x4AoQ_zgate = MakeH2I("ID","ID_x4AoQ_zgate", 300,2.,2.8, 200,-100.,100.,"A/Q s2-s4", "gate on Z    X at S4 [mm]", 2);
   
-  hID_x4z = MakeH2I("ID","ID_x4z", 300,60.,95., 200,-100.,100.,
-		    "Z s2-s4", "X at S4 [mm]", 2); 
+  hID_x4z = MakeH2I("ID","ID_x4z", 300,60.,95., 200,-100.,100., "Z s2-s4", "X at S4 [mm]", 2); 
                        
   //   hID_Z_Q = MakeH1I("ID","ID_Z_Q",2000,10.,93.,"Z s2-s4 gated on id_x2aoq(2)",2,6);
   
@@ -370,49 +367,53 @@ void TFRSAnlProc::Create_ID_Hist()
   cID_x2AoQ = MakePolyCond("ID","cID_x2AoQ", 4, cID_x2AoQ_points, hID_x2AoQ->GetName());
   
   int num_ID_Z_AoQ[5] = {5, 5, 5, 5, 5};
-  Float_t init_ID_Z_AoQ[5][5][2] =
-    {
-      // ID_Z_AOQ(1)
-      /* 213Fr setting */
-      {{2.45205,        86.7875},
-       {2.46124,        86.7458},
-       {2.46202,        88.1625},
-       {2.4496,        88.1417},
-       {2.45205,        86.7875}},
-      /* 223Th setting */
-      //      {{2.48025,        89.3017},
-      //      {2.49183,        89.2808},
-      //      {2.49122,        90.7808},
-      //      {2.48005,        90.8122},
-      //      {2.48025,        89.3017}},
-      /* 70 Ni @ 70Ni setting shifted by 10*/
-      {{2.482,        38.0000},
-       {2.508,        38.5000},
-       {2.522,        38.0000},
-       {2.489,        37.5000},
-       {2.488,        37.5000}},
-      // ID_Z_AOQ(3) 
-      {{2.25029,      51.22740},
-       {2.27401,      50.88124},
-       {2.30980,      51.80895},
-       {2.28475,      51.93358},
-       {2.25208,      52.07204}},
-      //ID_Z_AOQ(4) 
-      {{2.25222,      49.96984},
-       {2.24048,      49.85215},
-       {2.24764,      49.28444},
-       {2.25967,      49.38137},
-       {2.26654,      49.68599}},
-      // ID_Z_AOQ(5)
-      {{2.55977,      52.6315},
-       {2.55247,      52.293},
-       {2.57298,      51.8529},
-       {2.58529,      52.1914},
-       {2.57936,      52.6315}} };
+   Float_t init_ID_Z_AoQ[5][5][2] =
+     {
+       // ID_Z_AOQ(1)
+       /* 213Fr setting */
+       {{2.45205,        86.7875},
+        {2.46124,        86.7458},
+        {2.46202,        88.1625},
+        {2.4496,        88.1417},
+        {2.45205,        86.7875}},
+       /* 223Th setting */
+       //      {{2.48025,        89.3017},
+       //      {2.49183,        89.2808},
+       //      {2.49122,        90.7808},
+       //      {2.48005,        90.8122},
+       //      {2.48025,        89.3017}},
+       /* 70 Ni @ 70Ni setting shifted by 10*/
+       {{2.482,        38.0000},
+        {2.508,        38.5000},
+        {2.522,        38.0000},
+        {2.489,        37.5000},
+        {2.488,        37.5000}},
+       // ID_Z_AOQ(3) 
+       {{2.25029,      51.22740},
+        {2.27401,      50.88124},
+        {2.30980,      51.80895},
+        {2.28475,      51.93358},
+        {2.25208,      52.07204}},
+       //ID_Z_AOQ(4) 
+       {{2.25222,      49.96984},
+        {2.24048,      49.85215},
+        {2.24764,      49.28444},
+        {2.25967,      49.38137},
+        {2.26654,      49.68599}},
+       // ID_Z_AOQ(5)
+       {{2.55977,      52.6315},
+        {2.55247,      52.293},
+        {2.57298,      51.8529},
+        {2.58529,      52.1914},
+        {2.57936,      52.6315}} };
   
   char name[50], title[100];
   for(int i=0;i<5;i++)
     {
+      
+      sprintf(name,"ID_Z_AoQgate%d",i);  
+      hID_Z_AoQgate[i] = MakeH2I("ID",name, 300,1.2,2.8, 400,40.,95.,"A/Q s2-s4", "Z s2-s4", 2); 
+      
     /* 
        sprintf(name,"ID_x_silicon1c%d",i);  
        sprintf(title,"X at Si tracker 1 [mm] gated by poly ID_Z_AoQ%d",i);
@@ -453,9 +454,10 @@ void TFRSAnlProc::Create_ID_Hist()
       sprintf(title,"brho at S4  gated by poly ID_Z_AoQ%d",i);
       hID_brhoc[i] = MakeH1I("ID",name,500,3,9,title,2,6);
 
-      sprintf(name,"cID_Z_AoQ(%d)",i);
+      sprintf(name,"cID_Z_AoQ%d",i);
       cID_Z_AoQ[i] = MakePolyCond("ID", name, num_ID_Z_AoQ[i], init_ID_Z_AoQ[i], hID_Z_AoQ_corr->GetName());
-     
+  
+
       sprintf(name,"cID_x4AoQ_Z(%d)",i);
       Float_t cID_x4AoQ_Z_points[4][2] = 
 	{{2.1, -90},
@@ -1113,67 +1115,82 @@ void TFRSAnlProc::Procceed_ID_Analysis(TFRSSortEvent& srt, TFRSCalibrEvent& clb,
 	    }
 	
 	  for(int i=0;i<5;i++)
-	    {    
-	      tgt.id_b_music_z[i] = cID_Z_Z[i]->Test(tgt.id_z);   
-	      tgt.id_b_z_AoQ[i] = cID_Z_AoQ[i]->Test(tgt.id_AoQ_corr, tgt.id_z);      
-	      //        tgt.id_b_z_AoQ[i] = cID_Z_AoQ[i]->Test(tgt.id_AoQ, tgt.id_z);      
-	
-	      if(i==0)
-		{ 
-		  if (tgt.id_b_z_AoQ[0])
-		    { 
-		      hMUSIC3_z_AoQ_E[0]->Fill(srt.music_e3[0]);
-		      hMUSIC3_z_AoQ_E[1]->Fill(srt.music_e3[1]);
-		      hMUSIC3_z_AoQ_E[2]->Fill(srt.music_e3[2]);
-		      hMUSIC3_z_AoQ_E[3]->Fill(srt.music_e3[3]);
-		      hID_x4c[0]->Fill(tgt.id_x4);
-		      hID_x2c[0]->Fill(tgt.id_x2);
-		      
-		      //	    hMUSIC3_music_z_E[0]->Fill(srt.music_e3[0]);
-		      //	    hMUSIC3_music_z_E[1]->Fill(srt.music_e3[1]);
-		      //	    hMUSIC3_music_z_E[2]->Fill(srt.music_e3[2]);
-		      //	    hMUSIC3_music_z_E[3]->Fill(srt.music_e3[3]);
-		    }
-		}
+	    {
+	      tgt.id_b_music_z[i] = cID_Z_Z[i]->Test(tgt.id_z3);   
+	      if(cID_Z_AoQ[i]==nullptr)
+		std::cout<<"E> cID_Z_AoQ["<<i<<"] nullptr "<<cID_Z_AoQ[i]<<" | "<<id->ID_Z_AoverQ_num[i]<<std::endl;
 	      
+	      //tgt.id_b_z_AoQ[i] = cID_Z_AoQ[i]->Test(tgt.id_AoQ_corr, tgt.id_z);      
+	      tgt.id_b_z_AoQ[i] = cID_Z_AoQ[i]->Test(tgt.id_AoQ, tgt.id_z3);      
+		
+		// if(i==0)
+		//   { 
+		//     if (tgt.id_b_z_AoQ[0])
+		//       { 
+		// 	hMUSIC3_z_AoQ_E[0][i]->Fill(srt.music_e3[0]);
+		// 	hMUSIC3_z_AoQ_E[1][i]->Fill(srt.music_e3[1]);
+		// 	hMUSIC3_z_AoQ_E[2][i]->Fill(srt.music_e3[2]);
+		// 	hMUSIC3_z_AoQ_E[3][i]->Fill(srt.music_e3[3]);
+		// 	hID_x4c[0]->Fill(tgt.id_x4);
+		// 	hID_x2c[0]->Fill(tgt.id_x2);
+		      
+		// 	hMUSIC3_music_z_E[0][i]->Fill(srt.music_e3[0]);
+		// 	hMUSIC3_music_z_E[1][i]->Fill(srt.music_e3[1]);
+		// 	hMUSIC3_music_z_E[2][i]->Fill(srt.music_e3[2]);
+		// 	hMUSIC3_music_z_E[3][i]->Fill(srt.music_e3[3]);
+		//       }
+		//   }
 	      if (tgt.id_b_z_AoQ[i])
-		{
-		  if(bDrawHist)
-		    { 
-		      
-		      // S395 envelop plots, tracking from position(TPC6) and angle (TPC5, TPC6)
-		      /*
-			if( tgt.id_b_x4 && i==0) {
-			for(Int_t zz=0; zz<=2600; zz+=100) {
-			x4env =  tgt.id_a4 * (zz-my_dist_TPC6)/1000. + clb.tpc_x[5];
-			y4env =  tgt.id_b4 * (zz-my_dist_TPC6)/1000. + clb.tpc_y[5];
-			//hID_xz->Fill(zz,x4env);
-			//hID_yz->Fill(zz,y4env);
-			hID_xzc->Fill(zz,x4env);
-			hID_yzc->Fill(zz,y4env);
-			}
-			}
-		      */
-		      //  hID_x2c[i]->Fill(tgt.id_x2); 
-		      /*
-			hID_betac[i]->Fill(tgt.id_beta);
-			hID_brhoc[i]->Fill(tgt.id_brho[1]);
+		  {
+		    if(bDrawHist)
+		      { 
 			
-			hID_x_target1c[i]->Fill(clb.tpc_x_s2_target1);
-			hID_x_target2c[i]->Fill(clb.tpc_x_s4_target2);
-			hID_y_target1c[i]->Fill(clb.tpc_y_s2_target1);
-			hID_y_target2c[i]->Fill(clb.tpc_y_s4_target2);
-		      */
+			hID_Z_AoQgate[i]->Fill(tgt.id_AoQ, tgt.id_z3);;
+
+			hMUSIC3_z_AoQ_E[0][i]->Fill(srt.music_e3[0]);
+			hMUSIC3_z_AoQ_E[1][i]->Fill(srt.music_e3[1]);
+			hMUSIC3_z_AoQ_E[2][i]->Fill(srt.music_e3[2]);
+			hMUSIC3_z_AoQ_E[3][i]->Fill(srt.music_e3[3]);
+			hID_x4c[i]->Fill(tgt.id_x4);
+			//hID_x2c[i]->Fill(tgt.id_x2);
+			hMUSIC3_music_z_E[0][i]->Fill(srt.music_e3[0]);
+			hMUSIC3_music_z_E[1][i]->Fill(srt.music_e3[1]);
+			hMUSIC3_music_z_E[2][i]->Fill(srt.music_e3[2]);
+			hMUSIC3_music_z_E[3][i]->Fill(srt.music_e3[3]);
+
+			// S395 envelop plots, tracking from position(TPC6) and angle (TPC5, TPC6)
+			/*
+			  if( tgt.id_b_x4 && i==0) {
+			  for(Int_t zz=0; zz<=2600; zz+=100) {
+			  x4env =  tgt.id_a4 * (zz-my_dist_TPC6)/1000. + clb.tpc_x[5];
+			  y4env =  tgt.id_b4 * (zz-my_dist_TPC6)/1000. + clb.tpc_y[5];
+			  //hID_xz->Fill(zz,x4env);
+			  //hID_yz->Fill(zz,y4env);
+			  hID_xzc->Fill(zz,x4env);
+			  hID_yzc->Fill(zz,y4env);
+			  }
+			  }
+			*/
+			  hID_x2c[i]->Fill(tgt.id_x2); 
+			  
+			  hID_betac[i]->Fill(tgt.id_beta);
+			  hID_brhoc[i]->Fill(tgt.id_brho[1]);
+			
+			  // hID_x_target1c[i]->Fill(clb.tpc_x_s2_target1);
+			  // hID_x_target2c[i]->Fill(clb.tpc_x_s4_target2);
+			  // hID_y_target1c[i]->Fill(clb.tpc_y_s2_target1);
+			  // hID_y_target2c[i]->Fill(clb.tpc_y_s4_target2);
+			
 		      
-		      // if(i==1){
-		      //if(clb.coin[10]==1)
-		      //	hID_x4c[i]->Fill(tgt.id_x4);
-		      //}else{
-		      //hID_x4c[i]->Fill(tgt.id_x4);
-		      //}
-		    }
-		}
-	    }
+			// if(i==1){
+			//if(clb.coin[10]==1)
+			//	hID_x4c[i]->Fill(tgt.id_x4);
+			//}else{
+			//hID_x4c[i]->Fill(tgt.id_x4);
+			//}
+		      }
+		  }
+	      }
 	}
     }
 }

@@ -50,8 +50,8 @@ private:
   TH2I          *hMUSIC1_dE1dE2;
 
   TH1I          *hMUSIC3_E[4];
-  TH1I          *hMUSIC3_z_AoQ_E[4];
-  TH1I          *hMUSIC3_music_z_E[4];
+  TH1I          *hMUSIC3_z_AoQ_E[4][5];
+  TH1I          *hMUSIC3_music_z_E[4][5];
   TH1I          *hMUSIC3_T[4];
   TH1I          *hMUSIC3_dE;
   TH1I          *hMUSIC_pres[2];
@@ -127,7 +127,7 @@ private:
   TH1I          *hID_x4c[5];
   TH1I          *hID_x2c[5];
   TH1I          *hID_target2c[5];
-
+  TH2I          *hID_Z_AoQgate[5];
 
   TH2I          *hID_x4AoQ;
   TH2I          *hID_x4AoQ_zgate;
