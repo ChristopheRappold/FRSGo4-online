@@ -1141,7 +1141,7 @@ void TFRSAnlProc::Procceed_ID_Analysis(TFRSSortEvent& srt, TFRSCalibrEvent& clb,
       tgt.id_b_x2AoQ = cID_x2AoQ[0]->Test(tgt.id_AoQ, tgt.id_x2);
       for(int i=0;i<6;++i)
 	{
-	  if(cID_x2AoQ[0]->Test(tgt.id_AoQ, tgt.id_x2)==true)
+	  if(cID_x2AoQ[i]->Test(tgt.id_AoQ, tgt.id_x2)==true)
 	    {
 	      hMUSIC3_x2AoQ_E[0][i]->Fill(srt.music_e3[0]);
 	      hMUSIC3_x2AoQ_E[1][i]->Fill(srt.music_e3[1]);
