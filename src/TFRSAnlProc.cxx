@@ -1050,8 +1050,8 @@ void TFRSAnlProc::Procceed_ID_Analysis(TFRSSortEvent& srt, TFRSCalibrEvent& clb,
 	    hID_Z->Fill(tgt.id_z);
 	    hID_ZmaxRange->Fill(tgt.id_z);
 	  }
+      }
     }
-
 
   /****  S4  (MUSIC 2)   */
   
