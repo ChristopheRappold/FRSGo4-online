@@ -1087,6 +1087,15 @@ TIDParameter::TIDParameter() : TGo4Parameter("TIDParameter") {
 
   zgate_low = 0;
   zgate_high = 100;
+
+  for(int i=0;i<5;++i)
+    {
+      ID_Z_AoverQ_num[i] = 0;
+
+      for(int j=0;j<5;++j)
+	for(int k=0;k<2;++k)
+	  ID_Z_AoverQ[i][j][k] = 0;
+    }
 }
 
 TIDParameter::TIDParameter(const char* name) : TGo4Parameter(name) {
@@ -1119,6 +1128,15 @@ TIDParameter::TIDParameter(const char* name) : TGo4Parameter(name) {
         
   zgate_low = 0;
   zgate_high = 100;
+
+  for(int i=0;i<5;++i)
+    {
+      ID_Z_AoverQ_num[i] = 0;
+
+      for(int j=0;j<5;++j)
+	for(int k=0;k<2;++k)
+	  ID_Z_AoverQ[i][j][k] = 0;
+    }
 } 
 
 TIDParameter::~TIDParameter() {
@@ -1146,6 +1164,13 @@ void TIDParameter::Print(Option_t*) const {
   std::cout << "zgate_low = " << zgate_low << std::endl;
   std::cout << "zgate_high = " << zgate_high << std::endl;
 
+  for(int i=0;i<5;++i)
+    {
+      std::cout<<"ID condition "<<i<<" "<<ID_Z_AoverQ_num[i]<<std::endl;
+      for(int j=0;j<ID_Z_AoverQ_num[i];++j)
+	std::cout<<"--> x["<<j<<"] ="<<ID_Z_AoverQ[i][j][0]<<" y["<<j<<"] ="<<ID_Z_AoverQ[i][j][1]<<std::endl;
+    }
+  
   return ;
 }
 
@@ -1176,6 +1201,16 @@ Bool_t TIDParameter::UpdateFrom(TGo4Parameter* par) {
   zgate_low = from->zgate_low;
   zgate_high = from->zgate_high;
 
+    for(int i=0;i<5;++i)
+    {
+      ID_Z_AoverQ_num[i] = from->ID_Z_AoverQ_num[i];
+
+      for(int j=0;j<ID_Z_AoverQ_num[i];++j)
+	for(int k=0;k<2;++k)
+	  ID_Z_AoverQ[i][j][k] = from->ID_Z_AoverQ[i][j][k];
+    }
+
+  
   return kTRUE;
 }
 

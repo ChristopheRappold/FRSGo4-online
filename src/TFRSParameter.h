@@ -78,6 +78,10 @@ public:
   Float_t		  a2AoQCorr;  /* Correction of AoQ based on S2 angle in x */
   Float_t		  a4AoQCorr;  /* Correction of AoQ based on S4 angle in x */
 
+  
+
+
+  
   ClassDef(TFRSParameter,1)
 };
 
@@ -250,7 +254,10 @@ public:
 
   Int_t	zgate_low;
   Int_t	zgate_high;
-      
+
+  Int_t   ID_Z_AoverQ_num[5];
+  Float_t ID_Z_AoverQ [5][5][2];
+  
   ClassDef(TIDParameter,1)
 };
 
