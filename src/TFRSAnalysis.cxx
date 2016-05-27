@@ -223,6 +223,15 @@ Bool_t TFRSAnalysis::InitEventClasses()
   processL += nameSetupFile;
   gROOT->ProcessLine(processL.c_str());
   ModPar->setMap();
+  SetupPolyCond("cID_Z_AoQ0", 5, fIDPar->ID_Z_AoverQ[0]);
+  SetupPolyCond("cID_Z_AoQ1", 5, fIDPar->ID_Z_AoverQ[1]);
+  SetupPolyCond("cID_Z_AoQ2", 5, fIDPar->ID_Z_AoverQ[2]);
+  SetupPolyCond("cID_Z_AoQ3", 5, fIDPar->ID_Z_AoverQ[3]);
+  SetupPolyCond("cID_Z_AoQ4", 5, fIDPar->ID_Z_AoverQ[4]);
+
+
+
+
   printf("Analysis Name: %s\n",GetName()); 
   return res;
 }
