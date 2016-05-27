@@ -60,6 +60,12 @@ private:
   UInt_t         firsthundrethsec;	//mik
   UInt_t         firstcycle;
   UInt_t         firstseetram;
+  int scalercycle_Sec;
+  int scalercycle_TenthSec;
+  int scalercycle_HundrethSec;
+  int scalercycle_Cycle;
+  int scalercycle_Seetram;
+
   Float_t       dtime;
   Float_t       dt_last;
   Float_t       dt_diff;

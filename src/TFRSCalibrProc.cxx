@@ -114,27 +114,59 @@ void TFRSCalibrProc::Create_MON_Hist()
       hMON_scaler[9] ->SetXTitle("Seetram current digitizer (old output)");
       hMON_scaler[10]->SetXTitle("Seetram current digitizer (new output)");
       hMON_scaler[11]->SetXTitle("IC01 current digitizer (old output)");
-      hMON_scaler[12]->SetXTitle("Start extraction");
-      hMON_scaler[13]->SetXTitle("Stop extraction");
-      hMON_scaler[14]->SetXTitle("SC81 not used");  
+      hMON_scaler[12]->SetXTitle("Start SIS extraction");
+      hMON_scaler[13]->SetXTitle("Stop SIS extraction");
+      hMON_scaler[14]->SetXTitle("SC81");  
       hMON_scaler[15]->SetXTitle("Beam transformer digital gated");
-      hMON_scaler[16]->SetXTitle("not used"); 
-      hMON_scaler[17]->SetXTitle("not used");  
-      hMON_scaler[18]->SetXTitle("not used");
-      hMON_scaler[19]->SetXTitle("not used"); 
-      hMON_scaler[20]->SetXTitle("Channeltron signal");
-      hMON_scaler[21]->SetXTitle("not used");
-      hMON_scaler[22]->SetXTitle("not used");
-      hMON_scaler[23]->SetXTitle("not used");
-      hMON_scaler[24]->SetXTitle("not used");
-      hMON_scaler[25]->SetXTitle("not used");
-      hMON_scaler[26]->SetXTitle("not used");
-      hMON_scaler[27]->SetXTitle("not used");
+      hMON_scaler[16]->SetXTitle("SCI00"); 
+      hMON_scaler[17]->SetXTitle("SCI02");  
+      hMON_scaler[18]->SetXTitle("IC counter");
+      hMON_scaler[19]->SetXTitle("SCI41L"); 
+      hMON_scaler[20]->SetXTitle("Si CR-1");
+      hMON_scaler[21]->SetXTitle("Si CR-2");
+      hMON_scaler[22]->SetXTitle("Si CR-3");
+      hMON_scaler[23]->SetXTitle("Si CR-4");
+      hMON_scaler[24]->SetXTitle("Si CR-5");
+      hMON_scaler[25]->SetXTitle("10 kHz");
+      hMON_scaler[26]->SetXTitle("10 kHz veto dead time");
+      hMON_scaler[27]->SetXTitle("Nozzel extraction");
       hMON_scaler[28]->SetXTitle("not used");
-      hMON_scaler[29]->SetXTitle("not used");
-      hMON_scaler[30]->SetXTitle("not used");
-      hMON_scaler[31]->SetXTitle("not used");
+      hMON_scaler[29]->SetXTitle("Spill IN & dead time");
+      hMON_scaler[30]->SetXTitle("Spill OFF & dead time");
+      hMON_scaler[31]->SetXTitle("Nozzel & dead time");
     
+      hMON_scaler[32] ->SetXTitle("MrTOF 1 Hz");           // updated 28-08-11 
+      hMON_scaler[33] ->SetXTitle("MrTOF 100 Hz");
+      hMON_scaler[34] ->SetXTitle("MrTOF 10 kHz veto deadtime");
+      hMON_scaler[35] ->SetXTitle("MrTOF SC41L");
+      hMON_scaler[36] ->SetXTitle("MrTOF start extraction");
+      hMON_scaler[37] ->SetXTitle("MrTOF stop extraction");
+      hMON_scaler[38] ->SetXTitle("MrTOF start");
+      hMON_scaler[39] ->SetXTitle("MrTOF stop");
+      hMON_scaler[40] ->SetXTitle("chaneltron 1");
+      hMON_scaler[41] ->SetXTitle("chaneltron 2");
+      hMON_scaler[42]->SetXTitle("not used"); 
+      hMON_scaler[43]->SetXTitle("not used"); 
+      hMON_scaler[44]->SetXTitle("not used"); 
+      hMON_scaler[45]->SetXTitle("not used"); 
+      hMON_scaler[46]->SetXTitle("not used"); 
+      hMON_scaler[47]->SetXTitle("not used"); 
+      hMON_scaler[48]->SetXTitle("not used"); 
+      hMON_scaler[49]->SetXTitle("not used"); 
+      hMON_scaler[50]->SetXTitle("not used"); 
+      hMON_scaler[51]->SetXTitle("not used"); 
+      hMON_scaler[52]->SetXTitle("not used"); 
+      hMON_scaler[53]->SetXTitle("not used"); 
+      hMON_scaler[54]->SetXTitle("not used"); 
+      hMON_scaler[55]->SetXTitle("not used"); 
+      hMON_scaler[56]->SetXTitle("not used"); 
+      hMON_scaler[57]->SetXTitle("not used"); 
+      hMON_scaler[58]->SetXTitle("not used"); 
+      hMON_scaler[59]->SetXTitle("not used"); 
+      hMON_scaler[60]->SetXTitle("not used"); 
+      hMON_scaler[61]->SetXTitle("not used"); 
+      hMON_scaler[62]->SetXTitle("not used"); 
+      hMON_scaler[63]->SetXTitle("not used"); 
 
       hMON_diff[0] ->SetXTitle("Free Trigger (OR)");           // FRS scaler update 13.08.11
       hMON_diff[1] ->SetXTitle("Accepted Trigger (OR)");
@@ -145,62 +177,62 @@ void TFRSCalibrProc::Create_MON_Hist()
       hMON_diff[6] ->SetXTitle("IC01 current digitizer (new output)");
       hMON_diff[7] ->SetXTitle("SCI21");
       hMON_diff[8] ->SetXTitle("SCI41");
-       hMON_diff[9] ->SetXTitle("Seetram current digitizer (old output)");
-       hMON_diff[10]->SetXTitle("Seetram current digitizer (new output)");
-       hMON_diff[11]->SetXTitle("IC01 current digitizer (old output)");
-       hMON_diff[12]->SetXTitle("Start extraction");
-       hMON_diff[13]->SetXTitle("Stop extraction");
-       hMON_diff[14]->SetXTitle("SC81 not used");  
-       hMON_diff[15]->SetXTitle("Beam transformer digital gated");
-       hMON_diff[16]->SetXTitle("not used");
-       hMON_diff[17]->SetXTitle("not used");
-       hMON_diff[18]->SetXTitle("not used");
-       hMON_diff[19]->SetXTitle("not used");
-       hMON_diff[20]->SetXTitle("Channeltron out");
-       hMON_diff[21]->SetXTitle("not used");
-       hMON_diff[22]->SetXTitle("not used");
-       hMON_diff[23]->SetXTitle("not used");
-       hMON_diff[24]->SetXTitle("not used");
-       hMON_diff[25]->SetXTitle("not used");
-       hMON_diff[26]->SetXTitle("not used");
-       hMON_diff[27]->SetXTitle("not used");
-       hMON_diff[28]->SetXTitle("not used");
-       hMON_diff[29]->SetXTitle("not used");
-       hMON_diff[30]->SetXTitle("not used");
-       hMON_diff[31]->SetXTitle("not used");
+      hMON_diff[9] ->SetXTitle("Seetram current digitizer (old output)");
+      hMON_diff[10]->SetXTitle("Seetram current digitizer (new output)");
+      hMON_diff[11]->SetXTitle("IC01 current digitizer (old output)");
+      hMON_diff[12]->SetXTitle("Start extraction");
+      hMON_diff[13]->SetXTitle("Stop extraction");
+      hMON_diff[14]->SetXTitle("SC81");  
+      hMON_diff[15]->SetXTitle("Beam transformer digital gated");
+      hMON_diff[16]->SetXTitle("SCI00");                
+      hMON_diff[17]->SetXTitle("SCI02");                
+      hMON_diff[18]->SetXTitle("IC counter");           
+      hMON_diff[19]->SetXTitle("SCI41L");               
+      hMON_diff[20]->SetXTitle("Si CR-1");              
+      hMON_diff[21]->SetXTitle("Si CR-2");              
+      hMON_diff[22]->SetXTitle("Si CR-3");              
+      hMON_diff[23]->SetXTitle("Si CR-4");              
+      hMON_diff[24]->SetXTitle("Si CR-5");              
+      hMON_diff[25]->SetXTitle("10 kHz");               
+      hMON_diff[26]->SetXTitle("10 kHz veto dead time");
+      hMON_diff[27]->SetXTitle("Nozzel extraction");    
+      hMON_diff[28]->SetXTitle("not used");             
+      hMON_diff[29]->SetXTitle("Spill IN & dead time"); 
+      hMON_diff[30]->SetXTitle("Spill OFF & dead time");
+      hMON_diff[31]->SetXTitle("Nozzel & dead time");
 
-       hMON_diff[32] ->SetXTitle("not used");   // 2nd scaler module in the TPC crate update 13.08.11
-       hMON_diff[33] ->SetXTitle("not used");   
-       hMON_diff[34] ->SetXTitle("not used");
-       hMON_diff[35] ->SetXTitle("not used");
-       hMON_diff[36] ->SetXTitle("not used");
-       hMON_diff[37] ->SetXTitle("");
-       hMON_diff[38] ->SetXTitle("");
-       hMON_diff[39] ->SetXTitle("");
-       hMON_diff[40] ->SetXTitle("");
-       hMON_diff[41] ->SetXTitle("");
-       hMON_diff[42] ->SetXTitle("");
-       hMON_diff[43] ->SetXTitle("");
-       hMON_diff[44] ->SetXTitle("");
-       hMON_diff[45] ->SetXTitle("");
-       hMON_diff[46] ->SetXTitle("");
-       hMON_diff[47] ->SetXTitle("");
-       hMON_diff[48] ->SetXTitle("");   // from here not used
-       hMON_diff[49] ->SetXTitle("");
-       hMON_diff[50] ->SetXTitle("");
-       hMON_diff[51] ->SetXTitle("");
-       hMON_diff[52] ->SetXTitle("");
-       hMON_diff[53] ->SetXTitle("");
-       hMON_diff[54] ->SetXTitle("");
-       hMON_diff[55] ->SetXTitle("");
-       hMON_diff[56] ->SetXTitle("");
-       hMON_diff[57] ->SetXTitle("");
-       hMON_diff[58] ->SetXTitle("");
-       hMON_diff[59] ->SetXTitle("");
-       hMON_diff[60] ->SetXTitle("");
-       hMON_diff[61] ->SetXTitle("");
-       hMON_diff[62] ->SetXTitle("");
-       hMON_diff[63] ->SetXTitle("");
+      hMON_diff[32] ->SetXTitle("MrTOF 1 Hz");
+      hMON_diff[33] ->SetXTitle("MrTOF 100 Hz");
+      hMON_diff[34] ->SetXTitle("MrTOF 10 kHz veto deadtime");
+      hMON_diff[35] ->SetXTitle("MrTOF SC41L");             
+      hMON_diff[36] ->SetXTitle("MrTOF start extraction");  
+      hMON_diff[37] ->SetXTitle("MrTOF stop extraction");   
+      hMON_diff[38] ->SetXTitle("MrTOF start");
+      hMON_diff[39] ->SetXTitle("MrTOF stop");
+      hMON_diff[40] ->SetXTitle("chaneltron 1");
+      hMON_diff[41] ->SetXTitle("chaneltron 2");
+      hMON_diff[42] ->SetXTitle("");
+      hMON_diff[43] ->SetXTitle("");
+      hMON_diff[44] ->SetXTitle("");
+      hMON_diff[45] ->SetXTitle("");
+      hMON_diff[46] ->SetXTitle("");
+      hMON_diff[47] ->SetXTitle("");
+      hMON_diff[48] ->SetXTitle("");   // from here not used
+      hMON_diff[49] ->SetXTitle("");
+      hMON_diff[50] ->SetXTitle("");
+      hMON_diff[51] ->SetXTitle("");
+      hMON_diff[52] ->SetXTitle("");
+      hMON_diff[53] ->SetXTitle("");
+      hMON_diff[54] ->SetXTitle("");
+      hMON_diff[55] ->SetXTitle("");
+      hMON_diff[56] ->SetXTitle("");
+      hMON_diff[57] ->SetXTitle("");
+      hMON_diff[58] ->SetXTitle("");
+      hMON_diff[59] ->SetXTitle("");
+      hMON_diff[60] ->SetXTitle("");
+      hMON_diff[61] ->SetXTitle("");
+      hMON_diff[62] ->SetXTitle("");
+      hMON_diff[63] ->SetXTitle("");
      }
 
    /*   
@@ -545,6 +577,14 @@ void TFRSCalibrProc::Create_MON_Hist()
    dt_last = 0.;
    dt_diff = 0.;
 
+   scalercycle_Sec=0;
+   scalercycle_TenthSec=0;
+   scalercycle_HundrethSec=0;
+   scalercycle_Sec=0;
+   scalercycle_Cycle=0;
+   scalercycle_Seetram=0;
+
+   
    // MON initialization
    focx_s2m = 0.;
    focy_s2m = 0.;
@@ -581,7 +621,7 @@ void TFRSCalibrProc::Create_MON_Hist()
        {     
 	 firstsec = src.sc_long[3]; // TIME //
 	 firsttenthsec = src.sc_long[4];
-	 firsthundrethsec = src.sc_long2[9];	//mik
+	 firsthundrethsec = src.sc_long[25];	//mik
 	 firstcycle = src.sc_long[2];
 	 firstseetram= src.sc_long[10]; // new SE01
 	 //      firstseetram= src.sc_long[9]; // old SE01
@@ -666,22 +706,23 @@ void TFRSCalibrProc::Create_MON_Hist()
   if(src.sc_long[3]!=0)
     {
       if(src.sc_long[3]<firstsec)
-	firstsec = firstsec - 4294967295;
-
+	++scalercycle_Sec;
+	  //firstsec = src.sc_long[3];	  
+      
       if(src.sc_long[4]<firsttenthsec)
-	firsttenthsec = firsttenthsec - 4294967295;
-
+	++scalercycle_TenthSec;
+	
       if(src.sc_long2[9]<firsthundrethsec)		//mik
-	firsthundrethsec = firsthundrethsec - 4294967295;	//mik
-
+	++scalercycle_HundrethSec;
+	
       if(src.sc_long[2]<firstcycle)
-	firstcycle = firstcycle - 4294967295;
+	++scalercycle_Cycle;
 
 
-      tgt.seconds = src.sc_long[3] - firstsec;
-      tgt.tenthsecs = src.sc_long[4] - firsttenthsec;
-      tgt.hundrethsecs = src.sc_long2[9] - firsthundrethsec;  //mik
-      tgt.extraction_cycle = src.sc_long[2] - firstcycle;
+      tgt.seconds = src.sc_long[3] + 4294967295*scalercycle_Sec -firstsec;
+      tgt.tenthsecs = src.sc_long[4] + 4294967295*scalercycle_TenthSec - firsttenthsec;
+      tgt.hundrethsecs = src.sc_long2[9] + 4294967295*scalercycle_HundrethSec - firsthundrethsec;  //mik
+      tgt.extraction_cycle = src.sc_long[2] + 4294967295*scalercycle_Cycle - firstcycle;
     }
 
   hTimeStamp->Fill((Int_t)((Double_t)src.timestamp / 5E7) % 3600);
