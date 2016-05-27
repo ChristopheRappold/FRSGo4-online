@@ -459,12 +459,14 @@ void TFRSAnlProc::Create_ID_Hist()
   
 
       sprintf(name,"cID_x4AoQ_Z(%d)",i);
-      Float_t cID_x4AoQ_Z_points[4][2] = 
+      Float_t cID_x4AoQ_Z_points[5][2] = 
 	{{2.1, -90},
 	 {2.1,  90},
 	 {2.5,  90}, 
-	 {2.5, -90}};
-      cID_x4AoQ_Z[i] = MakePolyCond("ID",name, 4, cID_x4AoQ_Z_points, hID_x4AoQ->GetName());
+	 {2.5, -90},
+	 {2.1, -90},
+	};
+      cID_x4AoQ_Z[i] = MakePolyCond("ID",name, 5, cID_x4AoQ_Z_points, hID_x4AoQ->GetName());
      
       sprintf(name,"cID_Z_Z%d",i);
       cID_Z_Z[i] = MakeWindowCond("ID",name,2.,40.,hID_Z->GetName());
@@ -601,9 +603,10 @@ void TFRSAnlProc::Procceed_MUSIC_Analysis(TFRSSortEvent& srt, TFRSCalibrEvent& c
       
       /* Position (X) correction by TPC */       //TO DO!!!
       
-      if(!music->b_selfcorr1 && tgt.b_de3) {
-	if(clb.b_mw_xsum[4] && clb.b_mw_xsum[5] && tgt.b_de3) {
-	  
+      //if(!music->b_selfcorr1 && tgt.b_de3) {
+      //if(clb.b_mw_xsum[4] && clb.b_mw_xsum[5] && tgt.b_de3) {
+      if(tgt.b_de3 && clb.b_tpc_xy[4]&&clb.b_tpc_xy[5])
+	{
 	  Float_t p1 = clb.music1_x1;
 	  Float_t p2 = clb.music1_x2;
 	  Float_t p3 = clb.music1_x3;
@@ -628,7 +631,7 @@ void TFRSAnlProc::Procceed_MUSIC_Analysis(TFRSSortEvent& srt, TFRSCalibrEvent& c
 	  if(bDrawHist) 
 	    hMUSIC3_dExc->Fill(tgt.x1_mean, tgt.de_cor[2]);
 	}
-      }
+	//}
       
 
       /* Special gate on corrected music for cleaning x2 vs. AoQ spectrum */
@@ -833,7 +836,7 @@ void TFRSAnlProc::Procceed_ID_Analysis(TFRSSortEvent& srt, TFRSCalibrEvent& clb,
     
   /*  select by what means S2 positions are to be derived:         */
   /*  ID.X2_select =0: SC21;  =1: S2 MWs                           */
- 
+  tgt.id_x2 = -9999;
   if(id->x2_select == 0) 
     {
       if(tgt.sci_b_x[2])
