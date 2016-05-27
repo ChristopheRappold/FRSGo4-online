@@ -435,7 +435,7 @@ void setup_s411_jun16_75()
   tpc->y_offset[1][3] =  37.13; 
 
   // index 2 for Sc21  
-  sci->x_a[0][2] =  -2065.2;  //  SC21 calibration ch->mm 27.05.2016
+  sci->x_a[0][2] =  -2065.2-27;  //  SC21 calibration ch->mm 27.05.2016
   sci->x_a[1][2] =  0.73; //  27.05.2016 
   sci->x_a[2][2] =  0.000000;  // 
   sci->x_a[3][2] =  0.000000;  //                            
@@ -537,35 +537,35 @@ void setup_s411_jun16_75()
   id->ID_Z_AoverQ_num[3]=5; 
   id->ID_Z_AoverQ_num[4]=5; 
 
-  id->ID_Z_AoverQ[0][0][0]=2.18417; id->ID_Z_AoverQ[0][0][1]=75.5083;
-  id->ID_Z_AoverQ[0][1][0]=2.29006; id->ID_Z_AoverQ[0][1][1]=68.1225;
-  id->ID_Z_AoverQ[0][2][0]=2.2809;  id->ID_Z_AoverQ[0][2][1]=64.2503;
-  id->ID_Z_AoverQ[0][3][0]=2.17535; id->ID_Z_AoverQ[0][3][1]=71.2776;
-  id->ID_Z_AoverQ[0][4][0]=2.18417; id->ID_Z_AoverQ[0][4][1]=75.5083;
+  id->ID_Z_AoverQ[0][0][0]=2.208      ; id->ID_Z_AoverQ[0][0][1]=80;
+  id->ID_Z_AoverQ[0][1][0]=2.208      ; id->ID_Z_AoverQ[0][1][1]=60;
+  id->ID_Z_AoverQ[0][2][0]=2.220      ; id->ID_Z_AoverQ[0][2][1]=60;
+  id->ID_Z_AoverQ[0][3][0]=2.220      ; id->ID_Z_AoverQ[0][3][1]=80;
+  id->ID_Z_AoverQ[0][4][0]=2.208      ; id->ID_Z_AoverQ[0][4][1]=80;
 
-  id->ID_Z_AoverQ[1][0][0]=2.19741; id->ID_Z_AoverQ[1][0][1]=80.5277; 
-  id->ID_Z_AoverQ[1][1][0]=2.32977; id->ID_Z_AoverQ[1][1][1]=71.0624; 
-  id->ID_Z_AoverQ[1][2][0]=2.32264; id->ID_Z_AoverQ[1][2][1]=67.1903; 
-  id->ID_Z_AoverQ[1][3][0]=2.17467; id->ID_Z_AoverQ[1][3][1]=76.6556; 
-  id->ID_Z_AoverQ[1][4][0]=2.19741; id->ID_Z_AoverQ[1][4][1]=80.5277; 
+  id->ID_Z_AoverQ[1][0][0]=2.208+0.012; id->ID_Z_AoverQ[1][0][1]=80; 
+  id->ID_Z_AoverQ[1][1][0]=2.208+0.012; id->ID_Z_AoverQ[1][1][1]=60; 
+  id->ID_Z_AoverQ[1][2][0]=2.220+0.012; id->ID_Z_AoverQ[1][2][1]=60; 
+  id->ID_Z_AoverQ[1][3][0]=2.220+0.012; id->ID_Z_AoverQ[1][3][1]=80; 
+  id->ID_Z_AoverQ[1][4][0]=2.208+0.012; id->ID_Z_AoverQ[1][4][1]=80; 
 
-  id->ID_Z_AoverQ[2][0][0]=2.24526; id->ID_Z_AoverQ[2][0][1]=82.0336; 
-  id->ID_Z_AoverQ[2][1][0]=2.33282; id->ID_Z_AoverQ[2][1][1]=75.58  ; 
-  id->ID_Z_AoverQ[2][2][0]=2.32332; id->ID_Z_AoverQ[2][2][1]=72.138 ; 
-  id->ID_Z_AoverQ[2][3][0]=2.22252; id->ID_Z_AoverQ[2][3][1]=79.0936; 
-  id->ID_Z_AoverQ[2][4][0]=2.24526; id->ID_Z_AoverQ[2][4][1]=82.0336; 
+  id->ID_Z_AoverQ[2][0][0]=2.208+0.024; id->ID_Z_AoverQ[2][0][1]=80; 
+  id->ID_Z_AoverQ[2][1][0]=2.208+0.024; id->ID_Z_AoverQ[2][1][1]=60; 
+  id->ID_Z_AoverQ[2][2][0]=2.220+0.024; id->ID_Z_AoverQ[2][2][1]=60; 
+  id->ID_Z_AoverQ[2][3][0]=2.220+0.024; id->ID_Z_AoverQ[2][3][1]=80; 
+  id->ID_Z_AoverQ[2][4][0]=2.208+0.024; id->ID_Z_AoverQ[2][4][1]=80; 
 
-  id->ID_Z_AoverQ[3][0][0]=2.26732; id->ID_Z_AoverQ[3][0][1]=84.9736; 
-  id->ID_Z_AoverQ[3][1][0]=2.35488; id->ID_Z_AoverQ[3][1][1]=78.52  ; 
-  id->ID_Z_AoverQ[3][2][0]=2.34538; id->ID_Z_AoverQ[3][2][1]=75.078 ; 
-  id->ID_Z_AoverQ[3][3][0]=2.24458; id->ID_Z_AoverQ[3][3][1]=82.0336; 
-  id->ID_Z_AoverQ[3][4][0]=2.26732; id->ID_Z_AoverQ[3][4][1]=84.9736; 
+  id->ID_Z_AoverQ[3][0][0]=2.208+0.036; id->ID_Z_AoverQ[3][0][1]=80; 
+  id->ID_Z_AoverQ[3][1][0]=2.208+0.036; id->ID_Z_AoverQ[3][1][1]=60; 
+  id->ID_Z_AoverQ[3][2][0]=2.220+0.036; id->ID_Z_AoverQ[3][2][1]=60; 
+  id->ID_Z_AoverQ[3][3][0]=2.220+0.036; id->ID_Z_AoverQ[3][3][1]=80; 
+  id->ID_Z_AoverQ[3][4][0]=2.208+0.036; id->ID_Z_AoverQ[3][4][1]=80; 
 
-  id->ID_Z_AoverQ[4][0][0]=2.26732; id->ID_Z_AoverQ[4][0][1]=84.9736; 
-  id->ID_Z_AoverQ[4][1][0]=2.35488; id->ID_Z_AoverQ[4][1][1]=78.52  ; 
-  id->ID_Z_AoverQ[4][2][0]=2.34538; id->ID_Z_AoverQ[4][2][1]=75.078 ; 
-  id->ID_Z_AoverQ[4][3][0]=2.24458; id->ID_Z_AoverQ[4][3][1]=82.0336; 
-  id->ID_Z_AoverQ[4][4][0]=2.26732; id->ID_Z_AoverQ[4][4][1]=84.9736; 
+  id->ID_Z_AoverQ[4][0][0]=2.208+0.048; id->ID_Z_AoverQ[4][0][1]=80; 
+  id->ID_Z_AoverQ[4][1][0]=2.208+0.048; id->ID_Z_AoverQ[4][1][1]=60; 
+  id->ID_Z_AoverQ[4][2][0]=2.220+0.048; id->ID_Z_AoverQ[4][2][1]=60; 
+  id->ID_Z_AoverQ[4][3][0]=2.220+0.048; id->ID_Z_AoverQ[4][3][1]=80; 
+  id->ID_Z_AoverQ[4][4][0]=2.208+0.048; id->ID_Z_AoverQ[4][4][1]=80; 
 
 
   id->ID_x2AoverQ_num[0]=5; 
@@ -574,35 +574,35 @@ void setup_s411_jun16_75()
   id->ID_x2AoverQ_num[3]=5; 
   id->ID_x2AoverQ_num[4]=5; 
 
-  id->ID_x2AoverQ[0][0][0]=2.18417; id->ID_x2AoverQ[0][0][1]=75.5083;
-  id->ID_x2AoverQ[0][1][0]=2.29006; id->ID_x2AoverQ[0][1][1]=68.1225;
-  id->ID_x2AoverQ[0][2][0]=2.2809;  id->ID_x2AoverQ[0][2][1]=64.2503;
-  id->ID_x2AoverQ[0][3][0]=2.17535; id->ID_x2AoverQ[0][3][1]=71.2776;
-  id->ID_x2AoverQ[0][4][0]=2.18417; id->ID_x2AoverQ[0][4][1]=75.5083;
-
-  id->ID_x2AoverQ[1][0][0]=2.19741; id->ID_x2AoverQ[1][0][1]=80.5277; 
-  id->ID_x2AoverQ[1][1][0]=2.32977; id->ID_x2AoverQ[1][1][1]=71.0624; 
-  id->ID_x2AoverQ[1][2][0]=2.32264; id->ID_x2AoverQ[1][2][1]=67.1903; 
-  id->ID_x2AoverQ[1][3][0]=2.17467; id->ID_x2AoverQ[1][3][1]=76.6556; 
-  id->ID_x2AoverQ[1][4][0]=2.19741; id->ID_x2AoverQ[1][4][1]=80.5277; 
-
-  id->ID_x2AoverQ[2][0][0]=2.24526; id->ID_x2AoverQ[2][0][1]=82.0336; 
-  id->ID_x2AoverQ[2][1][0]=2.33282; id->ID_x2AoverQ[2][1][1]=75.58  ; 
-  id->ID_x2AoverQ[2][2][0]=2.32332; id->ID_x2AoverQ[2][2][1]=72.138 ; 
-  id->ID_x2AoverQ[2][3][0]=2.22252; id->ID_x2AoverQ[2][3][1]=79.0936; 
-  id->ID_x2AoverQ[2][4][0]=2.24526; id->ID_x2AoverQ[2][4][1]=82.0336; 
-
-  id->ID_x2AoverQ[3][0][0]=2.26732; id->ID_x2AoverQ[3][0][1]=84.9736; 
-  id->ID_x2AoverQ[3][1][0]=2.35488; id->ID_x2AoverQ[3][1][1]=78.52  ; 
-  id->ID_x2AoverQ[3][2][0]=2.34538; id->ID_x2AoverQ[3][2][1]=75.078 ; 
-  id->ID_x2AoverQ[3][3][0]=2.24458; id->ID_x2AoverQ[3][3][1]=82.0336; 
-  id->ID_x2AoverQ[3][4][0]=2.26732; id->ID_x2AoverQ[3][4][1]=84.9736; 
-
-  id->ID_x2AoverQ[4][0][0]=2.26732; id->ID_x2AoverQ[4][0][1]=84.9736; 
-  id->ID_x2AoverQ[4][1][0]=2.35488; id->ID_x2AoverQ[4][1][1]=78.52  ; 
-  id->ID_x2AoverQ[4][2][0]=2.34538; id->ID_x2AoverQ[4][2][1]=75.078 ; 
-  id->ID_x2AoverQ[4][3][0]=2.24458; id->ID_x2AoverQ[4][3][1]=82.0336; 
-  id->ID_x2AoverQ[4][4][0]=2.26732; id->ID_x2AoverQ[4][4][1]=84.9736; 
+  id->ID_x2AoverQ[0][0][0]=2.208      ; id->ID_x2AoverQ[0][0][1]=-100;
+  id->ID_x2AoverQ[0][1][0]=2.208      ; id->ID_x2AoverQ[0][1][1]=100;
+  id->ID_x2AoverQ[0][2][0]=2.220      ; id->ID_x2AoverQ[0][2][1]=100;
+  id->ID_x2AoverQ[0][3][0]=2.220      ; id->ID_x2AoverQ[0][3][1]=-100;
+  id->ID_x2AoverQ[0][4][0]=2.208      ; id->ID_x2AoverQ[0][4][1]=-100;
+                                      
+  id->ID_x2AoverQ[1][0][0]=2.208+0.012; id->ID_x2AoverQ[1][0][1]=-100; 
+  id->ID_x2AoverQ[1][1][0]=2.208+0.012; id->ID_x2AoverQ[1][1][1]=100; 
+  id->ID_x2AoverQ[1][2][0]=2.220+0.012; id->ID_x2AoverQ[1][2][1]=100; 
+  id->ID_x2AoverQ[1][3][0]=2.220+0.012; id->ID_x2AoverQ[1][3][1]=-100; 
+  id->ID_x2AoverQ[1][4][0]=2.208+0.012; id->ID_x2AoverQ[1][4][1]=-100; 
+                                      
+  id->ID_x2AoverQ[2][0][0]=2.208+0.024; id->ID_x2AoverQ[2][0][1]=-100; 
+  id->ID_x2AoverQ[2][1][0]=2.208+0.024; id->ID_x2AoverQ[2][1][1]=100; 
+  id->ID_x2AoverQ[2][2][0]=2.220+0.024; id->ID_x2AoverQ[2][2][1]=100; 
+  id->ID_x2AoverQ[2][3][0]=2.220+0.024; id->ID_x2AoverQ[2][3][1]=-100; 
+  id->ID_x2AoverQ[2][4][0]=2.208+0.024; id->ID_x2AoverQ[2][4][1]=-100; 
+                                      
+  id->ID_x2AoverQ[3][0][0]=2.208+0.036; id->ID_x2AoverQ[3][0][1]=-100; 
+  id->ID_x2AoverQ[3][1][0]=2.208+0.036; id->ID_x2AoverQ[3][1][1]=100; 
+  id->ID_x2AoverQ[3][2][0]=2.220+0.036; id->ID_x2AoverQ[3][2][1]=100; 
+  id->ID_x2AoverQ[3][3][0]=2.220+0.036; id->ID_x2AoverQ[3][3][1]=-100; 
+  id->ID_x2AoverQ[3][4][0]=2.208+0.036; id->ID_x2AoverQ[3][4][1]=-100; 
+                                      
+  id->ID_x2AoverQ[4][0][0]=2.208+0.048; id->ID_x2AoverQ[4][0][1]=-100; 
+  id->ID_x2AoverQ[4][1][0]=2.208+0.048; id->ID_x2AoverQ[4][1][1]=100; 
+  id->ID_x2AoverQ[4][2][0]=2.220+0.048; id->ID_x2AoverQ[4][2][1]=100; 
+  id->ID_x2AoverQ[4][3][0]=2.220+0.048; id->ID_x2AoverQ[4][3][1]=-100; 
+  id->ID_x2AoverQ[4][4][0]=2.208+0.048; id->ID_x2AoverQ[4][4][1]=-100; 
 
 
   
