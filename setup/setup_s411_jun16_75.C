@@ -64,7 +64,7 @@ void setup_s411_jun16_75()
    
 
   // setup part 
-  an->SetupH2("ID_x4AoQ", 500, 2.0, 2.8, 200, -100, +100, "A/Q", "X2 [mm]");     
+  an->SetupH2("ID_x4AoQ", 500, 2.0, 2.8, 200, -100, +100, "A/Q", "X4 [mm]");     
   an->SetupH2("ID_Z_AoQ", 600, 2.0, 2.8,600 , 30, 95, "A/Q", "Z"); 
   an->SetupH2("ID_Z_AoQ_corr", 500, 2.0, 2.75, 600, 50, 98, "A/Q (a2 corr)", "Z"); 
   an->SetupH2("ID_x4z", 450, 50, 60.0, 500, -100, 100, "Z", "X4 [mm]"); 
@@ -607,53 +607,44 @@ void setup_s411_jun16_75()
 //   id->ID_x2AoverQ[4][4][0]=2.208+0.048; id->ID_x2AoverQ[4][4][1]=-100; 
 // =======
 
- id->ID_x2AoverQ[0][0][0]=2.23366; id->ID_x2AoverQ[0][0][1]=49.8412;
- //id->ID_x2AoverQ[0][1][0]=2.21457; id->ID_x2AoverQ[0][1][1]=13.1916;
- id->ID_x2AoverQ[0][1][0]=2.1869; id->ID_x2AoverQ[0][1][1]=-40;
- //id->ID_x2AoverQ[0][2][0]=2.22832; id->ID_x2AoverQ[0][2][1]=12.8176;
- id->ID_x2AoverQ[0][2][0]=2.1869+0.013; id->ID_x2AoverQ[0][2][1]=-40;
- id->ID_x2AoverQ[0][3][0]=2.2455; id->ID_x2AoverQ[0][3][1]=49.8412;
- id->ID_x2AoverQ[0][4][0]=2.23366;id->ID_x2AoverQ[0][4][1]=49.8412;
+
+ id->ID_x2AoverQ[0][0][0]=2.24433; id->ID_x2AoverQ[0][0][1]=42.5864;
+ id->ID_x2AoverQ[0][1][0]=2.17429; id->ID_x2AoverQ[0][1][1]=-68.2431;
+ id->ID_x2AoverQ[0][2][0]=2.18351; id->ID_x2AoverQ[0][2][1]=-70.9073;
+ id->ID_x2AoverQ[0][3][0]=2.2573; id->ID_x2AoverQ[0][3][1]=40.9879;
+ id->ID_x2AoverQ[0][4][0]=2.24433;id->ID_x2AoverQ[0][4][1]=42.5864;
  
-  id->ID_x2AoverQ[1][0][0]=2.25008; id->ID_x2AoverQ[1][0][1]=49.8412; 
-  //id->ID_x2AoverQ[1][1][0]=2.23099; id->ID_x2AoverQ[1][1][1]=13.1916; 
-  id->ID_x2AoverQ[1][1][0]=2.2033; id->ID_x2AoverQ[1][1][1]=-40.; 
-  //id->ID_x2AoverQ[1][2][0]=2.24473; id->ID_x2AoverQ[1][2][1]=12.8176; 
-  id->ID_x2AoverQ[1][2][0]=2.2033+0.013; id->ID_x2AoverQ[1][2][1]=-40.; 
-  id->ID_x2AoverQ[1][3][0]=2.26192; id->ID_x2AoverQ[1][3][1]=49.8412; 
-  id->ID_x2AoverQ[1][4][0]=2.25008; id->ID_x2AoverQ[1][4][1]=49.8412; 
+  id->ID_x2AoverQ[1][0][0]=2.27782; id->ID_x2AoverQ[1][0][1]=58.1797; 
+  id->ID_x2AoverQ[1][1][0]=2.18477; id->ID_x2AoverQ[1][1][1]=-66.2442; 
+  id->ID_x2AoverQ[1][2][0]=2.19417; id->ID_x2AoverQ[1][2][1]=-69.7005; 
+  id->ID_x2AoverQ[1][3][0]=2.29192; id->ID_x2AoverQ[1][3][1]=57.0277; 
+  id->ID_x2AoverQ[1][4][0]=2.27782; id->ID_x2AoverQ[1][4][1]=58.1797; 
 
-  id->ID_x2AoverQ[2][0][0]=2.26726; id->ID_x2AoverQ[2][0][1]=49.8412; 
-  // id->ID_x2AoverQ[2][1][0]=2.24817; id->ID_x2AoverQ[2][1][1]=13.1916; 
-  id->ID_x2AoverQ[2][1][0]=2.2482; id->ID_x2AoverQ[2][1][1]=-40; 
-  // id->ID_x2AoverQ[2][2][0]=2.26192; id->ID_x2AoverQ[2][2][1]=12.8176; 
-  id->ID_x2AoverQ[2][2][0]=2.2482+0.013; id->ID_x2AoverQ[2][2][1]=-40; 
-  id->ID_x2AoverQ[2][3][0]=2.27910; id->ID_x2AoverQ[2][3][1]=49.8412; 
-  id->ID_x2AoverQ[2][4][0]=2.26726; id->ID_x2AoverQ[2][4][1]=49.8412; 
+  id->ID_x2AoverQ[2][0][0]=2.28597; id->ID_x2AoverQ[2][0][1]=40.8986; 
+  id->ID_x2AoverQ[2][1][0]=2.19548; id->ID_x2AoverQ[2][1][1]=-69.1244; 
+  id->ID_x2AoverQ[2][2][0]=2.21129; id->ID_x2AoverQ[2][2][1]=-69.1244; 
+  id->ID_x2AoverQ[2][3][0]=2.30014; id->ID_x2AoverQ[2][3][1]=40.3226; 
+  id->ID_x2AoverQ[2][4][0]=2.28597; id->ID_x2AoverQ[2][4][1]=40.8986; 
 
-  id->ID_x2AoverQ[3][0][0]=2.28349; id->ID_x2AoverQ[3][0][1]=48.5323; 
-  // id->ID_x2AoverQ[3][1][0]=2.2644 ; id->ID_x2AoverQ[3][1][1]=11.8827; 
-  id->ID_x2AoverQ[3][1][0]=2.2383; id->ID_x2AoverQ[3][1][1]=-40; 
-  // id->ID_x2AoverQ[3][2][0]=2.27814; id->ID_x2AoverQ[3][2][1]=11.5087; 
-  id->ID_x2AoverQ[3][2][0]=2.2383+0.013; id->ID_x2AoverQ[3][2][1]=-40; 
-  id->ID_x2AoverQ[3][3][0]=2.29532; id->ID_x2AoverQ[3][3][1]=48.5323; 
-  id->ID_x2AoverQ[3][4][0]=2.28349; id->ID_x2AoverQ[3][4][1]=48.5323; 
+  id->ID_x2AoverQ[3][0][0]=2.30468; id->ID_x2AoverQ[3][0][1]=41.0484; 
+  id->ID_x2AoverQ[3][1][0]=2.20712; id->ID_x2AoverQ[3][1][1]=-73.4407; 
+  id->ID_x2AoverQ[3][2][0]=2.22237; id->ID_x2AoverQ[3][2][1]=-73.1567; 
+  id->ID_x2AoverQ[3][3][0]=2.32009; id->ID_x2AoverQ[3][3][1]=41.0484; 
+  id->ID_x2AoverQ[3][4][0]=2.30468; id->ID_x2AoverQ[3][4][1]=41.0484; 
   
-  id->ID_x2AoverQ[4][0][0]=2.27007; /*2.29952*/; id->ID_x2AoverQ[4][0][1]=48.1387; 
-  //id->ID_x2AoverQ[4][1][0]=2.28043; id->ID_x2AoverQ[4][1][1]=11.5087; 
-  id->ID_x2AoverQ[4][1][0]=2.24292; id->ID_x2AoverQ[4][1][1]=-38.18; 
-  //id->ID_x2AoverQ[4][2][0]=2.29418; id->ID_x2AoverQ[4][2][1]=11.1347; 
-  id->ID_x2AoverQ[4][2][0]=2.25625; id->ID_x2AoverQ[4][2][1]=-40.8819; 
-  id->ID_x2AoverQ[4][3][0]=2.28123; id->ID_x2AoverQ[4][3][1]=44.7668; 
-  id->ID_x2AoverQ[4][4][0]=2.28123; id->ID_x2AoverQ[4][4][1]=44.7668; 
+  id->ID_x2AoverQ[4][0][0]=2.32064; id->ID_x2AoverQ[4][0][1]=39.6964; 
+  id->ID_x2AoverQ[4][1][0]=2.22332; id->ID_x2AoverQ[4][1][1]=-73.875; 
+  id->ID_x2AoverQ[4][2][0]=2.23886; id->ID_x2AoverQ[4][2][1]=-73.517; 
+  id->ID_x2AoverQ[4][3][0]=2.33663; id->ID_x2AoverQ[4][3][1]=39.6964; 
+  id->ID_x2AoverQ[4][4][0]=2.32064; id->ID_x2AoverQ[4][4][1]=39.6964; 
   
   id->ID_x2AoverQ[5][0][0]=2.26732; id->ID_x2AoverQ[5][0][1]=84.9736; 
   id->ID_x2AoverQ[5][1][0]=2.35488; id->ID_x2AoverQ[5][1][1]=78.52  ; 
   id->ID_x2AoverQ[5][2][0]=2.34538; id->ID_x2AoverQ[5][2][1]=75.078 ; 
   id->ID_x2AoverQ[5][3][0]=2.24458; id->ID_x2AoverQ[5][3][1]=82.0336; 
   id->ID_x2AoverQ[5][4][0]=2.26732; id->ID_x2AoverQ[5][4][1]=84.9736; 
-  //>>>>>>> Stashed changes
 
+  
 
   
   // B-rho values : change according to the FRS settings
