@@ -643,57 +643,89 @@ void TFRSCalibrProc::Create_MON_Hist()
   Long64_t nmax_V830 = 0x100000000;
 
   //----initialize values defined in this file---
-  if(1==check_first_event){
-    scaler_time_count  =0; //UInt_t
-    scaler_spill_count =0; //UInt_t
-    scaler_time_check_last = 0;//UInt_t
-    scaler_spill_check_last= 0;//UInt_t
-    for(size_t i=0; i<64; i++)
-      {
-	check_increase_time[i]   =0;//UInt_t
-	check_increase_spill[i]  =0;//UInt_t
-	scaler_increase_event[i] =0;//UInt_t
-	scaler_last_event[i] = static_cast<Long64_t>(src.sc_long[i]);//UInt_t
-      }
-  }
+  if(1==check_first_event)
+    {
+      scaler_time_count  =0; //UInt_t
+      scaler_spill_count =0; //UInt_t
+      scaler_time_check_last = 0;//UInt_t
+      scaler_spill_check_last= 0;//UInt_t
+      for(size_t i=0; i<32; i++)
+	{
+	  check_increase_time[i]   =0;//UInt_t
+	  check_increase_spill[i]  =0;//UInt_t
+	  scaler_increase_event[i] =0;//UInt_t
+	  scaler_last_event[i] = static_cast<Long64_t>(src.sc_long[i]);//UInt_t
+	}
+      for(size_t i=32;i<64;++i)
+	{
+	  check_increase_time[i]   =0;//UInt_t
+	  check_increase_spill[i]  =0;//UInt_t
+	  scaler_increase_event[i] =0;//UInt_t
+	  scaler_last_event[i] = static_cast<Long64_t>(src.sc_long2[i-32]);//UInt_t
+	}
+      
+    }
 
   //------------ scaler_increase_event[i] and scaler_last_event[i] -----------
   //////
   // sometimes V830 data from sort is empty (all 0)
   // in such case, we skip updating { scaler_increase_event[i] and scaler_last_event[i] }
-  if(0!=src.sc_long[scaler_channel_time]){
-    if(0==check_first_event){
-      for(size_t i=0; i<64; i++){
-	if(static_cast<Long64_t>(src.sc_long[i]) >= scaler_last_event[i]){
-	  scaler_increase_event[i] = src.sc_long[i] - scaler_last_event[i];
-	}else{
-	  //printf("src.sc_long[i], scaler_last_event[i]:%d %d\n", src.sc_long[i] , scaler_last_event[i]);
-	  scaler_increase_event[i] =  src.sc_long[i] - scaler_last_event[i] + nmax_V830;
+  if(0!=src.sc_long[scaler_channel_time])
+    {
+      if(0==check_first_event)
+	{
+	  for(size_t i=0; i<32; i++)
+	    {
+	      if(static_cast<Long64_t>(src.sc_long[i]) >= scaler_last_event[i])
+		{
+		  scaler_increase_event[i] = src.sc_long[i] - scaler_last_event[i];
+		}
+	      else
+		{
+		  //printf("src.sc_long[i], scaler_last_event[i]:%d %d\n", src.sc_long[i] , scaler_last_event[i]);
+		  scaler_increase_event[i] =  src.sc_long[i]  + nmax_V830 - scaler_last_event[i];
+		}
+	      scaler_last_event[i]     = src.sc_long[i];
+	    }
+	  for(size_t i=32; i<64; i++)
+	    {
+	      if(static_cast<Long64_t>(src.sc_long2[i-32]) >= scaler_last_event[i])
+		{
+		  scaler_increase_event[i] = src.sc_long2[i-32] - scaler_last_event[i];
+		}
+	      else
+		{
+		  //printf("src.sc_long[i], scaler_last_event[i]:%d %d\n", src.sc_long[i] , scaler_last_event[i]);
+		  scaler_increase_event[i] =  src.sc_long2[i-32]  + nmax_V830 - scaler_last_event[i];
+		}
+	      scaler_last_event[i]     = src.sc_long2[i-32];
+	    }	  
 	}
-	scaler_last_event[i]     = src.sc_long[i];
-      }
     }
-  }
-
+  
   //-----switch off initial event check---
-  if(1==check_first_event){ 
-    check_first_event = 0;
-  }
+  if(1==check_first_event)
+    { 
+      check_first_event = 0;
+    }
 
 
   // add {increase from last event} to the counters.
-  if(0!=src.sc_long[scaler_channel_time]){
-    for(int i=0; i<64; i++){
-      check_increase_spill[i] += scaler_increase_event[i];  
-      check_increase_time[i]  += scaler_increase_event[i];
+  if(0!=src.sc_long[scaler_channel_time])
+    {
+      for(int i=0; i<64; i++)
+	{
+	  check_increase_spill[i] += scaler_increase_event[i];  
+	  check_increase_time[i]  += scaler_increase_event[i];
+	}
     }
-  }
  
   // integrated count from the beginning
-  if(0!=src.sc_long[scaler_channel_time]){
-    scaler_time_count  += scaler_increase_event[scaler_channel_time]; //
-    scaler_spill_count += scaler_increase_event[scaler_channel_spill];//
-  }
+  if(0!=src.sc_long[scaler_channel_time])
+    {
+      scaler_time_count  += scaler_increase_event[scaler_channel_time]; //
+      scaler_spill_count += scaler_increase_event[scaler_channel_spill];//
+    }
   
   int scaler_time_check  = scaler_time_count/((int)normalization_factor_time);
   int scaler_spill_check = scaler_spill_count;
@@ -702,73 +734,95 @@ void TFRSCalibrProc::Create_MON_Hist()
  
 
   // when scaler_time_check is increased
-  if( 0<(scaler_time_check - scaler_time_check_last) ){
-    //   printf("scaler_time_check = %d, scaler_time_check_last = %d \n",scaler_time_check,scaler_time_check_last);
-    if(10<(scaler_time_check - scaler_time_check_last))
-      {
-	//printf("scaler_time_check - scaler_time_check_last = %d ...\n",);
-	std::cout<<"scaler_time_check - scaler_time_check_last = "<<(scaler_time_check - scaler_time_check_last)<<"...\n";
-      } 
-    for(int i=0; i<64; i++){
-      int x_bin = (scaler_time_check % 3000);
-      int x_bin_short = (scaler_time_check % 300);
-      int y_set;
-      if(check_increase_time[i]>0){ y_set =  (int)(normalization_factor_time*((Float_t)( check_increase_time[i] ))/((Float_t)( check_increase_time[scaler_channel_time] ))); 
-      }else{ y_set = 0; }
-      hSCALER_TIME[i]  -> SetBinContent(x_bin,y_set);
-      hSCALER_TIME[i]  -> SetBinContent((x_bin+100)%3000,0);
-      hSCALER_TIME[i]  -> SetBinContent((x_bin+101)%3000,0);
-      hSCALER_TIME[i]  -> SetBinContent((x_bin+102)%3000,0);
-      hSCALER_TIME[i]  -> SetBinContent((x_bin+103)%3000,0);
-      hSCALER_TIME[i]  -> SetBinContent((x_bin+104)%3000,0);
-      hSCALER_TIME[i]  -> SetBinContent((x_bin+105)%3000,0);
-      hSCALER_TIME_SHORT[i]  -> SetBinContent(x_bin_short,y_set);
-      hSCALER_TIME_SHORT[i]  -> SetBinContent((x_bin_short+21)%300,0);
-      hSCALER_TIME_SHORT[i]  -> SetBinContent((x_bin_short+22)%300,0);
-      hSCALER_TIME_SHORT[i]  -> SetBinContent((x_bin_short+23)%300,0);
-      hSCALER_TIME_SHORT[i]  -> SetBinContent((x_bin_short+24)%300,0);
-      hSCALER_TIME_SHORT[i]  -> SetBinContent((x_bin_short+25)%300,0);
+  if( 0<(scaler_time_check - scaler_time_check_last) )
+    {
+      //   printf("scaler_time_check = %d, scaler_time_check_last = %d \n",scaler_time_check,scaler_time_check_last);
+      if(10<(scaler_time_check - scaler_time_check_last))
+	{
+	  //printf("scaler_time_check - scaler_time_check_last = %d ...\n",);
+	  std::cout<<"scaler_time_check - scaler_time_check_last = "<<(scaler_time_check - scaler_time_check_last)<<"...\n";
+	} 
+      for(int i=0; i<64; i++)
+	{
+	  int x_bin = (scaler_time_check % 3000);
+	  int x_bin_short = (scaler_time_check % 300);
+	  int y_set;
+	  if(check_increase_time[i]>0)
+	    {
+	      y_set =  (int)(normalization_factor_time*((Float_t)( check_increase_time[i] ))/((Float_t)( check_increase_time[scaler_channel_time] ))); 
+	    }
+	  else
+	    {
+	      y_set = 0;
+	    }
+	  hSCALER_TIME[i]  -> SetBinContent(x_bin,y_set);
+	  hSCALER_TIME[i]  -> SetBinContent((x_bin+100)%3000,0);
+	  hSCALER_TIME[i]  -> SetBinContent((x_bin+101)%3000,0);
+	  hSCALER_TIME[i]  -> SetBinContent((x_bin+102)%3000,0);
+	  hSCALER_TIME[i]  -> SetBinContent((x_bin+103)%3000,0);
+	  hSCALER_TIME[i]  -> SetBinContent((x_bin+104)%3000,0);
+	  hSCALER_TIME[i]  -> SetBinContent((x_bin+105)%3000,0);
+	  hSCALER_TIME_SHORT[i]  -> SetBinContent(x_bin_short,y_set);
+	  hSCALER_TIME_SHORT[i]  -> SetBinContent((x_bin_short+21)%300,0);
+	  hSCALER_TIME_SHORT[i]  -> SetBinContent((x_bin_short+22)%300,0);
+	  hSCALER_TIME_SHORT[i]  -> SetBinContent((x_bin_short+23)%300,0);
+	  hSCALER_TIME_SHORT[i]  -> SetBinContent((x_bin_short+24)%300,0);
+	  hSCALER_TIME_SHORT[i]  -> SetBinContent((x_bin_short+25)%300,0);
+	}
+      for(int i=0; i<64; i++)
+	{
+	  check_increase_time[i]=0;
+	}//reset
+      scaler_time_check_last = scaler_time_check;  
     }
-    for(int i=0; i<64; i++){ check_increase_time[i]=0; }//reset
-    scaler_time_check_last = scaler_time_check;  
-  }
 
   // when scaler_time_check is increased
-  if( 0<(scaler_spill_check - scaler_spill_check_last) ){
-    if(10<(scaler_spill_check - scaler_spill_check_last))
-      {
-	//printf("scaler_spill_check - scaler_spill_check_last = %d ...\n",(scaler_spill_check - scaler_spill_check_last));
-	std::cout<<"scaler_spill_check - scaler_spill_check_last = "<<(scaler_spill_check - scaler_spill_check_last)<<"...\n";
-      }
-    for(int i=0; i<64; i++){
-      int x_bin = (scaler_spill_check % 300);
-      int x_bin_short = (scaler_spill_check % 30);
-      int y_set;
-      if(check_increase_spill[i]>0){ y_set =  (int)(normalization_factor_spill*((Float_t)( check_increase_spill[i] ))/((Float_t)( check_increase_spill[scaler_channel_spill] )));
-      }else{ y_set = 0; }
-      hSCALER_SPILL[i]  -> SetBinContent(x_bin,y_set);
-      hSCALER_SPILL[i]  -> SetBinContent((x_bin+10)%300,0);
-      hSCALER_SPILL[i]  -> SetBinContent((x_bin+11)%300,0);
-      hSCALER_SPILL[i]  -> SetBinContent((x_bin+12)%300,0);
-      hSCALER_SPILL[i]  -> SetBinContent((x_bin+13)%300,0);
-      hSCALER_SPILL[i]  -> SetBinContent((x_bin+14)%300,0);
-      hSCALER_SPILL[i]  -> SetBinContent((x_bin+15)%300,0);
-      hSCALER_SPILL_SHORT[i]  -> SetBinContent(x_bin_short,y_set);
-      hSCALER_SPILL_SHORT[i]  -> SetBinContent((x_bin_short+1)%30,0);
-      hSCALER_SPILL_SHORT[i]  -> SetBinContent((x_bin_short+2)%30,0);
-      hSCALER_SPILL_SHORT[i]  -> SetBinContent((x_bin_short+3)%30,0);
-      hSCALER_SPILL_SHORT[i]  -> SetBinContent((x_bin_short+4)%30,0);
-    }
-    //
-    check_total_sc21 += check_increase_spill[7];
-    check_total_sc41 += check_increase_spill[8];
-    check_total_seetram += check_increase_spill[10];
-    //printf("Total SC41 = %d,  Total SC21 = %d, Total SEETRAM = %d \n",check_total_sc41,check_total_sc21,check_total_seetram);
+  if( 0<(scaler_spill_check - scaler_spill_check_last) )
+    {
+      if(10<(scaler_spill_check - scaler_spill_check_last))
+	{
+	  //printf("scaler_spill_check - scaler_spill_check_last = %d ...\n",(scaler_spill_check - scaler_spill_check_last));
+	  std::cout<<"scaler_spill_check - scaler_spill_check_last = "<<(scaler_spill_check - scaler_spill_check_last)<<"...\n";
+	}
+      for(int i=0; i<64; i++)
+	{
+	  int x_bin = (scaler_spill_check % 300);
+	  int x_bin_short = (scaler_spill_check % 30);
+	  int y_set;
+	  if(check_increase_spill[i]>0)
+	    {
+	      y_set =  (int)(normalization_factor_spill*((Float_t)( check_increase_spill[i] ))/((Float_t)( check_increase_spill[scaler_channel_spill] )));
+	    }
+	  else
+	    {
+	      y_set = 0;
+	    }
+	  hSCALER_SPILL[i]  -> SetBinContent(x_bin,y_set);
+	  hSCALER_SPILL[i]  -> SetBinContent((x_bin+10)%300,0);
+	  hSCALER_SPILL[i]  -> SetBinContent((x_bin+11)%300,0);
+	  hSCALER_SPILL[i]  -> SetBinContent((x_bin+12)%300,0);
+	  hSCALER_SPILL[i]  -> SetBinContent((x_bin+13)%300,0);
+	  hSCALER_SPILL[i]  -> SetBinContent((x_bin+14)%300,0);
+	  hSCALER_SPILL[i]  -> SetBinContent((x_bin+15)%300,0);
+	  hSCALER_SPILL_SHORT[i]  -> SetBinContent(x_bin_short,y_set);
+	  hSCALER_SPILL_SHORT[i]  -> SetBinContent((x_bin_short+1)%30,0);
+	  hSCALER_SPILL_SHORT[i]  -> SetBinContent((x_bin_short+2)%30,0);
+	  hSCALER_SPILL_SHORT[i]  -> SetBinContent((x_bin_short+3)%30,0);
+	  hSCALER_SPILL_SHORT[i]  -> SetBinContent((x_bin_short+4)%30,0);
+	}
+      //
+      check_total_sc21 += check_increase_spill[7];
+      check_total_sc41 += check_increase_spill[8];
+      check_total_seetram += check_increase_spill[10];
+      //printf("Total SC41 = %d,  Total SC21 = %d, Total SEETRAM = %d \n",check_total_sc41,check_total_sc21,check_total_seetram);
 
-    for(int i=0; i<64; i++){ check_increase_spill[i]=0; }//reset                                                                                                                                                       
-    scaler_spill_check_last = scaler_spill_check;
-    //           
-  }
+      for(int i=0; i<64; i++)
+	{
+	  check_increase_spill[i]=0;
+	}//reset                                                                                                                                                       
+      scaler_spill_check_last = scaler_spill_check;
+      //           
+    }
   //----- up to here added by YKT 23.05 --------// 
 
    
