@@ -109,6 +109,8 @@ private:
   TH1I          *hID_ZmaxRange;
   TH1I          *hID_Z2;
   TH1I          *hID_Z3;
+  TH2I          *hID_DeltaBrho_AoQ;
+  TH2I          *hID_DeltaBrho_AoQzoom;
   TH2I          *hID_x2AoQ;
   TH2I          *hID_Z_AoQ;
   TH2I		*hID_Z_AoQ_zsame;
@@ -131,7 +133,7 @@ private:
   TH1I          *hID_target2c[5];
   TH2I          *hID_Z_AoQgate[5];
   TH2I          *hID_x4AoQ_x2AoQgate[6];
-  
+  TH2I          *hID_ZAoQ_x2AoQgate[6];
   TH2I          *hID_x4AoQ;
   TH2I          *hID_x4AoQ_zgate;
   TH2I          *hID_x4z;

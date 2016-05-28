@@ -312,6 +312,9 @@ void TFRSAnlProc::Create_ID_Hist()
   hID_Z3 = MakeH1I("ID","ID_Z3",1000,10,93,"Z3 s2-s4",2,6);
   
   
+  hID_DeltaBrho_AoQ = MakeH2I("ID","ID_DBrho_AoQ",300,2.0,2.8,500,0.,2.5,"A/Q s2-s4", "DeltaBrho ta-s2 s2-s4",2);
+  hID_DeltaBrho_AoQzoom = MakeH2I("ID","ID_DBrho_AoQzoom",300,2.0,2.8,900,0.9,1.2,"A/Q s2-s4", "DeltaBrho ta-s2 s2-s4",2);
+  
   hID_x2AoQ = MakeH2I("ID","ID_x2AoQ", 300,2.0,2.8, 200,-100.,100.,"A/Q s2-s4", "X at S2 [mm]", 2);
   
   hID_Z_AoQ = MakeH2I("ID","ID_Z_AoQ", 300,1.2,2.8, 400,40.,95.,"A/Q s2-s4", "Z s2-s4", 2); 
@@ -424,7 +427,10 @@ void TFRSAnlProc::Create_ID_Hist()
       //cID_Z_AoQ[i] = MakePolyCond("ID", name, num_ID_Z_AoQ[i], init_ID_Z_AoQ[i], hID_Z_AoQ->GetName());
       sprintf(name,"ID_x4AoQ_x2AoQgate%d",i);
       hID_x4AoQ_x2AoQgate[i] = MakeH2I("ID", name, 300,2.,2.8, 200,-100.,100.,"A/Q s2-s4", "gate on Z    X at S4 [mm]", 2);
-      
+
+      sprintf(name,"ID_ZAoQ_x2AoQgate%d",i);
+      hID_ZAoQ_x2AoQgate[i] = MakeH2I("ID", name, 300,2.,2.8, 400,30.,90.,"A/Q s2-s4", " Z music", 2);
+      //hID_Z_AoQ = MakeH2I("ID","ID_Z_AoQ", 300,1.2,2.8, 400,40.,95.,"A/Q s2-s4", "Z s2-s4", 2); 
     }
 
 
@@ -885,6 +891,8 @@ void TFRSAnlProc::Procceed_ID_Analysis(TFRSSortEvent& srt, TFRSCalibrEvent& clb,
 {
 
   tgt.id_trigger=srt.trigger;
+  if(tgt.id_trigger!=1)
+    return;
   /* accumulate raw detof spectrum  */
   if(bDrawHist) 
     hID_dEToF->Fill(tgt.sci_tof2, tgt.de[2]);
@@ -914,7 +922,7 @@ void TFRSAnlProc::Procceed_ID_Analysis(TFRSSortEvent& srt, TFRSCalibrEvent& clb,
 	tgt.id_x2 = clb.tpc_x[2];
       if(!clb.b_tpc_xy[2] && clb.b_tpc_xy[3])
 	tgt.id_x2 = clb.tpc_x[3];
-      if(!clb.b_tpc_xy[2] && !clb.b_tpc_xy[3])
+      if(!clb.b_tpc_xy[2] && !clb.b_tpc_xy[3] && tgt.sci_b_x[2])
 	tgt.id_x2 = tgt.sci_x[2];
      
 
@@ -1021,6 +1029,16 @@ void TFRSAnlProc::Procceed_ID_Analysis(TFRSSortEvent& srt, TFRSCalibrEvent& clb,
 	  tgt.id_b_AoQ = kTRUE;
 	}
     }
+
+  if(tgt.id_b_AoQ)
+    {
+      if(bDrawHist)
+	{
+	  hID_DeltaBrho_AoQ->Fill(tgt.id_AoQ,tgt.id_brho[0]-tgt.id_brho[1]);
+	  hID_DeltaBrho_AoQzoom->Fill(tgt.id_AoQ,tgt.id_brho[0]-tgt.id_brho[1]);
+	}
+    }
+  
   // }
 
   /*------------------------------------------------*/
@@ -1149,6 +1167,9 @@ void TFRSAnlProc::Procceed_ID_Analysis(TFRSSortEvent& srt, TFRSCalibrEvent& clb,
 	      hMUSIC3_x2AoQ_E[3][i]->Fill(srt.music_e3[3]);	      
 
 	      hID_x4AoQ_x2AoQgate[i]->Fill(tgt.id_AoQ, tgt.id_x4);
+	      if (tgt.id_b_z3)
+		hID_ZAoQ_x2AoQgate[i]->Fill(tgt.id_AoQ, tgt.id_z3);
+
 	    }
 	}
 	       

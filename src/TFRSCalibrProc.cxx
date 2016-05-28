@@ -648,12 +648,13 @@ void TFRSCalibrProc::Create_MON_Hist()
     scaler_spill_count =0; //UInt_t
     scaler_time_check_last = 0;//UInt_t
     scaler_spill_check_last= 0;//UInt_t
-    for(int i=0; i<64; i++){
-      check_increase_time[i]   =0;//UInt_t
-      check_increase_spill[i]  =0;//UInt_t
-      scaler_increase_event[i] =0;//UInt_t
-      scaler_last_event[i] = src.sc_long[i];//UInt_t
-    }
+    for(size_t i=0; i<64; i++)
+      {
+	check_increase_time[i]   =0;//UInt_t
+	check_increase_spill[i]  =0;//UInt_t
+	scaler_increase_event[i] =0;//UInt_t
+	scaler_last_event[i] = static_cast<Long64_t>(src.sc_long[i]);//UInt_t
+      }
   }
 
   //------------ scaler_increase_event[i] and scaler_last_event[i] -----------
@@ -662,8 +663,8 @@ void TFRSCalibrProc::Create_MON_Hist()
   // in such case, we skip updating { scaler_increase_event[i] and scaler_last_event[i] }
   if(0!=src.sc_long[scaler_channel_time]){
     if(0==check_first_event){
-      for(int i=0; i<64; i++){
-	if(src.sc_long[i] >= scaler_last_event[i]){
+      for(size_t i=0; i<64; i++){
+	if(static_cast<Long64_t>(src.sc_long[i]) >= scaler_last_event[i]){
 	  scaler_increase_event[i] = src.sc_long[i] - scaler_last_event[i];
 	}else{
 	  //printf("src.sc_long[i], scaler_last_event[i]:%d %d\n", src.sc_long[i] , scaler_last_event[i]);
