@@ -1,4 +1,3 @@
-
 #include "TFRSCalibrProc.h"
 
 #include "TH1.h"
@@ -643,7 +642,7 @@ void TFRSCalibrProc::Create_MON_Hist()
   Long64_t nmax_V830 = 0x100000000;
 
   //----initialize values defined in this file---
-  if(1==check_first_event)
+  if(1==check_first_event  && (0!=src.sc_long[scaler_channel_time])) // if first event has 0 (for all channels) >> use next event as a first event 
     {
       scaler_time_count  =0; //UInt_t
       scaler_spill_count =0; //UInt_t
@@ -704,7 +703,7 @@ void TFRSCalibrProc::Create_MON_Hist()
     }
   
   //-----switch off initial event check---
-  if(1==check_first_event)
+  if(1==check_first_event && (0!=src.sc_long[scaler_channel_time])) // if first event has 0 (for all channels) >> use next event as a first event
     { 
       check_first_event = 0;
     }
@@ -755,19 +754,19 @@ void TFRSCalibrProc::Create_MON_Hist()
 	    {
 	      y_set = 0;
 	    }
-	  hSCALER_TIME[i]  -> SetBinContent(x_bin,y_set);
-	  hSCALER_TIME[i]  -> SetBinContent((x_bin+100)%3000,0);
-	  hSCALER_TIME[i]  -> SetBinContent((x_bin+101)%3000,0);
-	  hSCALER_TIME[i]  -> SetBinContent((x_bin+102)%3000,0);
-	  hSCALER_TIME[i]  -> SetBinContent((x_bin+103)%3000,0);
-	  hSCALER_TIME[i]  -> SetBinContent((x_bin+104)%3000,0);
-	  hSCALER_TIME[i]  -> SetBinContent((x_bin+105)%3000,0);
-	  hSCALER_TIME_SHORT[i]  -> SetBinContent(x_bin_short,y_set);
-	  hSCALER_TIME_SHORT[i]  -> SetBinContent((x_bin_short+21)%300,0);
-	  hSCALER_TIME_SHORT[i]  -> SetBinContent((x_bin_short+22)%300,0);
-	  hSCALER_TIME_SHORT[i]  -> SetBinContent((x_bin_short+23)%300,0);
-	  hSCALER_TIME_SHORT[i]  -> SetBinContent((x_bin_short+24)%300,0);
-	  hSCALER_TIME_SHORT[i]  -> SetBinContent((x_bin_short+25)%300,0);
+	  hSCALER_TIME[i]  -> SetBinContent(1+x_bin,y_set);
+	  hSCALER_TIME[i]  -> SetBinContent(1+(x_bin+100)%3000,0);
+	  hSCALER_TIME[i]  -> SetBinContent(1+(x_bin+101)%3000,0);
+	  hSCALER_TIME[i]  -> SetBinContent(1+(x_bin+102)%3000,0);
+	  hSCALER_TIME[i]  -> SetBinContent(1+(x_bin+103)%3000,0);
+	  hSCALER_TIME[i]  -> SetBinContent(1+(x_bin+104)%3000,0);
+	  hSCALER_TIME[i]  -> SetBinContent(1+(x_bin+105)%3000,0);
+	  hSCALER_TIME_SHORT[i]  -> SetBinContent(1+x_bin_short,y_set);
+	  hSCALER_TIME_SHORT[i]  -> SetBinContent(1+(x_bin_short+21)%300,0);
+	  hSCALER_TIME_SHORT[i]  -> SetBinContent(1+(x_bin_short+22)%300,0);
+	  hSCALER_TIME_SHORT[i]  -> SetBinContent(1+(x_bin_short+23)%300,0);
+	  hSCALER_TIME_SHORT[i]  -> SetBinContent(1+(x_bin_short+24)%300,0);
+	  hSCALER_TIME_SHORT[i]  -> SetBinContent(1+(x_bin_short+25)%300,0);
 	}
       for(int i=0; i<64; i++)
 	{
@@ -797,18 +796,18 @@ void TFRSCalibrProc::Create_MON_Hist()
 	    {
 	      y_set = 0;
 	    }
-	  hSCALER_SPILL[i]  -> SetBinContent(x_bin,y_set);
-	  hSCALER_SPILL[i]  -> SetBinContent((x_bin+10)%300,0);
-	  hSCALER_SPILL[i]  -> SetBinContent((x_bin+11)%300,0);
-	  hSCALER_SPILL[i]  -> SetBinContent((x_bin+12)%300,0);
-	  hSCALER_SPILL[i]  -> SetBinContent((x_bin+13)%300,0);
-	  hSCALER_SPILL[i]  -> SetBinContent((x_bin+14)%300,0);
-	  hSCALER_SPILL[i]  -> SetBinContent((x_bin+15)%300,0);
-	  hSCALER_SPILL_SHORT[i]  -> SetBinContent(x_bin_short,y_set);
-	  hSCALER_SPILL_SHORT[i]  -> SetBinContent((x_bin_short+1)%30,0);
-	  hSCALER_SPILL_SHORT[i]  -> SetBinContent((x_bin_short+2)%30,0);
-	  hSCALER_SPILL_SHORT[i]  -> SetBinContent((x_bin_short+3)%30,0);
-	  hSCALER_SPILL_SHORT[i]  -> SetBinContent((x_bin_short+4)%30,0);
+	  hSCALER_SPILL[i]  -> SetBinContent(1+x_bin,y_set);
+	  hSCALER_SPILL[i]  -> SetBinContent(1+(x_bin+10)%300,0);
+	  hSCALER_SPILL[i]  -> SetBinContent(1+(x_bin+11)%300,0);
+	  hSCALER_SPILL[i]  -> SetBinContent(1+(x_bin+12)%300,0);
+	  hSCALER_SPILL[i]  -> SetBinContent(1+(x_bin+13)%300,0);
+	  hSCALER_SPILL[i]  -> SetBinContent(1+(x_bin+14)%300,0);
+	  hSCALER_SPILL[i]  -> SetBinContent(1+(x_bin+15)%300,0);
+	  hSCALER_SPILL_SHORT[i]  -> SetBinContent(1+x_bin_short,y_set);
+	  hSCALER_SPILL_SHORT[i]  -> SetBinContent(1+(x_bin_short+1)%30,0);
+	  hSCALER_SPILL_SHORT[i]  -> SetBinContent(1+(x_bin_short+2)%30,0);
+	  hSCALER_SPILL_SHORT[i]  -> SetBinContent(1+(x_bin_short+3)%30,0);
+	  hSCALER_SPILL_SHORT[i]  -> SetBinContent(1+(x_bin_short+4)%30,0);
 	}
       //
       check_total_sc21 += check_increase_spill[7];
