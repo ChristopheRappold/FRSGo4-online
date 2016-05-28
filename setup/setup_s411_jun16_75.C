@@ -573,36 +573,86 @@ void setup_s411_jun16_75()
   id->ID_x2AoverQ_num[2]=5; 
   id->ID_x2AoverQ_num[3]=5; 
   id->ID_x2AoverQ_num[4]=5; 
+  id->ID_x2AoverQ_num[5]=5; 
 
-  id->ID_x2AoverQ[0][0][0]=2.208      ; id->ID_x2AoverQ[0][0][1]=-100;
-  id->ID_x2AoverQ[0][1][0]=2.208      ; id->ID_x2AoverQ[0][1][1]=100;
-  id->ID_x2AoverQ[0][2][0]=2.220      ; id->ID_x2AoverQ[0][2][1]=100;
-  id->ID_x2AoverQ[0][3][0]=2.220      ; id->ID_x2AoverQ[0][3][1]=-100;
-  id->ID_x2AoverQ[0][4][0]=2.208      ; id->ID_x2AoverQ[0][4][1]=-100;
+// <<<<<<< Updated upstream
+//   id->ID_x2AoverQ[0][0][0]=2.208      ; id->ID_x2AoverQ[0][0][1]=-100;
+//   id->ID_x2AoverQ[0][1][0]=2.208      ; id->ID_x2AoverQ[0][1][1]=100;
+//   id->ID_x2AoverQ[0][2][0]=2.220      ; id->ID_x2AoverQ[0][2][1]=100;
+//   id->ID_x2AoverQ[0][3][0]=2.220      ; id->ID_x2AoverQ[0][3][1]=-100;
+//   id->ID_x2AoverQ[0][4][0]=2.208      ; id->ID_x2AoverQ[0][4][1]=-100;
                                       
-  id->ID_x2AoverQ[1][0][0]=2.208+0.012; id->ID_x2AoverQ[1][0][1]=-100; 
-  id->ID_x2AoverQ[1][1][0]=2.208+0.012; id->ID_x2AoverQ[1][1][1]=100; 
-  id->ID_x2AoverQ[1][2][0]=2.220+0.012; id->ID_x2AoverQ[1][2][1]=100; 
-  id->ID_x2AoverQ[1][3][0]=2.220+0.012; id->ID_x2AoverQ[1][3][1]=-100; 
-  id->ID_x2AoverQ[1][4][0]=2.208+0.012; id->ID_x2AoverQ[1][4][1]=-100; 
+//   id->ID_x2AoverQ[1][0][0]=2.208+0.012; id->ID_x2AoverQ[1][0][1]=-100; 
+//   id->ID_x2AoverQ[1][1][0]=2.208+0.012; id->ID_x2AoverQ[1][1][1]=100; 
+//   id->ID_x2AoverQ[1][2][0]=2.220+0.012; id->ID_x2AoverQ[1][2][1]=100; 
+//   id->ID_x2AoverQ[1][3][0]=2.220+0.012; id->ID_x2AoverQ[1][3][1]=-100; 
+//   id->ID_x2AoverQ[1][4][0]=2.208+0.012; id->ID_x2AoverQ[1][4][1]=-100; 
                                       
-  id->ID_x2AoverQ[2][0][0]=2.208+0.024; id->ID_x2AoverQ[2][0][1]=-100; 
-  id->ID_x2AoverQ[2][1][0]=2.208+0.024; id->ID_x2AoverQ[2][1][1]=100; 
-  id->ID_x2AoverQ[2][2][0]=2.220+0.024; id->ID_x2AoverQ[2][2][1]=100; 
-  id->ID_x2AoverQ[2][3][0]=2.220+0.024; id->ID_x2AoverQ[2][3][1]=-100; 
-  id->ID_x2AoverQ[2][4][0]=2.208+0.024; id->ID_x2AoverQ[2][4][1]=-100; 
+//   id->ID_x2AoverQ[2][0][0]=2.208+0.024; id->ID_x2AoverQ[2][0][1]=-100; 
+//   id->ID_x2AoverQ[2][1][0]=2.208+0.024; id->ID_x2AoverQ[2][1][1]=100; 
+//   id->ID_x2AoverQ[2][2][0]=2.220+0.024; id->ID_x2AoverQ[2][2][1]=100; 
+//   id->ID_x2AoverQ[2][3][0]=2.220+0.024; id->ID_x2AoverQ[2][3][1]=-100; 
+//   id->ID_x2AoverQ[2][4][0]=2.208+0.024; id->ID_x2AoverQ[2][4][1]=-100; 
                                       
-  id->ID_x2AoverQ[3][0][0]=2.208+0.036; id->ID_x2AoverQ[3][0][1]=-100; 
-  id->ID_x2AoverQ[3][1][0]=2.208+0.036; id->ID_x2AoverQ[3][1][1]=100; 
-  id->ID_x2AoverQ[3][2][0]=2.220+0.036; id->ID_x2AoverQ[3][2][1]=100; 
-  id->ID_x2AoverQ[3][3][0]=2.220+0.036; id->ID_x2AoverQ[3][3][1]=-100; 
-  id->ID_x2AoverQ[3][4][0]=2.208+0.036; id->ID_x2AoverQ[3][4][1]=-100; 
+//   id->ID_x2AoverQ[3][0][0]=2.208+0.036; id->ID_x2AoverQ[3][0][1]=-100; 
+//   id->ID_x2AoverQ[3][1][0]=2.208+0.036; id->ID_x2AoverQ[3][1][1]=100; 
+//   id->ID_x2AoverQ[3][2][0]=2.220+0.036; id->ID_x2AoverQ[3][2][1]=100; 
+//   id->ID_x2AoverQ[3][3][0]=2.220+0.036; id->ID_x2AoverQ[3][3][1]=-100; 
+//   id->ID_x2AoverQ[3][4][0]=2.208+0.036; id->ID_x2AoverQ[3][4][1]=-100; 
                                       
-  id->ID_x2AoverQ[4][0][0]=2.208+0.048; id->ID_x2AoverQ[4][0][1]=-100; 
-  id->ID_x2AoverQ[4][1][0]=2.208+0.048; id->ID_x2AoverQ[4][1][1]=100; 
-  id->ID_x2AoverQ[4][2][0]=2.220+0.048; id->ID_x2AoverQ[4][2][1]=100; 
-  id->ID_x2AoverQ[4][3][0]=2.220+0.048; id->ID_x2AoverQ[4][3][1]=-100; 
-  id->ID_x2AoverQ[4][4][0]=2.208+0.048; id->ID_x2AoverQ[4][4][1]=-100; 
+//   id->ID_x2AoverQ[4][0][0]=2.208+0.048; id->ID_x2AoverQ[4][0][1]=-100; 
+//   id->ID_x2AoverQ[4][1][0]=2.208+0.048; id->ID_x2AoverQ[4][1][1]=100; 
+//   id->ID_x2AoverQ[4][2][0]=2.220+0.048; id->ID_x2AoverQ[4][2][1]=100; 
+//   id->ID_x2AoverQ[4][3][0]=2.220+0.048; id->ID_x2AoverQ[4][3][1]=-100; 
+//   id->ID_x2AoverQ[4][4][0]=2.208+0.048; id->ID_x2AoverQ[4][4][1]=-100; 
+// =======
+
+ id->ID_x2AoverQ[0][0][0]=2.23366; id->ID_x2AoverQ[0][0][1]=49.8412;
+ //id->ID_x2AoverQ[0][1][0]=2.21457; id->ID_x2AoverQ[0][1][1]=13.1916;
+ id->ID_x2AoverQ[0][1][0]=2.1869; id->ID_x2AoverQ[0][1][1]=-40;
+ //id->ID_x2AoverQ[0][2][0]=2.22832; id->ID_x2AoverQ[0][2][1]=12.8176;
+ id->ID_x2AoverQ[0][2][0]=2.1869+0.013; id->ID_x2AoverQ[0][2][1]=-40;
+ id->ID_x2AoverQ[0][3][0]=2.2455; id->ID_x2AoverQ[0][3][1]=49.8412;
+ id->ID_x2AoverQ[0][4][0]=2.23366;id->ID_x2AoverQ[0][4][1]=49.8412;
+ 
+  id->ID_x2AoverQ[1][0][0]=2.25008; id->ID_x2AoverQ[1][0][1]=49.8412; 
+  //id->ID_x2AoverQ[1][1][0]=2.23099; id->ID_x2AoverQ[1][1][1]=13.1916; 
+  id->ID_x2AoverQ[1][1][0]=2.2033; id->ID_x2AoverQ[1][1][1]=-40.; 
+  //id->ID_x2AoverQ[1][2][0]=2.24473; id->ID_x2AoverQ[1][2][1]=12.8176; 
+  id->ID_x2AoverQ[1][2][0]=2.2033+0.013; id->ID_x2AoverQ[1][2][1]=-40.; 
+  id->ID_x2AoverQ[1][3][0]=2.26192; id->ID_x2AoverQ[1][3][1]=49.8412; 
+  id->ID_x2AoverQ[1][4][0]=2.25008; id->ID_x2AoverQ[1][4][1]=49.8412; 
+
+  id->ID_x2AoverQ[2][0][0]=2.26726; id->ID_x2AoverQ[2][0][1]=49.8412; 
+  // id->ID_x2AoverQ[2][1][0]=2.24817; id->ID_x2AoverQ[2][1][1]=13.1916; 
+  id->ID_x2AoverQ[2][1][0]=2.2482; id->ID_x2AoverQ[2][1][1]=-40; 
+  // id->ID_x2AoverQ[2][2][0]=2.26192; id->ID_x2AoverQ[2][2][1]=12.8176; 
+  id->ID_x2AoverQ[2][2][0]=2.2482+0.013; id->ID_x2AoverQ[2][2][1]=-40; 
+  id->ID_x2AoverQ[2][3][0]=2.27910; id->ID_x2AoverQ[2][3][1]=49.8412; 
+  id->ID_x2AoverQ[2][4][0]=2.26726; id->ID_x2AoverQ[2][4][1]=49.8412; 
+
+  id->ID_x2AoverQ[3][0][0]=2.28349; id->ID_x2AoverQ[3][0][1]=48.5323; 
+  // id->ID_x2AoverQ[3][1][0]=2.2644 ; id->ID_x2AoverQ[3][1][1]=11.8827; 
+  id->ID_x2AoverQ[3][1][0]=2.2383; id->ID_x2AoverQ[3][1][1]=-40; 
+  // id->ID_x2AoverQ[3][2][0]=2.27814; id->ID_x2AoverQ[3][2][1]=11.5087; 
+  id->ID_x2AoverQ[3][2][0]=2.2383+0.013; id->ID_x2AoverQ[3][2][1]=-40; 
+  id->ID_x2AoverQ[3][3][0]=2.29532; id->ID_x2AoverQ[3][3][1]=48.5323; 
+  id->ID_x2AoverQ[3][4][0]=2.28349; id->ID_x2AoverQ[3][4][1]=48.5323; 
+  
+  id->ID_x2AoverQ[4][0][0]=2.27007; /*2.29952*/; id->ID_x2AoverQ[4][0][1]=48.1387; 
+  //id->ID_x2AoverQ[4][1][0]=2.28043; id->ID_x2AoverQ[4][1][1]=11.5087; 
+  id->ID_x2AoverQ[4][1][0]=2.24292; id->ID_x2AoverQ[4][1][1]=-38.18; 
+  //id->ID_x2AoverQ[4][2][0]=2.29418; id->ID_x2AoverQ[4][2][1]=11.1347; 
+  id->ID_x2AoverQ[4][2][0]=2.25625; id->ID_x2AoverQ[4][2][1]=-40.8819; 
+  id->ID_x2AoverQ[4][3][0]=2.28123; id->ID_x2AoverQ[4][3][1]=44.7668; 
+  id->ID_x2AoverQ[4][4][0]=2.28123; id->ID_x2AoverQ[4][4][1]=44.7668; 
+  
+  id->ID_x2AoverQ[5][0][0]=2.26732; id->ID_x2AoverQ[5][0][1]=84.9736; 
+  id->ID_x2AoverQ[5][1][0]=2.35488; id->ID_x2AoverQ[5][1][1]=78.52  ; 
+  id->ID_x2AoverQ[5][2][0]=2.34538; id->ID_x2AoverQ[5][2][1]=75.078 ; 
+  id->ID_x2AoverQ[5][3][0]=2.24458; id->ID_x2AoverQ[5][3][1]=82.0336; 
+  id->ID_x2AoverQ[5][4][0]=2.26732; id->ID_x2AoverQ[5][4][1]=84.9736; 
+  //>>>>>>> Stashed changes
 
 
   
