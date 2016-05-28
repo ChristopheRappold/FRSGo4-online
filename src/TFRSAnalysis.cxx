@@ -308,6 +308,16 @@ Int_t TFRSAnalysis::UserPostLoop()
   std::cout << "Last event: " << fLastEvent << " Total events: " << fEvents << std::endl;
   fMbsEvent = 0; // reset to avoid invalid pointer if analysis is changed in between
   fEvents=0;
+
+  TGo4AnalysisStep* step3 = GetAnalysisStep("Calibr");
+  if (step3!=nullptr)
+    {
+      TFRSCalibrProc* proc3 = dynamic_cast<TFRSCalibrProc*> (step3->GetEventProcessor());
+      if(proc3!=nullptr)
+	{//printf("Total SC41 = %d,  Total SC21 = %d, Total SEETRAM = %d \n",check_total_sc41,check_total_sc21,check_total_seetram);
+	  std::cout<<"Total SC41 ="<< proc3->check_total_sc41 <<",  Total SC21 ="<< proc3->check_total_sc21  <<" Total SEETRAM ="<< proc3->check_total_seetram<<"\n"; 
+	}
+    }
   return 0;
 }
 
