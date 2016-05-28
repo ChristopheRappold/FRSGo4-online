@@ -28,9 +28,9 @@ public:
   void InitProcessor();
   Bool_t bDrawHist;
 
-  Long64_t  check_total_sc41 = 0;
-  Long64_t  check_total_sc21 = 0;
-  Long64_t  check_total_seetram = 0;
+  Long64_t  check_total_sc41 ;
+  Long64_t  check_total_sc21 ;
+  Long64_t  check_total_seetram ;
      
 protected: 
   Int_t counter;
@@ -93,15 +93,15 @@ private:
   TH1I          *hSCALER_TIME_SHORT[64];
   TH1I          *hSCALER_SPILL_SHORT[64];
 
-  int check_first_event = 1;
-  Long64_t  scaler_time_count  =0; 
-  Long64_t  scaler_spill_count =0; //UInt_t
-  Long64_t  scaler_time_check_last = 0;//UInt_t
-  Long64_t  scaler_spill_check_last= 0;//UInt_t 
-  Long64_t  check_increase_time[64]   = {0};//UInt_t 
-  Long64_t  check_increase_spill[64]  = {0};//UInt_t
-  Long64_t  scaler_increase_event[64] = {0};//UInt_t
-  Long64_t  scaler_last_event[64]	    = {0};
+  int check_first_event ;
+  Long64_t  scaler_time_count  ; 
+  Long64_t  scaler_spill_count ; //UInt_t
+  Long64_t  scaler_time_check_last ;//UInt_t
+  Long64_t  scaler_spill_check_last;//UInt_t 
+  Long64_t  check_increase_time[64]   ;//UInt_t 
+  Long64_t  check_increase_spill[64]  ;//UInt_t
+  Long64_t  scaler_increase_event[64] ;//UInt_t
+  Long64_t  scaler_last_event[64] ;
 
   
 
