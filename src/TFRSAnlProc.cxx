@@ -1066,7 +1066,6 @@ void TFRSAnlProc::Procceed_ID_Analysis(TFRSSortEvent& srt, TFRSCalibrEvent& clb,
 	if(bDrawHist) 
 	  {
 	    hID_Z->Fill(tgt.id_z);
-	    hID_ZmaxRange->Fill(tgt.id_z);
 	  }
       }
     }
@@ -1123,7 +1122,10 @@ void TFRSAnlProc::Procceed_ID_Analysis(TFRSSortEvent& srt, TFRSCalibrEvent& clb,
 	{
 	  tgt.id_b_z3 = kTRUE;
 	  if(bDrawHist)
-	    hID_Z3->Fill(tgt.id_z3);
+	    {
+	      hID_Z3->Fill(tgt.id_z3);
+	      hID_ZmaxRange->Fill(tgt.id_z3);
+	    }
 	}
       if(bDrawHist)
 	hID_Z_Z3->Fill(tgt.id_z,tgt.id_z3);
