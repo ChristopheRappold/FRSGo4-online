@@ -1016,8 +1016,10 @@ void TFRSAnlProc::Procceed_ID_Analysis(TFRSSortEvent& srt, TFRSCalibrEvent& clb,
 	  //      std::cout <<" id_AoQ "<<tgt.id_AoQ<<std::endl; 
 	  
 	  //correction for id_a2, JK 16.9.11
+
+
 	  tgt.id_AoQ_corr = tgt.id_AoQ - frs->a2AoQCorr * tgt.id_a2;
-	  if (!clb.b_tpc_xy[2] || !clb.b_tpc_xy[3])
+	  if (!clb.b_tpc_xy[4] || !clb.b_tpc_xy[5])
 	    tgt.id_AoQ_corr = tgt.id_AoQ - frs->a4AoQCorr * tgt.id_a4;
 
 
