@@ -847,7 +847,7 @@ void setup_s411_jun16_75()
   frs->offset_z3  = 0.0 ;
 
   frs->a2AoQCorr = 0.00095;
-  frs->a4AoQCorr = 0.0015;
+  frs->a4AoQCorr = 0.0000;//0.0015
 
 	
   // MUSIC 1 velocity correction 
