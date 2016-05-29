@@ -57,7 +57,8 @@ private:
   TH2I* hVME3_TDCAll;  //!
   TH2I* h_UnpackStatus; //!
   TH2I* h_TSFlagStatus; //!
-
+  TH2I* h_Multiplicity; //!
+  
   bool firstTS[2] ;
   Long64_t previousTimeStamp[2];
   Long64_t currentTimeStamp;

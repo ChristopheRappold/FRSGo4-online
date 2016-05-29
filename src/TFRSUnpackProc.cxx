@@ -82,6 +82,8 @@ TFRSUnpackProc::TFRSUnpackProc(const char* name) :  TFRSBasicProc(name)
   
   h_UnpackStatus = MakeH2I("Unpack","Status",2*21*32,0.,2*21*32,10,0.,10.,"#Ch","Status",1);
   h_TSFlagStatus = MakeH2I("Unpack","TS_flagStatus",1000,0,1000,10,0,10,"Diff_TS","Status",1);
+  
+  h_Multiplicity = MakeH2I("Unpack","mTDC_multiplicity",200,0,200,10,0,10,"ch mTDC","Multiplicity",1);
 }
 
 TFRSUnpackProc::~TFRSUnpackProc()
@@ -1126,6 +1128,8 @@ Bool_t TFRSUnpackProc::FillHistograms(TFRSUnpackEvent* event)
 		  hVME2_TDC[i]->Fill(event->vme2s[i][j]);
 		if (hVME2_TDCAll)
 		  hVME2_TDCAll->Fill(i,event->vme2s[i][j]);
+		if(h_Multiplicity)
+		  h_Multiplicity->Fill(i,j);
 	      }
 
 	    if(event->vme3s_MT[i][j] > 0)
@@ -1134,6 +1138,8 @@ Bool_t TFRSUnpackProc::FillHistograms(TFRSUnpackEvent* event)
 		  hVME3_TDC[i]->Fill(event->vme3s_MT[i][j]);
 		if(hVME3_TDCAll)
 		  hVME3_TDCAll->Fill(i,event->vme3s_MT[i][j]);
+		if(h_Multiplicity)
+		  h_Multiplicity->Fill(i+100,j);
 	      }
 
 	  }
