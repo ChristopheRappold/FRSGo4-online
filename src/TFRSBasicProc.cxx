@@ -171,7 +171,8 @@ TH1I* TFRSBasicProc::MakeH1ISeries3(const char* foldername, Int_t seriesnumber, 
       RemoveHistogram(fullname); 
       return 0;   
     }
-  return MakeH1I(fullfoldername, histoname, 8192, 0, 500000);
+//  return MakeH1I(fullfoldername, histoname, 8192, 0, 500000);
+  return MakeH1I(fullfoldername, histoname, 8192, 0, 2097152); // changed SP 30052016 10h17
 }
 
 
