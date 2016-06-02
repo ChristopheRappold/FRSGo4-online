@@ -112,6 +112,13 @@ void TFRSAnlProc::Create_MUSIC_Hist()
        sprintf(name,"MUSIC3_E(%d)",i);  
        sprintf(xtitle,"dE MUSIC3(%d)",i);
        hMUSIC3_E[i] = MakeH1I("MUSIC/MUSIC(3)/E",name,4096,0,4096,xtitle,2,6);
+       
+       sprintf(name,"MUSIC3_dEdx_betagamma(%d)",i);  
+       h_dEdx_betagamma[i] = MakeH2I("MUSIC/MUSIC(3)/BT",name,1000,0.4,1.4,1000,0,100,"betagamma","dE/dx (ch/cm)",1);
+
+       sprintf(name,"MUSIC3_DiffdEdx_betagamma(%d)",i);  
+       h_DiffdEdx_betagamma[i] = MakeH2I("MUSIC/MUSIC(3)/BT",name,1000,0.4,1.4,1000,-10,10,"betagamma","DiffdE/dx (ch/cm)",1);
+
        for(int k=0;k<5;++k)
 	 {
 	   
@@ -147,13 +154,16 @@ void TFRSAnlProc::Create_MUSIC_Hist()
         
    hMUSIC3_dEx = MakeH2I("MUSIC/MUSIC(3)/E","MUSIC3_dEx",100,-100,100,200,0,4096,
                          "Average x position in MUSIC3","dE MUSIC3 [channels]",2);
+
+   h_dEdx_betagammaAll = MakeH2I("MUSIC/MUSIC(3)","MUSIC3_dEdx_betagammaAll",1000,0.4,1.4,1000,0,100,"betagamma","dE/dx (ch/cm)",1);
+   h_dEdx_betagammaAllZoom = MakeH2I("MUSIC/MUSIC(3)","MUSIC3_dEdx_betagammaAllZoom",1000,0.4,1.4,1000,0,1,"betagamma","dE/dx (ch/cm)",1);
   
    hMUSIC3_dECOR = MakeH1I("MUSIC/MUSIC(3)/E","MUSIC3_dECOR",4000,0.5,4000.5,"dE MUSIC3 corrected for position",2,6);
    
    hMUSIC3_dExc = MakeH2I("MUSIC/MUSIC(3)","MUSIC3_dExc",100,-100,+100,200,0,4096,
 			  "Average x position in MUSIC3", "dE MUSIC3 (3)  [channels]", 2);
 
-   
+
    for(int i=0;i<8;i++)
      {
        sprintf(name,"Music1_E(%d)",i);
@@ -680,9 +690,8 @@ void TFRSAnlProc::Procceed_MUSIC_Analysis(TFRSSortEvent& srt, TFRSCalibrEvent& c
 	  Float_t p4 = clb.music1_x4;
 	  tgt.x1_mean = (p1+p2+p3+p4)/4.;	// Mean position 
  
-              // hMUSIC3_dEx->Fill(tgt.x1_mean, tgt.de[2]);
 	  if(bDrawHist) 
-	    hMUSIC3_dEx->Fill(clb.focx_s4, tgt.de[2]);
+	    hMUSIC3_dEx->Fill(tgt.x1_mean, tgt.de[2]);
 	  
 	  Float_t power = 1., Corr = 0.;
 	  for(int i=0;i<4;i++) {
@@ -1131,6 +1140,20 @@ void TFRSAnlProc::Procceed_ID_Analysis(TFRSSortEvent& srt, TFRSCalibrEvent& clb,
 	}
       if(bDrawHist)
 	hID_Z_Z3->Fill(tgt.id_z,tgt.id_z3);
+
+
+      static const double anode_width = 10.;//cm
+      double music_dX = anode_width*sqrt(tgt.id_a4*tgt.id_a4+tgt.id_b4*tgt.id_b4+1.);
+      h_dEdx_betagammaAll->Fill(tgt.id_beta*tgt.id_gamma,tgt.de[2]/music_dX);
+      h_dEdx_betagammaAllZoom->Fill(tgt.id_beta*tgt.id_gamma,tgt.de[2]/music_dX);
+      double music_dEtemp0 = srt.music_e3[0]*music->e3_gain[0] + music->e3_off[0];
+      for(int i=0;i<4;++i)
+	{
+	  double music_dEtemp = srt.music_e3[i]*music->e3_gain[i] + music->e3_off[i];
+	  h_dEdx_betagamma[i]->Fill(tgt.id_beta*tgt.id_gamma,music_dEtemp/music_dX);
+	  if(i>0)
+	    h_DiffdEdx_betagamma[i]->Fill(tgt.id_beta*tgt.id_gamma,(music_dEtemp-music_dEtemp0)/music_dX);
+	}
     }
   /*------------------------------------------------*/
   /* Identification Plots                           */

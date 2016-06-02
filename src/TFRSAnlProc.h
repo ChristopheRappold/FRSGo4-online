@@ -59,7 +59,11 @@ private:
   TH2I          *hMUSIC3_dEx;
   TH1I          *hMUSIC3_dECOR;
   TH2I          *hMUSIC3_dExc;
-
+  TH2I          *h_dEdx_betagammaAll;
+  TH2I          *h_dEdx_betagammaAllZoom;
+  TH2I          *h_dEdx_betagamma[4];
+  TH2I          *h_DiffdEdx_betagamma[4];
+  
   TGo4WinCond   *cMusic1_E[8];
   TGo4WinCond   *cMusic2_E[8];
   TGo4WinCond   *cMusic3_T[4];
@@ -105,6 +109,7 @@ private:
   TH1I          *hID_beta3;
   TH1I          *hID_AoQ; 
   TH1I          *hID_AoQ_corr; 
+  TH1I          *hID_AoQ_corr2; 
   TH1I          *hID_Z; 
   TH1I          *hID_ZmaxRange;
   TH1I          *hID_Z2;
