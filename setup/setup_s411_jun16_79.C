@@ -65,7 +65,7 @@ void setup_s411_jun16_79()
 
   // setup part 
   an->SetupH2("ID_x4AoQ", 500, 2.0, 2.8, 200, -100, +100, "A/Q", "X4 [mm]");     
-  an->SetupH2("ID_Z_AoQ", 600, 2.0, 2.8,600 , 30, 95, "A/Q", "Z"); 
+  an->SetupH2("ID_Z_AoQ", 600, 2.0, 2.8,800 , 10, 95, "A/Q", "Z"); 
   an->SetupH2("ID_Z_AoQ_corr", 500, 2.0, 2.75, 600, 50, 98, "A/Q (a2 corr)", "Z"); 
   an->SetupH2("ID_x4z", 450, 50, 60.0, 500, -100, 100, "Z", "X4 [mm]"); 
 
