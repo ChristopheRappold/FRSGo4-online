@@ -1366,11 +1366,15 @@ void TFRSCalibrProc::Process_TPC_Analysis(const TFRSSortEvent& src, TFRSCalibrEv
       tgt.tpc_x_s4 = tgt.tpc_angle_x_s4 * dist_TPC6_focS4/1000. + tgt.tpc_x[5];
       tgt.tpc_y_s4 = tgt.tpc_angle_y_s4 * dist_TPC6_focS4/1000. + tgt.tpc_y[5];
       
-      // YKT 27.05.2016 (next 4 lines) 
-      tgt.music1_x1 = tgt.tpc_angle_x_s4 * ((frs->dist_MUSIC3)+(frs->dist_MUSICa1))/1000. + tgt.tpc_x[5];
-      tgt.music1_x2 = tgt.tpc_angle_x_s4 * ((frs->dist_MUSIC3)+(frs->dist_MUSICa2))/1000. + tgt.tpc_x[5];
-      tgt.music1_x3 = tgt.tpc_angle_x_s4 * ((frs->dist_MUSIC3)+(frs->dist_MUSICa3))/1000. + tgt.tpc_x[5];
-      tgt.music1_x4 = tgt.tpc_angle_x_s4 * ((frs->dist_MUSIC3)+(frs->dist_MUSICa4))/1000. + tgt.tpc_x[5];
+      tgt.music1_x1 = tgt.tpc_angle_x_s4 * (frs->dist_MUSIC3+frs->dist_MUSICa1)/1000. + tgt.tpc_x[5];
+      tgt.music1_x2 = tgt.tpc_angle_x_s4 * (frs->dist_MUSIC3+frs->dist_MUSICa2)/1000. + tgt.tpc_x[5];
+      tgt.music1_x3 = tgt.tpc_angle_x_s4 * (frs->dist_MUSIC3+frs->dist_MUSICa3)/1000. + tgt.tpc_x[5];
+      tgt.music1_x4 = tgt.tpc_angle_x_s4 * (frs->dist_MUSIC3+frs->dist_MUSICa4)/1000. + tgt.tpc_x[5];
+
+      tgt.music1_y1 = tgt.tpc_angle_y_s4 * (frs->dist_MUSIC3+frs->dist_MUSICa1)/1000. + tgt.tpc_y[5];
+      tgt.music1_y2 = tgt.tpc_angle_y_s4 * (frs->dist_MUSIC3+frs->dist_MUSICa2)/1000. + tgt.tpc_y[5];
+      tgt.music1_y3 = tgt.tpc_angle_y_s4 * (frs->dist_MUSIC3+frs->dist_MUSICa3)/1000. + tgt.tpc_y[5];
+      tgt.music1_y4 = tgt.tpc_angle_y_s4 * (frs->dist_MUSIC3+frs->dist_MUSICa4)/1000. + tgt.tpc_y[5];
 
 
       if (bDrawHist)

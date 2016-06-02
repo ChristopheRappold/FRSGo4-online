@@ -117,6 +117,10 @@ void TFRSCalibrEvent::Clear(Option_t *t)
   music1_x2 = 0.;       /* parameters to calibrate  */
   music1_x3 = 0.;       /* parameters to calibrate  */
   music1_x4 = 0.;       /* parameters to calibrate  */
+  music1_y1 = 0.;	/* parameters to calibrate  */
+  music1_y2 = 0.;	/* parameters to calibrate  */
+  music1_y3 = 0.;	/* parameters to calibrate  */
+  music1_y4 = 0.;	/* parameters to calibrate  */
   music2_x = 0.;        /* MUSIC1,2 positions       */
 
   //TPC Part

@@ -126,6 +126,10 @@ public:
   Float_t       music1_x2;       /* parameters to calibrate  */
   Float_t       music1_x3;       /* parameters to calibrate  */
   Float_t       music1_x4;       /* parameters to calibrate  */
+  Float_t       music1_y1;       /* parameters to calibrate  */
+  Float_t       music1_y2;       /* parameters to calibrate  */
+  Float_t       music1_y3;       /* parameters to calibrate  */
+  Float_t       music1_y4;       /* parameters to calibrate  */
   Float_t       music2_x;        /* MUSIC1,2 positions       */
 
 
