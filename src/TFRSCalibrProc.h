@@ -93,11 +93,11 @@ private:
   TH1I          *hSCALER_TIME_SHORT[64];
   TH1I          *hSCALER_SPILL_SHORT[64];
 
-  int check_first_event ;
-  Long64_t  scaler_time_count  ; 
-  Long64_t  scaler_spill_count ; //UInt_t
-  Long64_t  scaler_time_check_last ;//UInt_t
-  Long64_t  scaler_spill_check_last;//UInt_t 
+  int check_first_event[2];
+  Long64_t  scaler_time_count[2]  ; 
+  Long64_t  scaler_spill_count[2] ; //UInt_t
+  Long64_t  scaler_time_check_last[2] ;//UInt_t
+  Long64_t  scaler_spill_check_last[2];//UInt_t 
   Long64_t  check_increase_time[64]   ;//UInt_t 
   Long64_t  check_increase_spill[64]  ;//UInt_t
   Long64_t  scaler_increase_event[64] ;//UInt_t

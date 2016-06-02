@@ -34,12 +34,14 @@ TFRSCalibrProc::TFRSCalibrProc(const char* name) : TFRSBasicProc(name)
   bDrawHist=kTRUE;
 
   counter=0;
-
-  check_first_event = 1;
-  scaler_time_count  =0; 
-  scaler_spill_count =0; //UInt_t
-  scaler_time_check_last = 0;//UInt_t
-  scaler_spill_check_last= 0;//UInt_t 
+  for(int i=0;i<2;++i)
+    {
+      check_first_event[i] = 1;
+      scaler_time_count[i] = 0; 
+      scaler_spill_count[i]= 0; //UInt_t
+      scaler_time_check_last[i] = 0;//UInt_t
+      scaler_spill_check_last[i] = 0;//UInt_t 
+    }
   for(int i=0;i<64;++i)
     {
       check_increase_time[i]   = 0;//UInt_t 
@@ -152,6 +154,7 @@ void TFRSCalibrProc::Create_MON_Hist()
     
       hMON_scaler[32] ->SetXTitle("MrTOF 1 Hz");           // updated 28-08-11 
       hMON_scaler[33] ->SetXTitle("MrTOF 100 Hz");
+      hMON_scaler[34] ->SetXTitle("MrTOF 10 kHz");
       hMON_scaler[34] ->SetXTitle("MrTOF 10 kHz veto deadtime");
       hMON_scaler[35] ->SetXTitle("MrTOF SC41L");
       hMON_scaler[36] ->SetXTitle("MrTOF start extraction");
@@ -216,16 +219,17 @@ void TFRSCalibrProc::Create_MON_Hist()
       hMON_diff[30]->SetXTitle("Spill OFF & dead time");
       hMON_diff[31]->SetXTitle("Nozzel & dead time");
 
-      hMON_diff[32] ->SetXTitle("MrTOF 1 Hz");
-      hMON_diff[33] ->SetXTitle("MrTOF 100 Hz");
-      hMON_diff[34] ->SetXTitle("MrTOF 10 kHz veto deadtime");
-      hMON_diff[35] ->SetXTitle("MrTOF SC41L");             
-      hMON_diff[36] ->SetXTitle("MrTOF start extraction");  
-      hMON_diff[37] ->SetXTitle("MrTOF stop extraction");   
-      hMON_diff[38] ->SetXTitle("MrTOF start");
-      hMON_diff[39] ->SetXTitle("MrTOF stop");
-      hMON_diff[40] ->SetXTitle("chaneltron 1");
-      hMON_diff[41] ->SetXTitle("chaneltron 2");
+      hMON_diff[32] ->SetXTitle("MrTOF 1 Hz"); // 0
+      hMON_diff[33] ->SetXTitle("MrTOF 100 Hz"); // 1
+      hMON_diff[34] ->SetXTitle("MrTOF 10 kHz"); // 2
+      hMON_diff[34] ->SetXTitle("MrTOF 10 kHz veto deadtime"); // 3
+      hMON_diff[35] ->SetXTitle("MrTOF SC41L"); // 4
+      hMON_diff[36] ->SetXTitle("MrTOF start extraction"); // 5  
+      hMON_diff[37] ->SetXTitle("MrTOF stop extraction");  // 6
+      hMON_diff[38] ->SetXTitle("MrTOF start"); // 7
+      hMON_diff[39] ->SetXTitle("MrTOF stop"); // 8
+      hMON_diff[40] ->SetXTitle("chaneltron 1"); // 9
+      hMON_diff[41] ->SetXTitle("chaneltron 2"); // 10
       hMON_diff[42] ->SetXTitle("");
       hMON_diff[43] ->SetXTitle("");
       hMON_diff[44] ->SetXTitle("");
@@ -271,365 +275,365 @@ void TFRSCalibrProc::Create_MON_Hist()
 
     }
 
-   /*   
-	for(int i=0;i<8;i++) {
-	sprintf(name,"MON_seecalA(%d)",i); 
-	hMON_seecalA[i] = MakeH1I("MON/seecalA",name,3600,0,36000,"",2,5);
-	sprintf(name,"MON_seecalB(%d)",i); 
-	hMON_seecalB[i] = MakeH1I("MON/seecalB",name,3600,0,36000,"",2,5);
-	}
+  /*   
+       for(int i=0;i<8;i++) {
+       sprintf(name,"MON_seecalA(%d)",i); 
+       hMON_seecalA[i] = MakeH1I("MON/seecalA",name,3600,0,36000,"",2,5);
+       sprintf(name,"MON_seecalB(%d)",i); 
+       hMON_seecalB[i] = MakeH1I("MON/seecalB",name,3600,0,36000,"",2,5);
+       }
 
-	if (ObjWasCreated()) {
-	hMON_seecalA[0]->SetXTitle("free triggers");
-	hMON_seecalA[1]->SetXTitle("acc. triggers");
-	hMON_seecalA[2]->SetXTitle("SE01 old CD");
-	hMON_seecalA[3]->SetXTitle("SC01 free");
-	hMON_seecalA[4]->SetXTitle("SE01 new CD");
-	hMON_seecalA[5]->SetXTitle("IC particles");
-	hMON_seecalA[6]->SetXTitle("IC old CD");
-	hMON_seecalA[7]->SetXTitle("IC new CD");
-	hMON_seecalB[0]->SetXTitle("free triggers");
-	hMON_seecalB[1]->SetXTitle("acc. triggers");
-	hMON_seecalB[2]->SetXTitle("SE01 old CD");
-	hMON_seecalB[3]->SetXTitle("SC01 free");
-	hMON_seecalB[4]->SetXTitle("SE01 new CD");
-	hMON_seecalB[5]->SetXTitle("IC particles");
-	hMON_seecalB[6]->SetXTitle("IC old CD");
-	hMON_seecalB[7]->SetXTitle("IC new CD");
-	}
-   */
+       if (ObjWasCreated()) {
+       hMON_seecalA[0]->SetXTitle("free triggers");
+       hMON_seecalA[1]->SetXTitle("acc. triggers");
+       hMON_seecalA[2]->SetXTitle("SE01 old CD");
+       hMON_seecalA[3]->SetXTitle("SC01 free");
+       hMON_seecalA[4]->SetXTitle("SE01 new CD");
+       hMON_seecalA[5]->SetXTitle("IC particles");
+       hMON_seecalA[6]->SetXTitle("IC old CD");
+       hMON_seecalA[7]->SetXTitle("IC new CD");
+       hMON_seecalB[0]->SetXTitle("free triggers");
+       hMON_seecalB[1]->SetXTitle("acc. triggers");
+       hMON_seecalB[2]->SetXTitle("SE01 old CD");
+       hMON_seecalB[3]->SetXTitle("SC01 free");
+       hMON_seecalB[4]->SetXTitle("SE01 new CD");
+       hMON_seecalB[5]->SetXTitle("IC particles");
+       hMON_seecalB[6]->SetXTitle("IC old CD");
+       hMON_seecalB[7]->SetXTitle("IC new CD");
+       }
+  */
 
-   hMON_Pattern = MakeH1I("MON","MON_Pattern",4096,0,4096,"Pattern Unit Channel * 10",2,5,"Counts");
-   hMON_PatternH = MakeH1I("MON","MON_Pattern_Hit",16,0,16,"Pattern Unit Channel",2,5,"Counts");
+  hMON_Pattern = MakeH1I("MON","MON_Pattern",4096,0,4096,"Pattern Unit Channel * 10",2,5,"Counts");
+  hMON_PatternH = MakeH1I("MON","MON_Pattern_Hit",16,0,16,"Pattern Unit Channel",2,5,"Counts");
 
-   /*
-     hMON_TOE = MakeH1I("MON","MON_TOE",40000,0,4000,"Time after start flat top [ms]",2,5,"Events");
-     hMONDtDiff = MakeH1I("MON","MON_DtDiff",10000,0,1000000,"Time between adjacent events [us] bin=100!",2,5,"Events");
-     hMON_SC01 = MakeH1I("MON/SC","MON_SC01",1000,0,10000,"Extraction Cycle",2,5,"Free SC01 counts/cycle");
-     hMON_SC21 = MakeH1I("MON/SC","MON_SC21",1000,0,10000,"Extraction Cycle",2,5,"Free SC21 counts/cycle");
-     hMON_SC41 = MakeH1I("MON/SC","MON_SC41",1000,0,10000,"Extraction Cycle",2,5,"Free SC41 counts/cycle");
-     hMON_Trigger = MakeH1I("MON","MON_Trigger",1000,0,10000,"Extraction Cycle",2,5,"Ungated Triggers/1000/10 cycles");
-     hMON_LAM = MakeH1I("MON","MON_LAM",1000,0,10000,"Extraction Cycle",2,5,"Gated Triggers(LAMs)/1000/10 cycles");
-     hMON_SE01 = MakeH1I("MON","MON_SE01",32765,0,32765,"Time after start [sec]",2,5,"Seetram (Current digitizer)/1000 Counts/sec");
-     hMON_ICDE = MakeH1I("MON","MON_ICDE",2048,0,4095,"IC Energy loss [channels]",2,5,"Counts");
-     hMON_IC1 = MakeH1I("MON/IC1","MON_IC1",32765,0,32765,"Time after start [sec]",2,5,"IC scaler 1");
-     hMON_IC1d = MakeH1I("MON/IC1","MON_IC1d",32765,0,32765,"Time after start [sec]",2,5,"IC scaler 1");
-     hMON_IC2 = MakeH1I("MON/IC2","MON_IC2",32765,0,32765,"Time after start [sec]",2,5,"IC scaler 2");
-     hMON_IC2d = MakeH1I("MON/IC2","MON_IC2d",32765,0,32765,"Time after start [sec]",2,5,"IC scaler 2");
-     hMON_IC3 = MakeH1I("MON/IC3","MON_IC3",32765,0,32765,"Time after start [sec]",2,5,"IC scaler 3");
-     hMON_IC3d = MakeH1I("MON/IC3","MON_IC3d",32765,0,32765,"Time after start [sec]",2,5,"IC scaler 3");
-
-
-     MakePic("MON","Mon",3,1,hMON_SE01,hMON_Trigger,hMON_LAM);
-     MakePic("MON","Mon_Deadtime",2,2,hMON_Trigger,hMON_TOE,hMON_LAM,hMON_DtDiff);
-     MakePic("MON","Mon_Deadtime",2,2,hMON_Trigger,hMON_TOE,hMON_LAM,hMON_DtDiff);
-     MakePic(0,"Seetram", 5,1,hMON_diff[2],  hMON_diff[5],  hMON_diff[10],  hMON_diff[11],  hMON_diff[12]);
-     MakePic(0,"Seetram2",5,1,hMON_scaler[2],hMON_scaler[5],hMON_scaler[10],hMON_scaler[11],hMON_scaler[12]);
-   */    
-
- }
-
- void TFRSCalibrProc::Create_MW_Hist() 
- {
-   Float_t lim_xsum[4][2] = {
-     {1,8000},  // MW11
-     {1,8000},  // MW21
-     {1,8000},  // MW22
-     {1,8000}};  // MW31
+  /*
+    hMON_TOE = MakeH1I("MON","MON_TOE",40000,0,4000,"Time after start flat top [ms]",2,5,"Events");
+    hMONDtDiff = MakeH1I("MON","MON_DtDiff",10000,0,1000000,"Time between adjacent events [us] bin=100!",2,5,"Events");
+    hMON_SC01 = MakeH1I("MON/SC","MON_SC01",1000,0,10000,"Extraction Cycle",2,5,"Free SC01 counts/cycle");
+    hMON_SC21 = MakeH1I("MON/SC","MON_SC21",1000,0,10000,"Extraction Cycle",2,5,"Free SC21 counts/cycle");
+    hMON_SC41 = MakeH1I("MON/SC","MON_SC41",1000,0,10000,"Extraction Cycle",2,5,"Free SC41 counts/cycle");
+    hMON_Trigger = MakeH1I("MON","MON_Trigger",1000,0,10000,"Extraction Cycle",2,5,"Ungated Triggers/1000/10 cycles");
+    hMON_LAM = MakeH1I("MON","MON_LAM",1000,0,10000,"Extraction Cycle",2,5,"Gated Triggers(LAMs)/1000/10 cycles");
+    hMON_SE01 = MakeH1I("MON","MON_SE01",32765,0,32765,"Time after start [sec]",2,5,"Seetram (Current digitizer)/1000 Counts/sec");
+    hMON_ICDE = MakeH1I("MON","MON_ICDE",2048,0,4095,"IC Energy loss [channels]",2,5,"Counts");
+    hMON_IC1 = MakeH1I("MON/IC1","MON_IC1",32765,0,32765,"Time after start [sec]",2,5,"IC scaler 1");
+    hMON_IC1d = MakeH1I("MON/IC1","MON_IC1d",32765,0,32765,"Time after start [sec]",2,5,"IC scaler 1");
+    hMON_IC2 = MakeH1I("MON/IC2","MON_IC2",32765,0,32765,"Time after start [sec]",2,5,"IC scaler 2");
+    hMON_IC2d = MakeH1I("MON/IC2","MON_IC2d",32765,0,32765,"Time after start [sec]",2,5,"IC scaler 2");
+    hMON_IC3 = MakeH1I("MON/IC3","MON_IC3",32765,0,32765,"Time after start [sec]",2,5,"IC scaler 3");
+    hMON_IC3d = MakeH1I("MON/IC3","MON_IC3d",32765,0,32765,"Time after start [sec]",2,5,"IC scaler 3");
 
 
-   Float_t lim_ysum[4][2] = {
-     {2,8000},
-     {2,8000},
-     {2,8000},
-     {2,8000}};
+    MakePic("MON","Mon",3,1,hMON_SE01,hMON_Trigger,hMON_LAM);
+    MakePic("MON","Mon_Deadtime",2,2,hMON_Trigger,hMON_TOE,hMON_LAM,hMON_DtDiff);
+    MakePic("MON","Mon_Deadtime",2,2,hMON_Trigger,hMON_TOE,hMON_LAM,hMON_DtDiff);
+    MakePic(0,"Seetram", 5,1,hMON_diff[2],  hMON_diff[5],  hMON_diff[10],  hMON_diff[11],  hMON_diff[12]);
+    MakePic(0,"Seetram2",5,1,hMON_scaler[2],hMON_scaler[5],hMON_scaler[10],hMON_scaler[11],hMON_scaler[12]);
+  */    
 
-   for(int i=0;i<4;i++)
-     {  // up to MW31
-       char fname[100]; 
-       sprintf(fname,"MW/MW%s/MW%s", mw_folder_ext1[i],mw_folder_ext2[i]); 
+}
 
-       hMW_AN[i] = MakeH1I_MW(fname,"MW_an",i,1000,1,4096,"Anode (channels)",2,3);
-       hMW_XL[i] = MakeH1I_MW(fname,"MW_XL",i,1000,1,4096,"X-left (channels)",2,3);
-       hMW_XR[i] = MakeH1I_MW(fname,"MW_XR",i,1000,1,4096,"X-right (channels)",2,3);
-       hMW_YU[i] = MakeH1I_MW(fname,"MW_YU",i,1000,1,4096,"Y-up (channels)",2,3);
-       hMW_YD[i] = MakeH1I_MW(fname,"MW_YD",i,1000,1,4096,"Y-down (channels)",2,3);
-
-       hMW_XSUM[i] = MakeH1I_MW(fname,"MW_XSUM",i,800,5,8005,"Sum XL+XR (channels)",2,5);
-       hMW_YSUM[i] = MakeH1I_MW(fname,"MW_YSUM",i,800,5,8005,"Sum YU+YD (channels)",2,5);
-
-       char title[100];
-       if((i==0) || (i>3))
-	 sprintf(title,"(stiff) X at MW%s [mm] (soft)", mw_folder_ext2[i]);
-       else
-	 sprintf(title,"(soft) X at MW%s [mm] (stiff)", mw_folder_ext2[i]);
-       hMW_X[i] = MakeH1I_MW(fname,"MW_X",i,201,-100.5,+100.5,title,2,7);
-
-       sprintf(title,"Y at MW%s [mm]", mw_folder_ext2[i]);
-       hMW_Y[i] = MakeH1I_MW(fname,"MW_Y",i,201,-100.5,+100.5,title,2,7);
-
-       char xyname[100];
-       sprintf(xyname,"MW_XY%s", mw_name_ext[i]);
-       hMW_XY[i] = MakeH2I(fname,xyname,40,-100,100,40,-100,100,"x [mm]","y [mm]",2);
-
-       char condname[40];
-       sprintf(condname,"XSUM%s",mw_name_ext[i]);
-       cMW_XSUM[i] = MakeWindowCond("MW/XSUM", condname, lim_xsum[i][0], lim_xsum[i][1], hMW_XSUM[i]->GetName());
-
-       sprintf(condname,"YSUM%s",mw_name_ext[i]);
-       cMW_YSUM[i] = MakeWindowCond("MW/YSUM", condname, lim_ysum[i][0], lim_ysum[i][1], hMW_YSUM[i]->GetName());
-     }
-
-   hMW_SC21x  = MakeH1I("MW","MW_SC21x", 221,-110.5,110.5,"X tracked at SC21 [mm]",2,7);
-   hMW_SC22x  = MakeH1I("MW","MW_SC22x", 221,-110.5,110.5,"X tracked at SC22 [mm]",2,7);
-
-   hMW_xAngS2 = MakeH1I("MW/S2/Ang","MW_xAngS2",201,-100.5,100.5,"X-Angles at S2 [mrad]",2,7); 
-   hMW_yAngS2 = MakeH1I("MW/S2/Ang","MW_yAngS2",201,-100.5,100.5,"Y-Angles at S2 [mrad]",2,7);
-   hMW_xFocS2 = MakeH1I("MW/S2/Foc","MW_xFocS2",201,-100.5,100.5,"X-Position at S2 Focus [mm]",2,7);
-   hMW_yFocS2 = MakeH1I("MW/S2/Foc","MW_yFocS2",201,-100.5,100.5,"Y-Position at S2 Focus [mm]",2,7);
-   hMW_zxS2   = MakeH1I("MW/S2/Pos","MW_zxS2",350,-100,600,"Distance from TS3QT33 at S2 Focus [cm]",2,7);
-   hMW_zyS2   = MakeH1I("MW/S2/Pos","MW_zyS2",350,-100,600,"Distance from TS3QT33 at S2 Focus [cm]",2,7);
-   hMW_FocS2  = MakeH2I("MW/S2/Foc","MW_FocS2", 240,-120.,120.,  240,-120.,120.,
-			"X [mm] tracked to S2 focus","Y [mm] tracked to S2 focus", 2);
-
-   for (int i=0;i<4;i++)
-     {  // up to MW31
-       char fname[100], pname[100];
-       sprintf(fname,"MW/MW%s", mw_folder_ext1[i]);
-       sprintf(pname,"MW%s", mw_folder_ext2[i]);
-       MakePic(fname,pname,2,2,hMW_XL[i],hMW_XR[i],hMW_YU[i],hMW_YD[i]);
-     }   
- }
+void TFRSCalibrProc::Create_MW_Hist() 
+{
+  Float_t lim_xsum[4][2] = {
+    {1,8000},  // MW11
+    {1,8000},  // MW21
+    {1,8000},  // MW22
+    {1,8000}};  // MW31
 
 
- //Creation of TPC data & histograms
- void TFRSCalibrProc::Create_TPC_Hist()
- {
+  Float_t lim_ysum[4][2] = {
+    {2,8000},
+    {2,8000},
+    {2,8000},
+    {2,8000}};
 
-   Float_t lim_csum1[6][2]={{300,1800},{350,1800},{300,1800},{300,1700},{300,2000},{300,2000}};
-   Float_t lim_csum2[6][2]={{300,1800},{300,1800},{300,1800},{300,1700},{300,2000},{300,2000}};
-   Float_t lim_csum3[6][2]={{300,1800},{300,1840},{300,1800},{300,1700},{300,2000},{300,2000}};
-   Float_t lim_csum4[6][2]={{300,1880},{300,1810},{300,1800},{300,1700},{300,2000},{300,2000}};
+  for(int i=0;i<4;i++)
+    {  // up to MW31
+      char fname[100]; 
+      sprintf(fname,"MW/MW%s/MW%s", mw_folder_ext1[i],mw_folder_ext2[i]); 
 
-   for(int i=0;i<6;i++)
-     {
-       char condname[40];
-       sprintf(condname,"TPC/CSUM1%s",tpc_name_ext1[i]);
-       //    cTPC_CSUM[i][0]=MakeWindowCond("TPC/CSUM1",condname,lim_csum1[i][0],
-       //				   lim_csum1[i][1],"CSUM1");
-       cTPC_CSUM[i][0]=MakeWinCond(condname,lim_csum1[i][0],lim_csum1[i][1],"CSUM1");
+      hMW_AN[i] = MakeH1I_MW(fname,"MW_an",i,1000,1,4096,"Anode (channels)",2,3);
+      hMW_XL[i] = MakeH1I_MW(fname,"MW_XL",i,1000,1,4096,"X-left (channels)",2,3);
+      hMW_XR[i] = MakeH1I_MW(fname,"MW_XR",i,1000,1,4096,"X-right (channels)",2,3);
+      hMW_YU[i] = MakeH1I_MW(fname,"MW_YU",i,1000,1,4096,"Y-up (channels)",2,3);
+      hMW_YD[i] = MakeH1I_MW(fname,"MW_YD",i,1000,1,4096,"Y-down (channels)",2,3);
 
+      hMW_XSUM[i] = MakeH1I_MW(fname,"MW_XSUM",i,800,5,8005,"Sum XL+XR (channels)",2,5);
+      hMW_YSUM[i] = MakeH1I_MW(fname,"MW_YSUM",i,800,5,8005,"Sum YU+YD (channels)",2,5);
 
+      char title[100];
+      if((i==0) || (i>3))
+	sprintf(title,"(stiff) X at MW%s [mm] (soft)", mw_folder_ext2[i]);
+      else
+	sprintf(title,"(soft) X at MW%s [mm] (stiff)", mw_folder_ext2[i]);
+      hMW_X[i] = MakeH1I_MW(fname,"MW_X",i,201,-100.5,+100.5,title,2,7);
 
-       sprintf(condname,"CSUM2%s",tpc_name_ext1[i]);
-       cTPC_CSUM[i][1]=MakeWindowCond("TPC/CSUM2",condname,lim_csum2[i][0],
-				      lim_csum2[i][1],"CSUM2");
-       sprintf(condname,"CSUM3%s",tpc_name_ext1[i]);
-       cTPC_CSUM[i][2]=MakeWindowCond("TPC/CSUM3",condname,lim_csum3[i][0],
-				      lim_csum3[i][1],"CSUM3");
-       sprintf(condname,"CSUM4%s",tpc_name_ext1[i]);
-       cTPC_CSUM[i][3]=MakeWindowCond("TPC/CSUM4",condname,lim_csum4[i][0],
-				      lim_csum4[i][1],"CSUM4");
-     }
+      sprintf(title,"Y at MW%s [mm]", mw_folder_ext2[i]);
+      hMW_Y[i] = MakeH1I_MW(fname,"MW_Y",i,201,-100.5,+100.5,title,2,7);
 
-   for(int i=0;i<6;i++)
-     {        
-       char fname[100];
-       char name[100];
-       sprintf(fname,"TPC/%s/",tpc_folder_ext1[i]);
-       //(HAPOL-25/03/06) Duplicated histograms for double delay line (0 and 1) in new TPCs
+      char xyname[100];
+      sprintf(xyname,"MW_XY%s", mw_name_ext[i]);
+      hMW_XY[i] = MakeH2I(fname,xyname,40,-100,100,40,-100,100,"x [mm]","y [mm]",2);
 
-       hTPC_L0[i]=MakeH1I_TPC(fname,"L0",i,4000,5,4005,
-			      "Left DL0 ADC (channels)",2,3);
-       hTPC_R0[i]=MakeH1I_TPC(fname,"R0",i,4000,5,4005,
-			      "Right DL0 ADc (channels)",2,3);
-       hTPC_LT0[i]=MakeH1I_TPC(fname,"LT0",i,4000,5,4005,
-			       "Left DL0 time (channels)",2,3);
-       hTPC_RT0[i]=MakeH1I_TPC(fname,"RT0",i,4000,5,4005,
-			       "Right DL0 time(channels)",2,3);
-       hTPC_L1[i]=MakeH1I_TPC(fname,"L1",i,4000,5,4005,
-			      "Left DL1 ADC (channels)",2,3);
-       hTPC_R1[i]=MakeH1I_TPC(fname,"R1",i,4000,5,4005,
-			      "Right DL1 ADC (channels)",2,3);
-       hTPC_LT1[i]=MakeH1I_TPC(fname,"LT1",i,4000,5,4005,
-			       "Left DL1 time (channels)",2,3);
-       hTPC_RT1[i]=MakeH1I_TPC(fname,"RT1",i,4000,5,4005,
-			       "Right DL1 time(channels)",2,3);
-       hTPC_DT[i][0]=MakeH1I_TPC(fname,"DT1",i,4000,5,4005,
-				 "drift time 1 (channels)",2,3);
-       hTPC_DT[i][1]=MakeH1I_TPC(fname,"DT2",i,4000,5,4005,
-				 "drift time 2(channels)",2,3);
-       hTPC_DT[i][2]=MakeH1I_TPC(fname,"DT3",i,4000,5,4005,
-				 "drift time 3(channels)",2,3);
-       hTPC_DT[i][3]=MakeH1I_TPC(fname,"DT4",i,4000,5,4005,
-				 "drift time 4(channels)",2,3);
-       hTPC_A[i][0]=MakeH1I_TPC(fname,"A1",i,4000,5,4005,
-				"anode 1 ADC(channels)",2,3);
-       hTPC_A[i][1]=MakeH1I_TPC(fname,"A2",i,4000,5,4005,
-				"anode 2 ADC(channels)",2,3);
-       hTPC_A[i][2]=MakeH1I_TPC(fname,"A3",i,4000,5,4005,
-				"anode 3 ADC(channels)",2,3);
-       hTPC_A[i][3]=MakeH1I_TPC(fname,"A4",i,4000,5,4005,
-				"anode 4 ADC(channels)",2,3);
-       hTPC_CSUM[i][0]=MakeH1I_TPC(fname,"CSUM1",i,4000,-2000,4005,
-				   "control sum 1(channels)",2,3);
-       hTPC_CSUM[i][1]=MakeH1I_TPC(fname,"CSUM2",i,4000,-2000,4005,
-				   "control sum 2(channels)",2,3);
-       hTPC_CSUM[i][2]=MakeH1I_TPC(fname,"CSUM3",i,4000,-2000,4005,
-				   "control sum 3(channels)",2,3);
-       hTPC_CSUM[i][3]=MakeH1I_TPC(fname,"CSUM4",i,4000,-2000,4005,
-				   "control sum 4(channels)",2,3);
+      char condname[40];
+      sprintf(condname,"XSUM%s",mw_name_ext[i]);
+      cMW_XSUM[i] = MakeWindowCond("MW/XSUM", condname, lim_xsum[i][0], lim_xsum[i][1], hMW_XSUM[i]->GetName());
 
-       hTPC_XRAW0[i]=MakeH1I_TPC(fname,"Xraw0",i,1000,-2000,2000,
-				 "First delay line  x(ch)",2,3);
-       hTPC_XRAW1[i]=MakeH1I_TPC(fname,"Xraw1",i,1000,-2000,2000,
-				 "Second delay line x(ch)",2,3);
-       hTPC_YRAW[i]=MakeH1I_TPC(fname,"Yraw",i,4000,0.0,4000.,
-				"y(ch)",2,3);
-       hTPC_X[i]=MakeH1I_TPC(fname,"X",i,800,-100.,100.,
-			     "x[mm]",2,3);
-       hTPC_Y[i]=MakeH1I_TPC(fname,"Y",i,800,-100.,100.,
-			     "y[mm]",2,3);
+      sprintf(condname,"YSUM%s",mw_name_ext[i]);
+      cMW_YSUM[i] = MakeWindowCond("MW/YSUM", condname, lim_ysum[i][0], lim_ysum[i][1], hMW_YSUM[i]->GetName());
+    }
+
+  hMW_SC21x  = MakeH1I("MW","MW_SC21x", 221,-110.5,110.5,"X tracked at SC21 [mm]",2,7);
+  hMW_SC22x  = MakeH1I("MW","MW_SC22x", 221,-110.5,110.5,"X tracked at SC22 [mm]",2,7);
+
+  hMW_xAngS2 = MakeH1I("MW/S2/Ang","MW_xAngS2",201,-100.5,100.5,"X-Angles at S2 [mrad]",2,7); 
+  hMW_yAngS2 = MakeH1I("MW/S2/Ang","MW_yAngS2",201,-100.5,100.5,"Y-Angles at S2 [mrad]",2,7);
+  hMW_xFocS2 = MakeH1I("MW/S2/Foc","MW_xFocS2",201,-100.5,100.5,"X-Position at S2 Focus [mm]",2,7);
+  hMW_yFocS2 = MakeH1I("MW/S2/Foc","MW_yFocS2",201,-100.5,100.5,"Y-Position at S2 Focus [mm]",2,7);
+  hMW_zxS2   = MakeH1I("MW/S2/Pos","MW_zxS2",350,-100,600,"Distance from TS3QT33 at S2 Focus [cm]",2,7);
+  hMW_zyS2   = MakeH1I("MW/S2/Pos","MW_zyS2",350,-100,600,"Distance from TS3QT33 at S2 Focus [cm]",2,7);
+  hMW_FocS2  = MakeH2I("MW/S2/Foc","MW_FocS2", 240,-120.,120.,  240,-120.,120.,
+		       "X [mm] tracked to S2 focus","Y [mm] tracked to S2 focus", 2);
+
+  for (int i=0;i<4;i++)
+    {  // up to MW31
+      char fname[100], pname[100];
+      sprintf(fname,"MW/MW%s", mw_folder_ext1[i]);
+      sprintf(pname,"MW%s", mw_folder_ext2[i]);
+      MakePic(fname,pname,2,2,hMW_XL[i],hMW_XR[i],hMW_YU[i],hMW_YD[i]);
+    }   
+}
 
 
-       sprintf(name,"%s%s",tpc_name_ext1[i],"XY");
-       hcTPC_XY[i]=MakeH2I(fname,name, 120,-120.,120., 120,-120.,120.,
-			   "X [mm] ","Y [mm] ", 2);
+//Creation of TPC data & histograms
+void TFRSCalibrProc::Create_TPC_Hist()
+{
 
-       sprintf(name,"%s%s",tpc_name_ext1[i],"LTRT");
-       hTPC_LTRT[i]=MakeH2I(fname,name, 2048,0,4095, 2048,0,4095,
-			    "LT [ch]","RT[ch] ", 2);			
-       hTPC_DELTAX[i]=MakeH1I_TPC(fname,"x0-x1",i,100,-10.,10.,
-				  "x0-x1[mm]",2,3);
+  Float_t lim_csum1[6][2]={{300,1800},{350,1800},{300,1800},{300,1700},{300,2000},{300,2000}};
+  Float_t lim_csum2[6][2]={{300,1800},{300,1800},{300,1800},{300,1700},{300,2000},{300,2000}};
+  Float_t lim_csum3[6][2]={{300,1800},{300,1840},{300,1800},{300,1700},{300,2000},{300,2000}};
+  Float_t lim_csum4[6][2]={{300,1880},{300,1810},{300,1800},{300,1700},{300,2000},{300,2000}};
 
-     }
-
-   //Calculated positions and angles from tracking
-
-   hTPC_X_S2=MakeH1I_TPC("TPC/S2","S2_X",-1,1000,-100.,100.,
-			 "x at S2 focus [mm]",2,3);
-   hTPC_Y_S2=MakeH1I_TPC("TPC/S2","S2_Y",-1,1000,-100.,100.,
-			 "y at S2 focus [mm]",2,3);
-   hTPC_AX_S2=MakeH1I_TPC("TPC/S2","S2_AX",-1,1000,-100.5,100.5,
-			  "angl_x at S2 focus [mrad]",2,3);
-   hTPC_AY_S2=MakeH1I_TPC("TPC/S2","S2_AY",-1,1000,-100.5,100.5,
-			  "angl_y at S2 focus [mrad]",2,3);
-
-   hTPC_X_S2_target1=MakeH1I_TPC("TPC/S2","S2_X_silicon1",-1,1000,-100.5,100.5,
-				 "x at Si tracker 1 [mm]",2,3);
-   hTPC_Y_S2_target1=MakeH1I_TPC("TPC/S2","S2_Y_silicon1",-1,1000,-100.5,100.5,
-				 "y at Si tracker 1 [mm]",2,3);
-   hTPC_XY_S2_target1=MakeH2I("TPC/S2","S2_XY_silicon1",1000,-100.5,100.5,1000,-100.5,100.5,
-			      "x at Si tracker 1 [mm]","y at Si tracker 1 [mm]",2);
+  for(int i=0;i<6;i++)
+    {
+      char condname[40];
+      sprintf(condname,"TPC/CSUM1%s",tpc_name_ext1[i]);
+      //    cTPC_CSUM[i][0]=MakeWindowCond("TPC/CSUM1",condname,lim_csum1[i][0],
+      //				   lim_csum1[i][1],"CSUM1");
+      cTPC_CSUM[i][0]=MakeWinCond(condname,lim_csum1[i][0],lim_csum1[i][1],"CSUM1");
 
 
-   hTPC_X_S4=MakeH1I_TPC("TPC/S4","S4_X",-1,1000,-100.5,100.5,
-			 "x at S4 focus [mm]",2,3);
-   hTPC_Y_S4=MakeH1I_TPC("TPC/S4","S4_Y",-1,1000,-100.5,100.5,
-			 "y at S4 focus [mm]",2,3);
-   hTPC_AX_S4=MakeH1I_TPC("TPC/S4","S4_AX",-1,1000,-100.5,100.5,
-			  "angl_x at S4 [mrad]",2,3);
-   hTPC_AY_S4=MakeH1I_TPC("TPC/S4","S4_AY",-1,1000,-100.5,100.5,
-			  "angl_y at S4 [mrad]",2,3);
-   hTPC_X_S4_target2=MakeH1I_TPC("TPC/S4","S4_X_OTPC",-1,1000,-100.5,100.5,
-				 "x at OTPC entrance [mm]",2,3);
-   hTPC_Y_S4_target2=MakeH1I_TPC("TPC/S4","S4_Y_OTPC",-1,1000,-100.5,100.5,
-				 "y at OTPC entrance [mm]",2,3);
-   //  hTPC_X_S4_target1d=MakeH1I_TPC("TPC/S4","S4_X_target1d",-1,1000,-100.5,100.5,
-   //			"x at S4 at H2 target [mm]",2,3);
-   //  hTPC_Y_S4_target1d=MakeH1I_TPC("TPC/S4","S4_Y_target1d",-1,1000,-100.5,100.5,
-   //			"y at S4 at H2 target [mm]",2,3);
 
-   hTPC_XY_S4_target2=MakeH2I("TPC/S4","S4_XY_OTPC",1000,-100.5,100.5,1000,-100.5,100.5,
-			      "x at OTPC entrance [mm]","y at OTPC entrance [mm]",2);
-   //  hTPC_XY_S4_target1d=MakeH2I("TPC/S4","S4_XY_target1d",1000,-100.5,100.5,1000,-100.5,100.5,
-   //			"x-S4 at H2 target [mm]","y-S4 at H2 target [mm]",2);
-   hTPC_XAX_S4=MakeH2I("TPC/S4","angle_vs_x_S4", 400,-100.,100., 250,-25.0,25.0,
-		       "X at S4 [mm] ","x angle [mrad] ", 2);  
-   hTPC_XS4_AX_S2 =MakeH2I("TPC/S4","angle_s2_at vs x_S4", 400,-100.,100., 250,-25.0,25.0,
-			   "X at S4 [mm] ","angle(x) at S2 [mrad] ", 2);
+      sprintf(condname,"CSUM2%s",tpc_name_ext1[i]);
+      cTPC_CSUM[i][1]=MakeWindowCond("TPC/CSUM2",condname,lim_csum2[i][0],
+				     lim_csum2[i][1],"CSUM2");
+      sprintf(condname,"CSUM3%s",tpc_name_ext1[i]);
+      cTPC_CSUM[i][2]=MakeWindowCond("TPC/CSUM3",condname,lim_csum3[i][0],
+				     lim_csum3[i][1],"CSUM3");
+      sprintf(condname,"CSUM4%s",tpc_name_ext1[i]);
+      cTPC_CSUM[i][3]=MakeWindowCond("TPC/CSUM4",condname,lim_csum4[i][0],
+				     lim_csum4[i][1],"CSUM4");
+    }
+
+  for(int i=0;i<6;i++)
+    {        
+      char fname[100];
+      char name[100];
+      sprintf(fname,"TPC/%s/",tpc_folder_ext1[i]);
+      //(HAPOL-25/03/06) Duplicated histograms for double delay line (0 and 1) in new TPCs
+
+      hTPC_L0[i]=MakeH1I_TPC(fname,"L0",i,4000,5,4005,
+			     "Left DL0 ADC (channels)",2,3);
+      hTPC_R0[i]=MakeH1I_TPC(fname,"R0",i,4000,5,4005,
+			     "Right DL0 ADc (channels)",2,3);
+      hTPC_LT0[i]=MakeH1I_TPC(fname,"LT0",i,4000,5,4005,
+			      "Left DL0 time (channels)",2,3);
+      hTPC_RT0[i]=MakeH1I_TPC(fname,"RT0",i,4000,5,4005,
+			      "Right DL0 time(channels)",2,3);
+      hTPC_L1[i]=MakeH1I_TPC(fname,"L1",i,4000,5,4005,
+			     "Left DL1 ADC (channels)",2,3);
+      hTPC_R1[i]=MakeH1I_TPC(fname,"R1",i,4000,5,4005,
+			     "Right DL1 ADC (channels)",2,3);
+      hTPC_LT1[i]=MakeH1I_TPC(fname,"LT1",i,4000,5,4005,
+			      "Left DL1 time (channels)",2,3);
+      hTPC_RT1[i]=MakeH1I_TPC(fname,"RT1",i,4000,5,4005,
+			      "Right DL1 time(channels)",2,3);
+      hTPC_DT[i][0]=MakeH1I_TPC(fname,"DT1",i,4000,5,4005,
+				"drift time 1 (channels)",2,3);
+      hTPC_DT[i][1]=MakeH1I_TPC(fname,"DT2",i,4000,5,4005,
+				"drift time 2(channels)",2,3);
+      hTPC_DT[i][2]=MakeH1I_TPC(fname,"DT3",i,4000,5,4005,
+				"drift time 3(channels)",2,3);
+      hTPC_DT[i][3]=MakeH1I_TPC(fname,"DT4",i,4000,5,4005,
+				"drift time 4(channels)",2,3);
+      hTPC_A[i][0]=MakeH1I_TPC(fname,"A1",i,4000,5,4005,
+			       "anode 1 ADC(channels)",2,3);
+      hTPC_A[i][1]=MakeH1I_TPC(fname,"A2",i,4000,5,4005,
+			       "anode 2 ADC(channels)",2,3);
+      hTPC_A[i][2]=MakeH1I_TPC(fname,"A3",i,4000,5,4005,
+			       "anode 3 ADC(channels)",2,3);
+      hTPC_A[i][3]=MakeH1I_TPC(fname,"A4",i,4000,5,4005,
+			       "anode 4 ADC(channels)",2,3);
+      hTPC_CSUM[i][0]=MakeH1I_TPC(fname,"CSUM1",i,4000,-2000,4005,
+				  "control sum 1(channels)",2,3);
+      hTPC_CSUM[i][1]=MakeH1I_TPC(fname,"CSUM2",i,4000,-2000,4005,
+				  "control sum 2(channels)",2,3);
+      hTPC_CSUM[i][2]=MakeH1I_TPC(fname,"CSUM3",i,4000,-2000,4005,
+				  "control sum 3(channels)",2,3);
+      hTPC_CSUM[i][3]=MakeH1I_TPC(fname,"CSUM4",i,4000,-2000,4005,
+				  "control sum 4(channels)",2,3);
+
+      hTPC_XRAW0[i]=MakeH1I_TPC(fname,"Xraw0",i,1000,-2000,2000,
+				"First delay line  x(ch)",2,3);
+      hTPC_XRAW1[i]=MakeH1I_TPC(fname,"Xraw1",i,1000,-2000,2000,
+				"Second delay line x(ch)",2,3);
+      hTPC_YRAW[i]=MakeH1I_TPC(fname,"Yraw",i,4000,0.0,4000.,
+			       "y(ch)",2,3);
+      hTPC_X[i]=MakeH1I_TPC(fname,"X",i,800,-100.,100.,
+			    "x[mm]",2,3);
+      hTPC_Y[i]=MakeH1I_TPC(fname,"Y",i,800,-100.,100.,
+			    "y[mm]",2,3);
 
 
-   //  hTPC_X_S4_target2d=MakeH1I_TPC("TPC/S4","S4_X_target2d",-1,1000,-100.5,100.5,
-   //			"x at S4 at target 2 [mm]",2,3);
-   //  hTPC_Y_S4_target2d=MakeH1I_TPC("TPC/S4","S4_Y_target2d",-1,1000,-100.5,100.5,
-   //			"y at S4 at target 2 [mm]",2,3);
-   //  hTPC_AX_S4_target2=MakeH1I_TPC("TPC/S4","S4_AX_target2",-1,1000,-100.5,100.5,
-   //			"angl_x at S4 at target 2 [mrad]",2,3);
-   //  hTPC_AY_S4_target2=MakeH1I_TPC("TPC/S4","S4_AY_target2",-1,1000,-100.5,100.5,
-   //			"angl_y at S4 at target 2 [mrad]",2,3);
-   //  hTPC_XY_S4_target2d=MakeH2I("TPC/S4","S4_XY_target2d",1000,-100.5,100.5,1000,-100.5,100.5,
-   //			"x-S4 at target 2 [mm]","y at S4 at target 2 [mm]",2);
+      sprintf(name,"%s%s",tpc_name_ext1[i],"XY");
+      hcTPC_XY[i]=MakeH2I(fname,name, 120,-120.,120., 120,-120.,120.,
+			  "X [mm] ","Y [mm] ", 2);
 
-   hTPC_SC21x  = MakeH1I_TPC("TPC/Detector","TPC_SC21x",-1, 221,-110.5,110.5,"X tracked at SC21 [mm]",2,3);
-   hTPC_SC21y  = MakeH1I_TPC("TPC/Detector","TPC_SC21y",-1, 221,-110.5,110.5,"Y tracked at SC21 [mm]",2,3);
-   hTPC_SC41x  = MakeH1I_TPC("TPC/Detector","TPC_SC41x",-1, 221,-110.5,110.5,"X tracked at SC41 [mm]",2,3);
-   hTPC_SC41y  = MakeH1I_TPC("TPC/Detector","TPC_SC41y",-1, 221,-110.5,110.5,"Y tracked at SC41 [mm]",2,3);
+      sprintf(name,"%s%s",tpc_name_ext1[i],"LTRT");
+      hTPC_LTRT[i]=MakeH2I(fname,name, 2048,0,4095, 2048,0,4095,
+			   "LT [ch]","RT[ch] ", 2);			
+      hTPC_DELTAX[i]=MakeH1I_TPC(fname,"x0-x1",i,100,-10.,10.,
+				 "x0-x1[mm]",2,3);
 
-   for(int i=0;i<6;i++){
-     char name[100];
-     sprintf(name,"TPC/TPC%d",i+1);
-     MakePic(name,"Amplitudes",4,2,hTPC_A[i][0],hTPC_A[i][1],hTPC_A[i][2],hTPC_A[i][3],hTPC_L0[i],hTPC_R0[i],hTPC_L1[i],hTPC_R1[i]);
-   }
- }
+    }
 
- // Creation of Si data & histograms
- void TFRSCalibrProc::Create_SI_Hist()
- {
-   hsi_e1 = MakeH1I("Si/e1","Si_1 DU energy [keV]",5000,0,10000);
-   hsi_e2 = MakeH1I("Si/e2","Si_2 DU energy [keV]",5000,0,10000);
-   hsi_e3 = MakeH1I("Si/e1","Si_3 gate energy [keV]",5000,0,10000);
-   hsi_e4 = MakeH1I("Si/e2","Si_4 sled energy [keV]",5000,0,10000);
+  //Calculated positions and angles from tracking
 
- }
- // Creation of Channeltron data & histograms
- void TFRSCalibrProc::Create_CT_Hist()
- {
-   hct_all = MakeH1I("Ct","Ct_all",5000,0,10000);
-   hct_trigger_DU = MakeH1I("Ct","Ct_trigger_DU",5,0,5);
-   hct_trigger_SY = MakeH1I("Ct","Ct_trigger_SY",5,0,5);
-   hct_DU = MakeH1I("Ct","Ct_DU",5000,0,10000);
-   hct_SY = MakeH1I("Ct","Ct_SY",5000,0,10000);
- }
+  hTPC_X_S2=MakeH1I_TPC("TPC/S2","S2_X",-1,1000,-100.,100.,
+			"x at S2 focus [mm]",2,3);
+  hTPC_Y_S2=MakeH1I_TPC("TPC/S2","S2_Y",-1,1000,-100.,100.,
+			"y at S2 focus [mm]",2,3);
+  hTPC_AX_S2=MakeH1I_TPC("TPC/S2","S2_AX",-1,1000,-100.5,100.5,
+			 "angl_x at S2 focus [mrad]",2,3);
+  hTPC_AY_S2=MakeH1I_TPC("TPC/S2","S2_AY",-1,1000,-100.5,100.5,
+			 "angl_y at S2 focus [mrad]",2,3);
 
- // Creation of Electron Current data & histograms
- void TFRSCalibrProc::Create_ElCurrent_Hist()
- {
-   helcurrent = MakeH1I("El Current","El Current",5000,0,10000);
- }
+  hTPC_X_S2_target1=MakeH1I_TPC("TPC/S2","S2_X_silicon1",-1,1000,-100.5,100.5,
+				"x at Si tracker 1 [mm]",2,3);
+  hTPC_Y_S2_target1=MakeH1I_TPC("TPC/S2","S2_Y_silicon1",-1,1000,-100.5,100.5,
+				"y at Si tracker 1 [mm]",2,3);
+  hTPC_XY_S2_target1=MakeH2I("TPC/S2","S2_XY_silicon1",1000,-100.5,100.5,1000,-100.5,100.5,
+			     "x at Si tracker 1 [mm]","y at Si tracker 1 [mm]",2);
 
- void TFRSCalibrProc::InitProcessor()
- {
-   // MW initialization 
 
-   fbFirstEvent = kTRUE; 
-   for (int i=0;i<32;i++)
-     scaler_save[i] = 0; 
-   firstsec = 0;
-   firsttenthsec = 0;
-   firsthundrethsec = 0;	//mik
-   firstcycle = 0;
-   dtime = 0.;
-   dt_last = 0.;
-   dt_diff = 0.;
+  hTPC_X_S4=MakeH1I_TPC("TPC/S4","S4_X",-1,1000,-100.5,100.5,
+			"x at S4 focus [mm]",2,3);
+  hTPC_Y_S4=MakeH1I_TPC("TPC/S4","S4_Y",-1,1000,-100.5,100.5,
+			"y at S4 focus [mm]",2,3);
+  hTPC_AX_S4=MakeH1I_TPC("TPC/S4","S4_AX",-1,1000,-100.5,100.5,
+			 "angl_x at S4 [mrad]",2,3);
+  hTPC_AY_S4=MakeH1I_TPC("TPC/S4","S4_AY",-1,1000,-100.5,100.5,
+			 "angl_y at S4 [mrad]",2,3);
+  hTPC_X_S4_target2=MakeH1I_TPC("TPC/S4","S4_X_OTPC",-1,1000,-100.5,100.5,
+				"x at OTPC entrance [mm]",2,3);
+  hTPC_Y_S4_target2=MakeH1I_TPC("TPC/S4","S4_Y_OTPC",-1,1000,-100.5,100.5,
+				"y at OTPC entrance [mm]",2,3);
+  //  hTPC_X_S4_target1d=MakeH1I_TPC("TPC/S4","S4_X_target1d",-1,1000,-100.5,100.5,
+  //			"x at S4 at H2 target [mm]",2,3);
+  //  hTPC_Y_S4_target1d=MakeH1I_TPC("TPC/S4","S4_Y_target1d",-1,1000,-100.5,100.5,
+  //			"y at S4 at H2 target [mm]",2,3);
 
-   scalercycle_Sec=0;
-   scalercycle_TenthSec=0;
-   scalercycle_HundrethSec=0;
-   scalercycle_Sec=0;
-   scalercycle_Cycle=0;
-   scalercycle_Seetram=0;
+  hTPC_XY_S4_target2=MakeH2I("TPC/S4","S4_XY_OTPC",1000,-100.5,100.5,1000,-100.5,100.5,
+			     "x at OTPC entrance [mm]","y at OTPC entrance [mm]",2);
+  //  hTPC_XY_S4_target1d=MakeH2I("TPC/S4","S4_XY_target1d",1000,-100.5,100.5,1000,-100.5,100.5,
+  //			"x-S4 at H2 target [mm]","y-S4 at H2 target [mm]",2);
+  hTPC_XAX_S4=MakeH2I("TPC/S4","angle_vs_x_S4", 400,-100.,100., 250,-25.0,25.0,
+		      "X at S4 [mm] ","x angle [mrad] ", 2);  
+  hTPC_XS4_AX_S2 =MakeH2I("TPC/S4","angle_s2_at vs x_S4", 400,-100.,100., 250,-25.0,25.0,
+			  "X at S4 [mm] ","angle(x) at S2 [mrad] ", 2);
+
+
+  //  hTPC_X_S4_target2d=MakeH1I_TPC("TPC/S4","S4_X_target2d",-1,1000,-100.5,100.5,
+  //			"x at S4 at target 2 [mm]",2,3);
+  //  hTPC_Y_S4_target2d=MakeH1I_TPC("TPC/S4","S4_Y_target2d",-1,1000,-100.5,100.5,
+  //			"y at S4 at target 2 [mm]",2,3);
+  //  hTPC_AX_S4_target2=MakeH1I_TPC("TPC/S4","S4_AX_target2",-1,1000,-100.5,100.5,
+  //			"angl_x at S4 at target 2 [mrad]",2,3);
+  //  hTPC_AY_S4_target2=MakeH1I_TPC("TPC/S4","S4_AY_target2",-1,1000,-100.5,100.5,
+  //			"angl_y at S4 at target 2 [mrad]",2,3);
+  //  hTPC_XY_S4_target2d=MakeH2I("TPC/S4","S4_XY_target2d",1000,-100.5,100.5,1000,-100.5,100.5,
+  //			"x-S4 at target 2 [mm]","y at S4 at target 2 [mm]",2);
+
+  hTPC_SC21x  = MakeH1I_TPC("TPC/Detector","TPC_SC21x",-1, 221,-110.5,110.5,"X tracked at SC21 [mm]",2,3);
+  hTPC_SC21y  = MakeH1I_TPC("TPC/Detector","TPC_SC21y",-1, 221,-110.5,110.5,"Y tracked at SC21 [mm]",2,3);
+  hTPC_SC41x  = MakeH1I_TPC("TPC/Detector","TPC_SC41x",-1, 221,-110.5,110.5,"X tracked at SC41 [mm]",2,3);
+  hTPC_SC41y  = MakeH1I_TPC("TPC/Detector","TPC_SC41y",-1, 221,-110.5,110.5,"Y tracked at SC41 [mm]",2,3);
+
+  for(int i=0;i<6;i++){
+    char name[100];
+    sprintf(name,"TPC/TPC%d",i+1);
+    MakePic(name,"Amplitudes",4,2,hTPC_A[i][0],hTPC_A[i][1],hTPC_A[i][2],hTPC_A[i][3],hTPC_L0[i],hTPC_R0[i],hTPC_L1[i],hTPC_R1[i]);
+  }
+}
+
+// Creation of Si data & histograms
+void TFRSCalibrProc::Create_SI_Hist()
+{
+  hsi_e1 = MakeH1I("Si/e1","Si_1 DU energy [keV]",5000,0,10000);
+  hsi_e2 = MakeH1I("Si/e2","Si_2 DU energy [keV]",5000,0,10000);
+  hsi_e3 = MakeH1I("Si/e1","Si_3 gate energy [keV]",5000,0,10000);
+  hsi_e4 = MakeH1I("Si/e2","Si_4 sled energy [keV]",5000,0,10000);
+
+}
+// Creation of Channeltron data & histograms
+void TFRSCalibrProc::Create_CT_Hist()
+{
+  hct_all = MakeH1I("Ct","Ct_all",5000,0,10000);
+  hct_trigger_DU = MakeH1I("Ct","Ct_trigger_DU",5,0,5);
+  hct_trigger_SY = MakeH1I("Ct","Ct_trigger_SY",5,0,5);
+  hct_DU = MakeH1I("Ct","Ct_DU",5000,0,10000);
+  hct_SY = MakeH1I("Ct","Ct_SY",5000,0,10000);
+}
+
+// Creation of Electron Current data & histograms
+void TFRSCalibrProc::Create_ElCurrent_Hist()
+{
+  helcurrent = MakeH1I("El Current","El Current",5000,0,10000);
+}
+
+void TFRSCalibrProc::InitProcessor()
+{
+  // MW initialization 
+
+  fbFirstEvent = kTRUE; 
+  for (int i=0;i<32;i++)
+    scaler_save[i] = 0; 
+  firstsec = 0;
+  firsttenthsec = 0;
+  firsthundrethsec = 0;	//mik
+  firstcycle = 0;
+  dtime = 0.;
+  dt_last = 0.;
+  dt_diff = 0.;
+
+  scalercycle_Sec=0;
+  scalercycle_TenthSec=0;
+  scalercycle_HundrethSec=0;
+  scalercycle_Sec=0;
+  scalercycle_Cycle=0;
+  scalercycle_Seetram=0;
 
    
-   // MON initialization
-   focx_s2m = 0.;
-   focy_s2m = 0.;
-   angle_x_s2m = 0.;
-   angle_y_s2m = 0.;
- }
+  // MON initialization
+  focx_s2m = 0.;
+  focy_s2m = 0.;
+  angle_x_s2m = 0.;
+  angle_y_s2m = 0.;
+}
 
- void TFRSCalibrProc::Process_MON_Analysis(const TFRSSortEvent& src, TFRSCalibrEvent& tgt)
- {
+void TFRSCalibrProc::Process_MON_Analysis(const TFRSSortEvent& src, TFRSCalibrEvent& tgt)
+{
 
   //----- from here added by YKT 23.05 --------//   
   /////// 
@@ -637,17 +641,31 @@ void TFRSCalibrProc::Create_MON_Hist()
   ///////  check_increase_time[i]   check_increase_spill[i],   scaler_last_event[i]    UInt_t 
 
   // special channels for normalization
-  int scaler_channel_spill = 12; double normalization_factor_spill = 1.0; //   YKT 23.05
-  int scaler_channel_time  = 4; double normalization_factor_time = 10.0; //  YKT 23.05 
+  int scaler_channel_spill_all[2] = {12, 5}; double normalization_factor_spill_all[2] = {1.0,1.0}; //   YKT 23.05
+  int scaler_channel_time_all[2]  = {4,1}; double normalization_factor_time_all[2] = {10.0,100.}; //  YKT 23.05 
   Long64_t nmax_V830 = 0x100000000;
 
+  int index_flag = -1;
+  if(tgt.EventFlag==0x100)
+    index_flag=0;
+  else if(tgt.EventFlag==0x200)
+    index_flag=1;
+  else
+    std::cout<<"E> EventFlag unknown !"<<tgt.EventFlag<<std::endl;
+
+  int scaler_channel_spill = scaler_channel_spill_all[index_flag];
+  double normalization_factor_spill = normalization_factor_spill_all[index_flag]; //   YKT 23.05
+  int scaler_channel_time  = scaler_channel_time_all[index_flag];
+  double normalization_factor_time = normalization_factor_time_all[index_flag] ; //  YKT 23.05 
+
+  UInt_t tempCurrentTime = index_flag == 0 ? src.sc_long[scaler_channel_time] : src.sc_long2[scaler_channel_time];
   //----initialize values defined in this file---
-  if(1==check_first_event  && (0!=src.sc_long[scaler_channel_time])) // if first event has 0 (for all channels) >> use next event as a first event 
+  if(1==check_first_event[index_flag]  && (0!=tempCurrentTime)) // if first event has 0 (for all channels) >> use next event as a first event 
     {
-      scaler_time_count  =0; //UInt_t
-      scaler_spill_count =0; //UInt_t
-      scaler_time_check_last = 0;//UInt_t
-      scaler_spill_check_last= 0;//UInt_t
+      scaler_time_count[index_flag]  = 0; //UInt_t
+      scaler_spill_count[index_flag] = 0; //UInt_t
+      scaler_time_check_last[index_flag] = 0;//UInt_t
+      scaler_spill_check_last[index_flag] = 0;//UInt_t
       for(size_t i=0; i<32; i++)
 	{
 	  check_increase_time[i]   =0;//UInt_t
@@ -665,52 +683,56 @@ void TFRSCalibrProc::Create_MON_Hist()
       
     }
 
+  for(int i=0; i<64; i++)
+    scaler_increase_event[i]=0;  
+  
   //------------ scaler_increase_event[i] and scaler_last_event[i] -----------
   //////
   // sometimes V830 data from sort is empty (all 0)
   // in such case, we skip updating { scaler_increase_event[i] and scaler_last_event[i] }
-  if(0!=src.sc_long[scaler_channel_time])
+  if(0!=tempCurrentTime)
     {
-      if(0==check_first_event)
+      if(0==check_first_event[index_flag])
 	{
-	  for(size_t i=0; i<32; i++)
+	  if(index_flag==0)
 	    {
-	      if(static_cast<Long64_t>(src.sc_long[i]) >= scaler_last_event[i])
+	      for(size_t i=0; i<32; i++)
 		{
-		  scaler_increase_event[i] = src.sc_long[i] - scaler_last_event[i];
+		  if(static_cast<Long64_t>(src.sc_long[i]) >= scaler_last_event[i])
+		    scaler_increase_event[i] = src.sc_long[i] - scaler_last_event[i];
+		  else
+		    {
+		      //printf("src.sc_long[i], scaler_last_event[i]:%d %d\n", src.sc_long[i] , scaler_last_event[i]);
+		      scaler_increase_event[i] =  src.sc_long[i]  + nmax_V830 - scaler_last_event[i];
+		    }
+		  scaler_last_event[i]     = src.sc_long[i];
 		}
-	      else
-		{
-		  //printf("src.sc_long[i], scaler_last_event[i]:%d %d\n", src.sc_long[i] , scaler_last_event[i]);
-		  scaler_increase_event[i] =  src.sc_long[i]  + nmax_V830 - scaler_last_event[i];
-		}
-	      scaler_last_event[i]     = src.sc_long[i];
 	    }
-	  for(size_t i=32; i<64; i++)
+	  if(index_flag==1)
 	    {
-	      if(static_cast<Long64_t>(src.sc_long2[i-32]) >= scaler_last_event[i])
+	      for(size_t i=32; i<64; i++)
 		{
-		  scaler_increase_event[i] = src.sc_long2[i-32] - scaler_last_event[i];
-		}
-	      else
-		{
-		  //printf("src.sc_long[i], scaler_last_event[i]:%d %d\n", src.sc_long[i] , scaler_last_event[i]);
-		  scaler_increase_event[i] =  src.sc_long2[i-32]  + nmax_V830 - scaler_last_event[i];
-		}
-	      scaler_last_event[i]     = src.sc_long2[i-32];
-	    }	  
+		  if(static_cast<Long64_t>(src.sc_long2[i-32]) >= scaler_last_event[i])
+		    scaler_increase_event[i] = src.sc_long2[i-32] - scaler_last_event[i];
+		  else
+		    {
+		      //printf("src.sc_long[i], scaler_last_event[i]:%d %d\n", src.sc_long[i] , scaler_last_event[i]);
+		      scaler_increase_event[i] =  src.sc_long2[i-32]  + nmax_V830 - scaler_last_event[i];
+		    }
+		  scaler_last_event[i]     = src.sc_long2[i-32];
+		}	  
+	    }
 	}
     }
-  
   //-----switch off initial event check---
-  if(1==check_first_event && (0!=src.sc_long[scaler_channel_time])) // if first event has 0 (for all channels) >> use next event as a first event
+  if(1==check_first_event[index_flag] && (0!=tempCurrentTime)) // if first event has 0 (for all channels) >> use next event as a first event
     { 
-      check_first_event = 0;
+      check_first_event[index_flag] = 0;
     }
 
 
   // add {increase from last event} to the counters.
-  if(0!=src.sc_long[scaler_channel_time])
+  if(0!=tempCurrentTime)
     {
       for(int i=0; i<64; i++)
 	{
@@ -720,26 +742,26 @@ void TFRSCalibrProc::Create_MON_Hist()
     }
  
   // integrated count from the beginning
-  if(0!=src.sc_long[scaler_channel_time])
+  if(0!=tempCurrentTime)
     {
-      scaler_time_count  += scaler_increase_event[scaler_channel_time]; //
-      scaler_spill_count += scaler_increase_event[scaler_channel_spill];//
+      scaler_time_count[index_flag]  += scaler_increase_event[scaler_channel_time]; //
+      scaler_spill_count[index_flag] += scaler_increase_event[scaler_channel_spill];//
     }
   
-  int scaler_time_check  = scaler_time_count/((int)normalization_factor_time);
-  int scaler_spill_check = scaler_spill_count;
+  int scaler_time_check  = scaler_time_count[index_flag]/((int)normalization_factor_time);
+  int scaler_spill_check = scaler_spill_count[index_flag];
 
   //  printf("scaler_time_count = %d, src.sc_long[4]=%d, src.sc_long[3]=%d, \n",scaler_time_count, src.sc_long[4], src.sc_long[3]);
  
 
   // when scaler_time_check is increased
-  if( 0<(scaler_time_check - scaler_time_check_last) )
+  if( 0<(scaler_time_check - scaler_time_check_last[index_flag]) )
     {
       //   printf("scaler_time_check = %d, scaler_time_check_last = %d \n",scaler_time_check,scaler_time_check_last);
-      if(10<(scaler_time_check - scaler_time_check_last))
+      if(10<(scaler_time_check - scaler_time_check_last[index_flag]))
 	{
 	  //printf("scaler_time_check - scaler_time_check_last = %d ...\n",);
-	  std::cout<<"scaler_time_check - scaler_time_check_last = "<<(scaler_time_check - scaler_time_check_last)<<"...\n";
+	  std::cout<<"EventFlag"<<tgt.EventFlag<<"|"<<index_flag<<"scaler_time_check - scaler_time_check_last = "<<(scaler_time_check - scaler_time_check_last[index_flag])<<"...\n";
 	} 
       for(int i=0; i<64; i++)
 	{
@@ -772,16 +794,16 @@ void TFRSCalibrProc::Create_MON_Hist()
 	{
 	  check_increase_time[i]=0;
 	}//reset
-      scaler_time_check_last = scaler_time_check;  
+      scaler_time_check_last[index_flag] = scaler_time_check;  
     }
 
   // when scaler_time_check is increased
-  if( 0<(scaler_spill_check - scaler_spill_check_last) )
+  if( 0<(scaler_spill_check - scaler_spill_check_last[index_flag]) )
     {
-      if(10<(scaler_spill_check - scaler_spill_check_last))
+      if(10<(scaler_spill_check - scaler_spill_check_last[index_flag]))
 	{
 	  //printf("scaler_spill_check - scaler_spill_check_last = %d ...\n",(scaler_spill_check - scaler_spill_check_last));
-	  std::cout<<"scaler_spill_check - scaler_spill_check_last = "<<(scaler_spill_check - scaler_spill_check_last)<<"...\n";
+	  std::cout<<"EventFlag"<<tgt.EventFlag<<"|"<<index_flag<<"scaler_spill_check - scaler_spill_check_last = "<<(scaler_spill_check - scaler_spill_check_last[index_flag])<<"...\n";
 	}
       for(int i=0; i<64; i++)
 	{
@@ -810,16 +832,18 @@ void TFRSCalibrProc::Create_MON_Hist()
 	  hSCALER_SPILL_SHORT[i]  -> SetBinContent(1+(x_bin_short+4)%30,0);
 	}
       //
-      check_total_sc21 += check_increase_spill[7];
-      check_total_sc41 += check_increase_spill[8];
-      check_total_seetram += check_increase_spill[10];
+      if(index_flag==0)
+	{
+	  check_total_sc21 += check_increase_spill[7];
+	  check_total_sc41 += check_increase_spill[8];
+	  check_total_seetram += check_increase_spill[10];
       //printf("Total SC41 = %d,  Total SC21 = %d, Total SEETRAM = %d \n",check_total_sc41,check_total_sc21,check_total_seetram);
-
+	}
       for(int i=0; i<64; i++)
 	{
 	  check_increase_spill[i]=0;
 	}//reset                                                                                                                                                       
-      scaler_spill_check_last = scaler_spill_check;
+      scaler_spill_check_last[index_flag] = scaler_spill_check;
       //           
     }
   //----- up to here added by YKT 23.05 --------// 
@@ -830,86 +854,86 @@ void TFRSCalibrProc::Create_MON_Hist()
 
 
    
-   UInt_t first[64];
-   //  Int_t  first[64]; 
+  UInt_t first[64];
+  //  Int_t  first[64]; 
 
-   if (fbFirstEvent)
-     { //
-       for (int i=0;i<32;i++)
-	 {
-	   //std::cout <<"In first event loop"<<std::endl ; 
-	   scaler_save[i] = src.sc_long[i];
-	   //		 std::cout <<"  "<<scaler_save[i] <<"  "<<src.sc_long[i]<<std::endl ; 
-	   first[i]=src.sc_long[i];
-	 }
+  if (fbFirstEvent)
+    { //
+      for (int i=0;i<32;i++)
+	{
+	  //std::cout <<"In first event loop"<<std::endl ; 
+	  scaler_save[i] = src.sc_long[i];
+	  //		 std::cout <<"  "<<scaler_save[i] <<"  "<<src.sc_long[i]<<std::endl ; 
+	  first[i]=src.sc_long[i];
+	}
 
-     for (int i=32;i<64;i++)
-       {
-	 scaler_save[i] = src.sc_long2[i-32];
-	 first[i]=src.sc_long2[i-32];
-       }
+      for (int i=32;i<64;i++)
+	{
+	  scaler_save[i] = src.sc_long2[i-32];
+	  first[i]=src.sc_long2[i-32];
+	}
 
-     //    std::cout <<"1Hz  "<<src.sc_long[3]<<std::endl;
-     //    std::cout <<"10Hz "<<src.sc_long[4]<<std::endl;  
+      //    std::cout <<"1Hz  "<<src.sc_long[3]<<std::endl;
+      //    std::cout <<"10Hz "<<src.sc_long[4]<<std::endl;  
 
-     if(src.sc_long[3]!=0)
-       {     
-	 firstsec = src.sc_long[3]; // TIME //
-	 firsttenthsec = src.sc_long[4];
-	 firsthundrethsec = src.sc_long[25];	//mik
-	 firstcycle = src.sc_long[2];
-	 firstseetram= src.sc_long[10]; // new SE01
-	 //      firstseetram= src.sc_long[9]; // old SE01
+      if(src.sc_long[3]!=0)
+	{     
+	  firstsec = src.sc_long[3]; // TIME //
+	  firsttenthsec = src.sc_long[4];
+	  firsthundrethsec = src.sc_long[25];	//mik
+	  firstcycle = src.sc_long[2];
+	  firstseetram= src.sc_long[10]; // new SE01
+	  //      firstseetram= src.sc_long[9]; // old SE01
 
-	 fbFirstEvent = kFALSE; 
-	 return;  // skip event   
-       }
-   }
+	  fbFirstEvent = kFALSE; 
+	  return;  // skip event   
+	}
+    }
 
 
-   //  Int_t tgt.mon_inc[64];
+  //  Int_t tgt.mon_inc[64];
 
-   Double_t over_scale=  4000000000.;
-   //  printf("%15f",over_scale);
+  Double_t over_scale=  4000000000.;
+  //  printf("%15f",over_scale);
 
-   // for 1st module
-   for (int i=0;i<32;i++)
-     if(0!=src.sc_long[scaler_channel_time])
-       {
-	 Int_t overload = 0; 
-	 //  if(src.sc_long[i]!=0){            
-	 if ( scaler_save[i] > static_cast<Long64_t>(src.sc_long[i]))
-	   {
-	     if (src.trigger==12 || src.trigger==13)
-	       continue ;
+  // for 1st module
+  for (int i=0;i<32;i++)
+    if(0!=src.sc_long[scaler_channel_time])
+      {
+	Int_t overload = 0; 
+	//  if(src.sc_long[i]!=0){            
+	if ( scaler_save[i] > static_cast<Long64_t>(src.sc_long[i]))
+	  {
+	    if (src.trigger==12 || src.trigger==13)
+	      continue ;
 
-	     //std::cout <<"Hey I got overloaded !!! channel "<<i<<std::endl ; 
-	     //std::cout <<scaler_save[i] <<"  "<<src.sc_long[i]<<std::endl ;
-	     //std::cout <<"trigger is : "<<src.trigger<<std::endl ; 
-	     //scaler_save[i] = scaler_save[i] - 4294967295;
-	     tgt.mon_inc[i] = static_cast<Long64_t>(src.sc_long[i])+4294967295 - scaler_save[i]; //
-	     //scaler_save[i] = (Long64_t)src.sc_long[i]);
-	     overload = 1;
-	   }
-	 else
-	   tgt.mon_inc[i] = static_cast<Long64_t>(src.sc_long[i]) - scaler_save[i]; //
+	    //std::cout <<"Hey I got overloaded !!! channel "<<i<<std::endl ; 
+	    //std::cout <<scaler_save[i] <<"  "<<src.sc_long[i]<<std::endl ;
+	    //std::cout <<"trigger is : "<<src.trigger<<std::endl ; 
+	    //scaler_save[i] = scaler_save[i] - 4294967295;
+	    tgt.mon_inc[i] = static_cast<Long64_t>(src.sc_long[i])+4294967295 - scaler_save[i]; //
+	    //scaler_save[i] = (Long64_t)src.sc_long[i]);
+	    overload = 1;
+	  }
+	else
+	  tgt.mon_inc[i] = static_cast<Long64_t>(src.sc_long[i]) - scaler_save[i]; //
 	 
-	 scaler_save[i] = static_cast<Long64_t>(src.sc_long[i]);
-	 //
-	 //if(overload != 0)
-	 //std::cout<<"case overload"<<std::endl;
-	 if (tgt.mon_inc[i]<0)
-	   {
-	     //std::cout <<"  "<<i<<"  "<<tgt.mon_inc[i]<<"  "<<src.sc_long[i]<<"  "<<scaler_save[i]<<" | "<<overload<<std::endl ; 
-	     std::cout <<"!> tgt.mon_inc["<<i<<"] -> WRONG"<<std::endl ;
-	   } 
+	scaler_save[i] = static_cast<Long64_t>(src.sc_long[i]);
+	//
+	//if(overload != 0)
+	//std::cout<<"case overload"<<std::endl;
+	if (tgt.mon_inc[i]<0)
+	  {
+	    //std::cout <<"  "<<i<<"  "<<tgt.mon_inc[i]<<"  "<<src.sc_long[i]<<"  "<<scaler_save[i]<<" | "<<overload<<std::endl ; 
+	    std::cout <<"!> tgt.mon_inc["<<i<<"] -> WRONG"<<std::endl ;
+	  } 
 
 
-    /* save the current value so that it can be used next time around... */
-    //if(tgt.mon_inc[i]>4000000000)tgt.mon_inc[i]=0; 
-    //  if(tgt.mon_inc[i]>over_scale)tgt.mon_inc[i]=0; 
+	/* save the current value so that it can be used next time around... */
+	//if(tgt.mon_inc[i]>4000000000)tgt.mon_inc[i]=0; 
+	//  if(tgt.mon_inc[i]>over_scale)tgt.mon_inc[i]=0; 
       
-       } 
+      } 
 
   // for 2nd module
   for (int i=32;i<64;i++)
@@ -944,7 +968,7 @@ void TFRSCalibrProc::Create_MON_Hist()
     {
       if(src.sc_long[3]<firstsec)
 	++scalercycle_Sec;
-	  //firstsec = src.sc_long[3];	  
+      //firstsec = src.sc_long[3];	  
       
       if(src.sc_long[4]<firsttenthsec)
 	++scalercycle_TenthSec;
@@ -1086,27 +1110,27 @@ void TFRSCalibrProc::Process_MW_Analysis(const TFRSSortEvent& src, TFRSCalibrEve
       /*******************************************************************/
       /* If the signals in x and y are valid, calculate position spectra */
       /*******************************************************************/
-    if (tgt.b_mw_xsum[i])
-      {
-	//      Int_t r_x = src.mw_xl[i] - src.mw_xr[i];
-	Float_t r_x = src.mw_xl[i] *  mw->gain_tdc[1][i] - src.mw_xr[i] *  mw->gain_tdc[2][i]; //14.09.05 CN+AM
-	tgt.mw_x[i] = mw->x_factor[i] * r_x + mw->x_offset[i];
-	hMW_X[i]->Fill(tgt.mw_x[i]);
-      }
+      if (tgt.b_mw_xsum[i])
+	{
+	  //      Int_t r_x = src.mw_xl[i] - src.mw_xr[i];
+	  Float_t r_x = src.mw_xl[i] *  mw->gain_tdc[1][i] - src.mw_xr[i] *  mw->gain_tdc[2][i]; //14.09.05 CN+AM
+	  tgt.mw_x[i] = mw->x_factor[i] * r_x + mw->x_offset[i];
+	  hMW_X[i]->Fill(tgt.mw_x[i]);
+	}
     
-    if (tgt.b_mw_ysum[i])
-      {
-	//      Int_t r_y = src.mw_yd[i] - src.mw_yu[i];
-	Float_t r_y = src.mw_yd[i] *  mw->gain_tdc[4][i] - src.mw_yu[i] *  mw->gain_tdc[3][i]; //14.09.05 CN+AM
-	tgt.mw_y[i] = mw->y_factor[i] * r_y + mw->y_offset[i];
-	hMW_Y[i]->Fill(tgt.mw_y[i]);
-      }
+      if (tgt.b_mw_ysum[i])
+	{
+	  //      Int_t r_y = src.mw_yd[i] - src.mw_yu[i];
+	  Float_t r_y = src.mw_yd[i] *  mw->gain_tdc[4][i] - src.mw_yu[i] *  mw->gain_tdc[3][i]; //14.09.05 CN+AM
+	  tgt.mw_y[i] = mw->y_factor[i] * r_y + mw->y_offset[i];
+	  hMW_Y[i]->Fill(tgt.mw_y[i]);
+	}
 
     
-    if(tgt.b_mw_xsum[i] && tgt.b_mw_ysum[i])
-      {
-	hMW_XY[i]->Fill(tgt.mw_x[i], tgt.mw_y[i]);  
-      }
+      if(tgt.b_mw_xsum[i] && tgt.b_mw_ysum[i])
+	{
+	  hMW_XY[i]->Fill(tgt.mw_x[i], tgt.mw_y[i]);  
+	}
 
     } // for(int i=0;i<max_index;i++)
 
@@ -1143,15 +1167,15 @@ void TFRSCalibrProc::Process_MW_Analysis(const TFRSSortEvent& src, TFRSCalibrEve
 
       /* 'real' z-position of S2 X focus (cm) */
       Float_t rh = (tgt.angle_x_s2 - angle_x_s2m);
-    if(fabs(rh)>1e-4)
-      {
-	tgt.z_x_s2 = ((focx_s2m - tgt.focx_s2)/rh)*100. + frs->dist_focS2/10.;  
-	hMW_zxS2->Fill(tgt.z_x_s2);
-      }
+      if(fabs(rh)>1e-4)
+	{
+	  tgt.z_x_s2 = ((focx_s2m - tgt.focx_s2)/rh)*100. + frs->dist_focS2/10.;  
+	  hMW_zxS2->Fill(tgt.z_x_s2);
+	}
     
-    /* keep values for next event */
-    focx_s2m = tgt.focx_s2; 
-    angle_x_s2m = tgt.angle_x_s2;
+      /* keep values for next event */
+      focx_s2m = tgt.focx_s2; 
+      angle_x_s2m = tgt.angle_x_s2;
     }
   
   if (tgt.b_mw_ysum[1] && tgt.b_mw_ysum[2])
@@ -1230,11 +1254,11 @@ void TFRSCalibrProc::Process_TPC_Analysis(const TFRSSortEvent& src, TFRSCalibrEv
 	    tgt.tpc_csum[i][j] = (src.tpc_lt[i][1] + src.tpc_rt[i][1]- 2*src.tpc_dt[i][j]);
 
 
-      //      if((src.de_42l>230&&src.de_42l<450)||(src.de_42r>540&&src.de_42r<750)){
+	  //      if((src.de_42l>230&&src.de_42l<450)||(src.de_42r>540&&src.de_42r<750)){
 	  if (bDrawHist) 
 	    hTPC_CSUM[i][j]->Fill(tgt.tpc_csum[i][j]);
 	  tgt.b_tpc_csum[i][j] = cTPC_CSUM[i][j]->Test(tgt.tpc_csum[i][j]);
-      //      }
+	  //      }
 	  
 	  if(src.tpc_lt[i][0]==0 && src.tpc_rt[i][0]==0 && j<2)
 	    tgt.b_tpc_csum[i][j]=0;
