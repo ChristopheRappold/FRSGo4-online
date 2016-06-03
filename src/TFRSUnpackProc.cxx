@@ -878,7 +878,7 @@ Bool_t TFRSUnpackProc::Event_Extract(TFRSUnpackEvent* event_out, TGo4MbsSubEvent
 			  std::cout << " +-> tdc T value = " << value << std::endl;
 #endif
 			  if (value > 0)
-			    event_out->vme2s_trailing[vme_chn][multihit] = value;
+			    event_out->vme3s_MT_trailing[vme_chn][multihit] = value;
 			}
 		      event_out->vme3_MT_nhit5[vme_chn][LeadingOrTrailing]++;
 		    
