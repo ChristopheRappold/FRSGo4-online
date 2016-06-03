@@ -881,12 +881,15 @@ void setup_s411_jun16_75()
 
   //Si
    
-  si->si_factor1=3.2596; //CH 18.10.2014
-  si->si_offset1=-550.59; //CH 18.10.2014
+  si->si_factor1=5.82775; //CH 03/06/2016
+  si->si_offset1=-381.593; //CH 03/06/2016
+
   si->si_factor2=3.809; //CH 18.10.2014
   si->si_offset2=-529.01; //CH 18.10.2014
+
   si->si_factor3=3.2596; //CH 21.05.2016
   si->si_offset3=-550.59; //CH 21.05.2016|
+
   si->si_factor4=3.2596; //CH 21.05.2016
   si->si_offset4=-550.59; //CH 21.05.2016
   
