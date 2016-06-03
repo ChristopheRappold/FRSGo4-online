@@ -26,6 +26,7 @@ private:
   void Create_MUSIC_Hist();
   void Create_SCI_Hist();
   void Create_ID_Hist();
+  void Create_MRTOF_Hist();
   // void Create_SI_Hist();
   // void Create_CT_Hist();
 
@@ -39,6 +40,15 @@ private:
   TFRSParameter* frs;
   TIDParameter* id;
   TMRTOFMSParameter* mrtof;
+
+  //MRTOF data
+
+  TH1F* h_MRtof_Start;
+  TH1F* h_MRtof_StopDelay;
+  TH1F* h_MRtof_Stop;
+  TH1F* h_MRtof_tof;
+  TH1F* h_MRtof_status;
+
   
   // MUSIC data
 

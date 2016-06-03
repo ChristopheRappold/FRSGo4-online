@@ -46,6 +46,8 @@ TFRSAnlProc::TFRSAnlProc(const char* name): TFRSBasicProc(name)
   //Create_SI_Hist();
   //     printf("Start CT \n"); 
   //Create_CT_Hist();
+  Create_MRTOF_Hist();
+
 
   TGo4CondArray* conarr = MakeCondArray(0, "Integral", 5);
   if (ObjWasCreated())
@@ -91,6 +93,17 @@ Bool_t TFRSAnlProc::BuildEvent(TGo4EventElement* output)
   Procceed_MRTOF_Analysis(*srt, *clb, *poutevt); 
 
   return kTRUE;
+}
+
+void TFRSAnlProc::Create_MRTOF_Hist()
+{
+
+  h_MRtof_Start = MakeH1F("MRTOF/Time","mrtof_start",1000,0,50,"microsec",2,6);
+  h_MRtof_StopDelay = MakeH1F("MRTOF/Time","mrtof_stopDelay",1000,0,50,"microsec",2,6);
+  h_MRtof_Stop = MakeH1F("MRTOF/Time","mrtof_stop",1000,0,50,"microsec",2,6);
+  h_MRtof_tof = MakeH1F("MRTOF/Time","mrtof_tof",2000,0,200,"microsec",2,6);
+  h_MRtof_status = MakeH1F("MRTOF/Time","mrtof_TimeStatus",10,0,10,"",2,6);
+  
 }
 
 void TFRSAnlProc::Create_MUSIC_Hist()
@@ -555,7 +568,7 @@ void TFRSAnlProc::Create_ID_Hist()
 // void TFRSAnlProc::Create_SI_Hist()
 // { }
 // void TFRSAnlProc::Create_CT_Hist()
-// { }
+//{ }
 
 void TFRSAnlProc::Procceed_MUSIC_Analysis(TFRSSortEvent& srt, TFRSCalibrEvent& clb, TFRSAnlEvent& tgt) 
 {
@@ -1330,11 +1343,74 @@ void TFRSAnlProc::Procceed_ID_Analysis(TFRSSortEvent& srt, TFRSCalibrEvent& clb,
 
 void TFRSAnlProc::Procceed_MRTOF_Analysis(TFRSSortEvent& srt, TFRSCalibrEvent& clb, TFRSAnlEvent& tgt) 
 {
-  tgt.mrtof_start = srt.mrtof_start;
-  tgt.mrtof_stop  = srt.mrtof_stop < 0 ? srt.mrtof_stopDelay : srt.mrtof_stop ;
-
-  tgt.mrtof_tof = tgt.mrtof_start - tgt.mrtof_stop;
   
+  if(srt.EventFlag==0x200 && srt.trigger==1)
+    {
+      tgt.mrtof_start = srt.mrtof_start*25./1000000.; // ch to microsec
+      
+      double tempStop1 = srt.mrtof_stopDelay*25./1000000. ;
+      double tempStop2 = srt.mrtof_stop*25./1000000. ;
+      
+      h_MRtof_Start->Fill(tgt.mrtof_start);
+      h_MRtof_StopDelay->Fill(tempStop1);
+      h_MRtof_Stop->Fill(tempStop2);
+      
+      int stop_status=0;
+      
+      if(tempStop1<=0.)
+	{
+	  if(tempStop2>0.)
+	    {
+	      tgt.mrtof_stop  = tempStop2;
+	      h_MRtof_status->Fill("GoodStop2",1);
+	      stop_status=1;
+	    }
+	  else
+	    {
+	      tgt.mrtof_stop = -9999.;
+	      //std::cout<<"E> MRTOF Anal : both stop signal "<<
+	      h_MRtof_status->Fill("NoGoodStop",1);
+	    }
+	}
+      else
+	{
+	  if(tempStop2<=0.)
+	    {
+	      tgt.mrtof_stop = tempStop1-45.;
+	      h_MRtof_status->Fill("GoodStop1",1);
+	      stop_status=1;
+	    }
+	  else
+	    {
+	      double diff_stop = tempStop1-tempStop2;
+	      if(TMath::Abs(diff_stop-45)<1e-2)
+		{
+		  tgt.mrtof_stop = tempStop1-45.;
+		  h_MRtof_status->Fill("GoodStop1&2",1);
+		  stop_status=1;
+		}
+	      else
+		{
+		  h_MRtof_status->Fill("Stop1&2BadOverlap",1);
+		  std::cout<<"E> MRtof diff stop too big from 45 microsec !"<<diff_stop<< "sorted : D="<<srt.mrtof_stopDelay <<" "<< srt.mrtof_stop <<" | in microsec: D="<< tempStop1 <<" "<<tempStop2<<"\n";
+		}
+	    }
+	}
+
+      //int diff_stopdelay = 1891482-54830;
+
+      if(stop_status==1)
+	{
+	  tgt.mrtof_tof = 100. + tgt.mrtof_start - tgt.mrtof_stop; // add 100 microsec from mrtof trigger system 
+	  h_MRtof_tof->Fill(tgt.mrtof_tof);
+	  h_MRtof_status->Fill("GoodTOF",1);
+	}
+      else
+	h_MRtof_status->Fill("BadTOF",1);
+
+
+    }
+
   tgt.mrtof_si_e1=clb.si_e1;
   tgt.mrtof_si_e2=clb.si_e2;
   tgt.mrtof_si_e3=clb.si_e3;
