@@ -273,12 +273,12 @@ Bool_t TFRSSortProc::BuildEvent(TGo4EventElement* output)
   tgt->tpc_rt[1][1]=src->vme1[8][15] & 0xfff;
   
   /* ### SCI dE:  */
-  tgt->de_21l = src->vme0[11][16] & 0xfff;
-  tgt->de_21r = src->vme0[11][17] & 0xfff;
-  tgt->de_41l = src->vme0[11][18] & 0xfff;
-  tgt->de_41r = src->vme0[11][19] & 0xfff;  
-  tgt->de_81l = src->vme0[11][20] & 0xfff;
-  tgt->de_81r = src->vme0[11][21] & 0xfff;  
+  tgt->de_21l = src->vme0[11][0] & 0xfff;
+  tgt->de_21r = src->vme0[11][1] & 0xfff;
+  tgt->de_41l = src->vme0[11][2] & 0xfff;
+  tgt->de_41r = src->vme0[11][3] & 0xfff;  
+  tgt->de_81l = src->vme0[11][4] & 0xfff;
+  tgt->de_81r = src->vme0[11][5] & 0xfff;  
   tgt->de_v1l = 0;
   tgt->de_v1r = 0;  
   tgt->de_v2l = 0;
@@ -350,9 +350,9 @@ Bool_t TFRSSortProc::BuildEvent(TGo4EventElement* output)
   tgt->ec_signal = src->vme0[12][1]& 0xfff;
   
   // mrtof
-  tgt->mrtof_start = src->vme3s_MT[0][0] & 0xfff;
-  tgt->mrtof_stopDelay = src->vme3s_MT[1][0] & 0xfff;
-  tgt->mrtof_stop = src->vme3s_MT[2][0] & 0xfff;
+  tgt->mrtof_start = src->vme3s_MT[0][0] ;//& 0x7ffff;
+  tgt->mrtof_stopDelay = src->vme3s_MT[1][0];// & 0x7ffff;
+  tgt->mrtof_stop = src->vme3s_MT[2][0] ;//& 0x7ffff;
   
   
   return kTRUE;
