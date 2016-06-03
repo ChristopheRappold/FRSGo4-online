@@ -582,8 +582,13 @@ void TFRSCalibrProc::Create_SI_Hist()
 {
   hsi_e1 = MakeH1I("Si/e1","Si_1 DU energy [keV]",5000,0,10000);
   hsi_e2 = MakeH1I("Si/e2","Si_2 DU energy [keV]",5000,0,10000);
-  hsi_e3 = MakeH1I("Si/e1","Si_3 gate energy [keV]",5000,0,10000);
-  hsi_e4 = MakeH1I("Si/e2","Si_4 sled energy [keV]",5000,0,10000);
+  hsi_e3 = MakeH1I("Si/e3","Si_3 gate energy [keV]",5000,0,10000);
+  hsi_e4 = MakeH1I("Si/e4","Si_4 sled energy [keV]",5000,0,10000);
+
+  hsi_e1Trig = MakeH1I("Si/e1Trig","Si_1 DU energy with self trigger  [keV]",5000,0,10000);
+  hsi_e2Trig = MakeH1I("Si/e2Trig","Si_2 DU energy  with self trigger [keV]",5000,0,10000);
+  hsi_e3Trig = MakeH1I("Si/e3Trig","Si_3 gate energy with self trigger [keV]",5000,0,10000);
+  hsi_e4Trig = MakeH1I("Si/e4Trig","Si_4 sled energy  with self trigger [keV]",5000,0,10000);
 
 }
 // Creation of Channeltron data & histograms
@@ -1468,23 +1473,27 @@ void TFRSCalibrProc::Process_SI_Analysis(const TFRSSortEvent& src, TFRSCalibrEve
   tgt.si_e4 = (si->si_factor4*src.si_adc4)+si->si_offset4;
   tgt.si_e5 = (si->si_factor5*src.si_adc5)+si->si_offset5;
 
-  // fill histogram for first si detector trigger ==2
-  if(src.trigger==2)
-    hsi_e1->Fill(tgt.si_e1);
+  // fill histogram for first si detector trigger ==3
 
-
-  // fill histogram for second si detector trigger ==3
+  hsi_e1->Fill(tgt.si_e1);
   if(src.trigger==3)
-    hsi_e2->Fill(tgt.si_e2);
-  
-  // fill histogram for first si detector trigger ==2
-  if(src.trigger==2)
-    hsi_e3->Fill(tgt.si_e3);
-  
-  // fill histogram for first si detector trigger ==2
-  if(src.trigger==2)
-    hsi_e4->Fill(tgt.si_e4);
-  
+    hsi_e1Trig->Fill(tgt.si_e1);
+
+  // fill histogram for second si detector trigger ==4
+  //if(src.trigger==3)
+  hsi_e2->Fill(tgt.si_e2);
+  if(src.trigger==4)
+    hsi_e2Trig->Fill(tgt.si_e2);
+  // fill histogram for first si detector trigger ==5
+  //if(src.trigger==2)
+  hsi_e3->Fill(tgt.si_e3);
+  if(src.trigger==5)
+    hsi_e3Trig->Fill(tgt.si_e3);
+  // fill histogram for first si detector trigger ==6
+  //if(src.trigger==2)
+  hsi_e4->Fill(tgt.si_e4);
+  if(src.trigger==6)
+    hsi_e4Trig->Fill(tgt.si_e4);
 }
 
 //////////////////////////////////////////////////////////////////

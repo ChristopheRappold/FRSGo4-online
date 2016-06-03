@@ -242,6 +242,11 @@ private:
   TH1I *hsi_e3;
   TH1I *hsi_e4;
 
+  TH1I *hsi_e1Trig;
+  TH1I *hsi_e2Trig;
+  TH1I *hsi_e3Trig;
+  TH1I *hsi_e4Trig;
+
   //Channeltron detector
   TH1I 	*hct_all;
   TH1I 	*hct_trigger_DU;
