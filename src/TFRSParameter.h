@@ -279,10 +279,13 @@ public:
   Float_t si_factor2;
   Float_t si_factor3;
   Float_t si_factor4;
+  Float_t si_factor5;
+
   Float_t si_offset1;
   Float_t si_offset2;
   Float_t si_offset3;
   Float_t si_offset4;
+  Float_t si_offset5;
 
   ClassDef(TSIParameter,1)
 };   

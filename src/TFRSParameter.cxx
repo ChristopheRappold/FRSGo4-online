@@ -1247,18 +1247,41 @@ ClassImp(TIDParameter)
 
 // ----------------------------------------------------------
 
-TSIParameter::TSIParameter() : TGo4Parameter("TSIParameter") {
+TSIParameter::TSIParameter() : TGo4Parameter("TSIParameter")
+{
+  si_factor1 = 1.;
+  si_factor2 = 1.;
+  si_factor3 = 1.;
+  si_factor4 = 1.;
+  si_factor5 = 1.;
+
+  si_offset1 = 0.;
+  si_offset2 = 0.;
+  si_offset3 = 0.;
+  si_offset4 = 0.;
+  si_offset5 = 0.;
 
 }
 
-TSIParameter::TSIParameter(const char* name) : TGo4Parameter(name) {
+TSIParameter::TSIParameter(const char* name) : TGo4Parameter(name)
+{
+  si_factor1 = 1.;
+  si_factor2 = 1.;
+  si_factor3 = 1.;
+  si_factor4 = 1.;
+  si_factor5 = 1.;
+
+  si_offset1 = 0.;
+  si_offset2 = 0.;
+  si_offset3 = 0.;
+  si_offset4 = 0.;
+  si_offset5 = 0.;
 
 } 
 
   
-TSIParameter::~TSIParameter() {
-
-}
+TSIParameter::~TSIParameter()
+{ }
 
 void TSIParameter::Print(Option_t*) const {
   std::cout << "Parameter " << GetName() << std::endl;
@@ -1270,16 +1293,19 @@ Bool_t TSIParameter::UpdateFrom(TGo4Parameter* par) {
   if (from==0) {
     std::cout << "Wrong parameter object: " << par->ClassName() << std::endl; 
     return kFALSE;   
-  }		
+  }
   si_factor1 = from->si_factor1;
   si_factor2 = from->si_factor2;
   si_factor3 = from->si_factor3;
   si_factor4 = from->si_factor4;
+  si_factor5 = from->si_factor5;
 
   si_offset1 = from->si_offset1;
   si_offset2 = from->si_offset2;
   si_offset3 = from->si_offset3;
   si_offset4 = from->si_offset4;
+  si_offset5 = from->si_offset5;
+
 
   return kTRUE;		
 }
@@ -1287,11 +1313,21 @@ Bool_t TSIParameter::UpdateFrom(TGo4Parameter* par) {
 ClassImp(TSIParameter)
 
 
-TMRTOFMSParameter::TMRTOFMSParameter() : TGo4Parameter("TMRTOFMSParameter") {
+TMRTOFMSParameter::TMRTOFMSParameter() : TGo4Parameter("TMRTOFMSParameter")
+{
+  MRTOFMS_a = 1.;
+  MRTOFMS_b = 0.;
+  MRTOFMS_t0 = 0.;
+  MRTOFMS_tFRS = 0.;
 
 }
 
-TMRTOFMSParameter::TMRTOFMSParameter(const char* name) : TGo4Parameter(name) {
+TMRTOFMSParameter::TMRTOFMSParameter(const char* name) : TGo4Parameter(name)
+{
+  MRTOFMS_a = 1.;
+  MRTOFMS_b = 0.;
+  MRTOFMS_t0 = 0.;
+  MRTOFMS_tFRS = 0.;
 
 } 
 
