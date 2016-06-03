@@ -141,6 +141,7 @@ void TFRSCalibrEvent::Clear(Option_t *t)
   si_e2=0;
   si_e3=0;
   si_e4=0;
+  si_e5=0;
   
 }
 

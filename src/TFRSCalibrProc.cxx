@@ -1466,6 +1466,7 @@ void TFRSCalibrProc::Process_SI_Analysis(const TFRSSortEvent& src, TFRSCalibrEve
   tgt.si_e2 = (si->si_factor2*src.si_adc2)+si->si_offset2;
   tgt.si_e3 = (si->si_factor3*src.si_adc3)+si->si_offset3;
   tgt.si_e4 = (si->si_factor4*src.si_adc4)+si->si_offset4;
+  tgt.si_e5 = (si->si_factor5*src.si_adc5)+si->si_offset5;
 
   // fill histogram for first si detector trigger ==2
   if(src.trigger==2)

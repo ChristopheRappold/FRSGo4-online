@@ -138,6 +138,7 @@ public:
   Float_t si_e2;
   Float_t si_e3;
   Float_t si_e4;
+  Float_t si_e5;
 
 
 private:
