@@ -23,6 +23,7 @@ TFRSAnlProc::TFRSAnlProc() : TFRSBasicProc("FRSAnlProc")
   sci   = dynamic_cast<TSCIParameter*>(GetParameter("SCIPar"));
   frs   = dynamic_cast<TFRSParameter*>(GetParameter("FRSPar"));
   id    = dynamic_cast<TIDParameter*>(GetParameter("IDPar"));
+  mrtof = dynamic_cast<TMRTOFMSParameter*>(GetParameter("MRTOFMSPar"));
 }
 
 TFRSAnlProc::TFRSAnlProc(const char* name): TFRSBasicProc(name)
@@ -32,6 +33,7 @@ TFRSAnlProc::TFRSAnlProc(const char* name): TFRSBasicProc(name)
   sci   = dynamic_cast<TSCIParameter*>(GetParameter("SCIPar"));
   frs   = dynamic_cast<TFRSParameter*>(GetParameter("FRSPar"));
   id    = dynamic_cast<TIDParameter*>(GetParameter("IDPar"));
+  mrtof = dynamic_cast<TMRTOFMSParameter*>(GetParameter("MRTOFMSPar"));
 
   bDrawHist=kTRUE;
   //     printf("Start MUSIC \n");
@@ -1328,8 +1330,16 @@ void TFRSAnlProc::Procceed_ID_Analysis(TFRSSortEvent& srt, TFRSCalibrEvent& clb,
 
 void TFRSAnlProc::Procceed_MRTOF_Analysis(TFRSSortEvent& srt, TFRSCalibrEvent& clb, TFRSAnlEvent& tgt) 
 {
-  tgt.mrtof_start=srt.mrtof_start;
-  tgt.mrtof_stop =srt.mrtof_stop;
+  tgt.mrtof_start = srt.mrtof_start;
+  tgt.mrtof_stop  = srt.mrtof_stop < 0 ? srt.mrtof_stopDelay : srt.mrtof_stop ;
+
+  tgt.mrtof_tof = tgt.mrtof_start - tgt.mrtof_stop;
+  
+  tgt.mrtof_si_e1=clb.si_e1;
+  tgt.mrtof_si_e2=clb.si_e2;
+  tgt.mrtof_si_e3=clb.si_e3;
+  tgt.mrtof_si_e4=clb.si_e4;
+  tgt.mrtof_si_e5=clb.si_e5;
   
 }
 

@@ -144,7 +144,16 @@ public:
   // MRTOF part :
   Int_t mrtof_start;
   Int_t mrtof_stop;
+  
+  Float_t mrtof_tof;
+  Float_t mrtof_si_e1;
+  Float_t mrtof_si_e2;
+  Float_t mrtof_si_e3;
+  Float_t mrtof_si_e4;
+  Float_t mrtof_si_e5;
 
+  
+  
 private:
 
   // TFRSAnlProc *fxProc;        //! This is processor

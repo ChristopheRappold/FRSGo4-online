@@ -38,6 +38,7 @@ private:
   TSCIParameter* sci;
   TFRSParameter* frs;
   TIDParameter* id;
+  TMRTOFMSParameter* mrtof;
   
   // MUSIC data
 

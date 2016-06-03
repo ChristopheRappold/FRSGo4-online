@@ -169,7 +169,19 @@ void TFRSAnlEvent::Clear(Option_t *t)
     }
   timestamp=0;
   ts=0;  
-  ts2=0;  
+  ts2=0;
+
+  
+  mrtof_start = 0;
+  mrtof_stop = 0;
+  mrtof_tof = 0.;
+  
+  mrtof_si_e1 = 0;
+  mrtof_si_e2 = 0;
+  mrtof_si_e3 = 0;
+  mrtof_si_e4 = 0;
+  mrtof_si_e5 = 0;
+  
 }
 
 ClassImp(TFRSAnlEvent)
