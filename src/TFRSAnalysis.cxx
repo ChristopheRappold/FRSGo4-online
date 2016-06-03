@@ -51,7 +51,7 @@ TFRSAnalysis::TFRSAnalysis(const char* lmd,
 
   // Enable autosave. Autosave is done when analysis loop is stopped
   // or intervall os over.
-  // SetAutoSave(kFALSE);   // no autosave
+  SetAutoSave(kFALSE);   // no autosave
   SetAutoSaveFile(asf);   // optional
   SetAutoSaveInterval(100000); // events , 0 = termination of event loop
 
