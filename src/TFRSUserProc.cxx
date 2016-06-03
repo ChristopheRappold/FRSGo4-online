@@ -208,11 +208,19 @@ void TFRSUserProc::CopyPrevious(TFRSAnlEvent &anl)
 void TFRSUserProc::Process_Analysis(TFRSSortEvent &srt, TFRSCalibrEvent &cal, TFRSAnlEvent &anl, TFRSUserEvent &tgt) 
 {
   // fill tgt object from the MRTOF anl part 
-
   tgt.EventFlag = anl.EventFlag;
+  
+  tgt.timestamp_mrtof = anl.timestamp;
+
   tgt.mrtof_start = anl.mrtof_start;
   tgt.mrtof_stop = anl.mrtof_stop;
-  tgt.timestamp_mrtof = anl.timestamp;
+  tgt.mrtof_tof = anl.mrtof_tof;
+
+  tgt.mrtof_si_e1 = anl.mrtof_si_e1;
+  tgt.mrtof_si_e2 = anl.mrtof_si_e2;
+  tgt.mrtof_si_e3 = anl.mrtof_si_e3;
+  tgt.mrtof_si_e4 = anl.mrtof_si_e4;
+  tgt.mrtof_si_e5 = anl.mrtof_si_e5;
   
   // fill the rest of tgt object from the closest FRS anl 
   for(int i=0;i<8;i++)

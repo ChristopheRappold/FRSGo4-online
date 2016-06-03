@@ -29,9 +29,16 @@ public:
   Int_t EventFlag;
 
   // MRTOF part :
+  Int_t timestamp_mrtof;
+  
   Int_t mrtof_start;
   Int_t mrtof_stop;
-  Int_t timestamp_mrtof;
+  Float_t mrtof_tof;
+  Float_t mrtof_si_e1;
+  Float_t mrtof_si_e2;
+  Float_t mrtof_si_e3;
+  Float_t mrtof_si_e4;
+  Float_t mrtof_si_e5;
   
   // MUSIC part
   Int_t         music1_anodes_cnt;

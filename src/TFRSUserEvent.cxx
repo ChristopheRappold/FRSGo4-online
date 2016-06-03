@@ -42,6 +42,14 @@ void TFRSUserEvent::Clear(Option_t *t)
   mrtof_start = 0;
   mrtof_stop  = 0;
   timestamp_mrtof = 0;
+
+  mrtof_tof=0.;
+  mrtof_si_e1=0.;
+  mrtof_si_e2=0.;
+  mrtof_si_e3=0.;
+  mrtof_si_e4=0.;
+  mrtof_si_e5=0.;
+
   // MUSIC part
   music1_anodes_cnt = 0;
   music2_anodes_cnt = 0;
