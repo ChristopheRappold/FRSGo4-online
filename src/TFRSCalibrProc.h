@@ -31,6 +31,8 @@ public:
   Long64_t  check_total_sc41 ;
   Long64_t  check_total_sc21 ;
   Long64_t  check_total_seetram ;
+  Long64_t  check_total_mrtof_start ;
+  Long64_t  check_total_mrtof_stop ;
      
 protected: 
   Int_t counter;

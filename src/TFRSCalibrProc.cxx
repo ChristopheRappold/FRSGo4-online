@@ -52,6 +52,8 @@ TFRSCalibrProc::TFRSCalibrProc(const char* name) : TFRSBasicProc(name)
   check_total_sc41 = 0;
   check_total_sc21 = 0;
   check_total_seetram = 0;
+  check_total_mrtof_start = 0;
+  check_total_mrtof_stop = 0;
   
   Create_MON_Hist();
   Create_MW_Hist();
@@ -155,15 +157,14 @@ void TFRSCalibrProc::Create_MON_Hist()
       hMON_scaler[32] ->SetXTitle("MrTOF 1 Hz");           // updated 28-08-11 
       hMON_scaler[33] ->SetXTitle("MrTOF 100 Hz");
       hMON_scaler[34] ->SetXTitle("MrTOF 10 kHz");
-      hMON_scaler[34] ->SetXTitle("MrTOF 10 kHz veto deadtime");
-      hMON_scaler[35] ->SetXTitle("MrTOF SC41L");
-      hMON_scaler[36] ->SetXTitle("MrTOF start extraction");
-      hMON_scaler[37] ->SetXTitle("MrTOF stop extraction");
-      hMON_scaler[38] ->SetXTitle("MrTOF start");
-      hMON_scaler[39] ->SetXTitle("MrTOF stop");
-      hMON_scaler[40] ->SetXTitle("chaneltron 1");
-      hMON_scaler[41] ->SetXTitle("chaneltron 2");
-      hMON_scaler[42]->SetXTitle("not used"); 
+      hMON_scaler[35] ->SetXTitle("MrTOF 10 kHz veto deadtime");
+      hMON_scaler[36] ->SetXTitle("MrTOF SC41L");
+      hMON_scaler[37] ->SetXTitle("MrTOF start extraction");
+      hMON_scaler[38] ->SetXTitle("MrTOF stop extraction");
+      hMON_scaler[39] ->SetXTitle("MrTOF start");
+      hMON_scaler[40] ->SetXTitle("MrTOF stop");
+      hMON_scaler[41] ->SetXTitle("chaneltron 1");
+      hMON_scaler[42] ->SetXTitle("chaneltron 2");
       hMON_scaler[43]->SetXTitle("not used"); 
       hMON_scaler[44]->SetXTitle("not used"); 
       hMON_scaler[45]->SetXTitle("not used"); 
@@ -222,15 +223,14 @@ void TFRSCalibrProc::Create_MON_Hist()
       hMON_diff[32] ->SetXTitle("MrTOF 1 Hz"); // 0
       hMON_diff[33] ->SetXTitle("MrTOF 100 Hz"); // 1
       hMON_diff[34] ->SetXTitle("MrTOF 10 kHz"); // 2
-      hMON_diff[34] ->SetXTitle("MrTOF 10 kHz veto deadtime"); // 3
-      hMON_diff[35] ->SetXTitle("MrTOF SC41L"); // 4
-      hMON_diff[36] ->SetXTitle("MrTOF start extraction"); // 5  
-      hMON_diff[37] ->SetXTitle("MrTOF stop extraction");  // 6
-      hMON_diff[38] ->SetXTitle("MrTOF start"); // 7
-      hMON_diff[39] ->SetXTitle("MrTOF stop"); // 8
-      hMON_diff[40] ->SetXTitle("chaneltron 1"); // 9
-      hMON_diff[41] ->SetXTitle("chaneltron 2"); // 10
-      hMON_diff[42] ->SetXTitle("");
+      hMON_diff[35] ->SetXTitle("MrTOF 10 kHz veto deadtime"); // 3
+      hMON_diff[36] ->SetXTitle("MrTOF SC41L"); // 4
+      hMON_diff[37] ->SetXTitle("MrTOF start extraction"); // 5  
+      hMON_diff[38] ->SetXTitle("MrTOF stop extraction");  // 6
+      hMON_diff[39] ->SetXTitle("MrTOF start"); // 7
+      hMON_diff[40] ->SetXTitle("MrTOF stop"); // 8
+      hMON_diff[41] ->SetXTitle("chaneltron 1"); // 9
+      hMON_diff[42] ->SetXTitle("chaneltron 2"); // 10
       hMON_diff[43] ->SetXTitle("");
       hMON_diff[44] ->SetXTitle("");
       hMON_diff[45] ->SetXTitle("");
@@ -665,29 +665,33 @@ void TFRSCalibrProc::Process_MON_Analysis(const TFRSSortEvent& src, TFRSCalibrEv
 
   UInt_t tempCurrentTime = index_flag == 0 ? src.sc_long[scaler_channel_time] : src.sc_long2[scaler_channel_time];
   //----initialize values defined in this file---
-  if(1==check_first_event[index_flag]  && (0!=tempCurrentTime)) // if first event has 0 (for all channels) >> use next event as a first event 
+  if(1==check_first_event[index_flag]) // if first event has 0 (for all channels) >> use next event as a first event 
     {
-      scaler_time_count[index_flag]  = 0; //UInt_t
-      scaler_spill_count[index_flag] = 0; //UInt_t
-      scaler_time_check_last[index_flag] = 0;//UInt_t
-      scaler_spill_check_last[index_flag] = 0;//UInt_t
-      for(size_t i=0; i<32; i++)
+      //      std::cout<<"Init Scaler :"<<index_flag<<" "<<tgt.EventFlag<<" | "<<check_first_event[index_flag]<<" "<<tempCurrentTime<<"\n";
+      if(0!=tempCurrentTime)
 	{
-	  check_increase_time[i]   =0;//UInt_t
-	  check_increase_spill[i]  =0;//UInt_t
-	  scaler_increase_event[i] =0;//UInt_t
-	  scaler_last_event[i] = static_cast<Long64_t>(src.sc_long[i]);//UInt_t
+	  //std::cout<<" +--> set initial values ";
+	  scaler_time_count[index_flag]  = 0; //UInt_t
+	  scaler_spill_count[index_flag] = 0; //UInt_t
+	  scaler_time_check_last[index_flag] = 0;//UInt_t
+	  scaler_spill_check_last[index_flag] = 0;//UInt_t
+	  for(size_t i=0; i<32; i++)
+	    {
+	      check_increase_time[i]   =0;//UInt_t
+	      check_increase_spill[i]  =0;//UInt_t
+	      scaler_increase_event[i] =0;//UInt_t
+	      scaler_last_event[i] = static_cast<Long64_t>(src.sc_long[i]);//UInt_t
+	    }
+	  for(size_t i=32;i<64;++i)
+	    {
+	      check_increase_time[i]   =0;//UInt_t
+	      check_increase_spill[i]  =0;//UInt_t
+	      scaler_increase_event[i] =0;//UInt_t
+	      scaler_last_event[i] = static_cast<Long64_t>(src.sc_long2[i-32]);//UInt_t
+	    }
+	  //std::cout<<" done !\n";
 	}
-      for(size_t i=32;i<64;++i)
-	{
-	  check_increase_time[i]   =0;//UInt_t
-	  check_increase_spill[i]  =0;//UInt_t
-	  scaler_increase_event[i] =0;//UInt_t
-	  scaler_last_event[i] = static_cast<Long64_t>(src.sc_long2[i-32]);//UInt_t
-	}
-      
     }
-
   for(int i=0; i<64; i++)
     scaler_increase_event[i]=0;  
   
@@ -843,6 +847,12 @@ void TFRSCalibrProc::Process_MON_Analysis(const TFRSSortEvent& src, TFRSCalibrEv
 	  check_total_sc41 += check_increase_spill[8];
 	  check_total_seetram += check_increase_spill[10];
       //printf("Total SC41 = %d,  Total SC21 = %d, Total SEETRAM = %d \n",check_total_sc41,check_total_sc21,check_total_seetram);
+	}
+      if(index_flag==1)
+	{
+	  check_total_mrtof_start += check_increase_spill[38];
+	  check_total_mrtof_stop += check_increase_spill[39];
+	    
 	}
       for(int i=0; i<64; i++)
 	{

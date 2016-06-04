@@ -795,7 +795,7 @@ Bool_t TFRSUnpackProc::Event_Extract(TFRSUnpackEvent* event_out, TGo4MbsSubEvent
 	{
 	  event_out->vme3scaler[i] = *pdata;
 #ifdef DEBUG
-	  std::cout<<" Ch "<<i<<"# "<<event_out->vme3[0][i] <<std::endl;
+	  std::cout<<" Ch "<<i<<"# "<<event_out->vme3scaler[i] <<std::endl;
 #endif
 	  pdata++; len++;
 	}

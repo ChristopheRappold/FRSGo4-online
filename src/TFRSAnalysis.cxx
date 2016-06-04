@@ -315,7 +315,9 @@ Int_t TFRSAnalysis::UserPostLoop()
       TFRSCalibrProc* proc3 = dynamic_cast<TFRSCalibrProc*> (step3->GetEventProcessor());
       if(proc3!=nullptr)
 	{//printf("Total SC41 = %d,  Total SC21 = %d, Total SEETRAM = %d \n",check_total_sc41,check_total_sc21,check_total_seetram);
-	  std::cout<<"Total SC41 ="<< proc3->check_total_sc41 <<",  Total SC21 ="<< proc3->check_total_sc21  <<" Total SEETRAM ="<< proc3->check_total_seetram<<"\n"; 
+	  std::cout<<"Total SC41 ="<< proc3->check_total_sc41 <<",  Total SC21 ="<< proc3->check_total_sc21  <<" Total SEETRAM ="<< proc3->check_total_seetram
+		   <<" Total MRtof Start ="<< proc3->check_total_mrtof_start<<" Total MRtof Stop ="<<proc3->check_total_mrtof_stop
+		   <<"\n"; 
 	}
     }
   return 0;
