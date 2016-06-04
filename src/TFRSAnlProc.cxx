@@ -1369,7 +1369,10 @@ void TFRSAnlProc::Procceed_MRTOF_Analysis(TFRSSortEvent& srt, TFRSCalibrEvent& c
 	    {
 	      tgt.mrtof_stop = -9999.;
 	      //std::cout<<"E> MRTOF Anal : both stop signal "<<
-	      h_MRtof_status->Fill("NoGoodStop",1);
+	      if(tgt.mrtof_start>1)
+		h_MRtof_status->Fill("NoGoodStop",1);
+	      else
+		h_MRtof_status->Fill("NoData",1);
 	    }
 	}
       else
@@ -1383,7 +1386,7 @@ void TFRSAnlProc::Procceed_MRTOF_Analysis(TFRSSortEvent& srt, TFRSCalibrEvent& c
 	  else
 	    {
 	      double diff_stop = tempStop1-tempStop2;
-	      if(TMath::Abs(diff_stop-45)<1e-2)
+	      if(TMath::Abs(diff_stop-45)<1.)
 		{
 		  tgt.mrtof_stop = tempStop1-45.;
 		  h_MRtof_status->Fill("GoodStop1&2",1);
