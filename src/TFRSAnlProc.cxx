@@ -101,7 +101,7 @@ void TFRSAnlProc::Create_MRTOF_Hist()
   h_MRtof_Start = MakeH1F("MRTOF/Time","mrtof_start",1000,0,50,"microsec",2,6);
   h_MRtof_StopDelay = MakeH1F("MRTOF/Time","mrtof_stopDelay",1000,0,50,"microsec",2,6);
   h_MRtof_Stop = MakeH1F("MRTOF/Time","mrtof_stop",1000,0,50,"microsec",2,6);
-  h_MRtof_tof = MakeH1F("MRTOF/Time","mrtof_tof",2000,0,200,"microsec",2,6);
+  h_MRtof_tof = MakeH1F("MRTOF/Time","mrtof_tof",200000,0,200,"microsec",2,6);
   h_MRtof_status = MakeH1F("MRTOF/Time","mrtof_TimeStatus",10,0,10,"",2,6);
   
 }
@@ -1401,7 +1401,7 @@ void TFRSAnlProc::Procceed_MRTOF_Analysis(TFRSSortEvent& srt, TFRSCalibrEvent& c
 
       if(stop_status==1)
 	{
-	  tgt.mrtof_tof = 100. + tgt.mrtof_start - tgt.mrtof_stop; // add 100 microsec from mrtof trigger system 
+	  tgt.mrtof_tof = 100 - ( tgt.mrtof_start - tgt.mrtof_stop); // add 100 microsec from mrtof trigger system 
 	  h_MRtof_tof->Fill(tgt.mrtof_tof);
 	  h_MRtof_status->Fill("GoodTOF",1);
 	}
